@@ -22,7 +22,7 @@
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>{{
-                    processInstance.createdAt
+                    new Date(processInstance.createdAt).toLocaleString()
                   }}</q-item-label>
                 </q-item-section>
               </q-item>
@@ -84,63 +84,91 @@
         </q-card>
       </div>
     </div>
-    <div class="row q-col-gutter-md">
-      <q-tabs class="col-12" v-model="tab" narrow-indicator>
-        <q-tab name="jobs" label="Jobs" />
-        <q-tab name="activities" label="Activities" />
-      </q-tabs>
+    <div class="row q-col-gutter-md q-mt-md q-ml-none">
+      <q-card class="col-12">
+        <q-tabs
+          class="col-12"
+          v-model="tab"
+          narrow-indicator
+          dense
+          align="left"
+        >
+          <q-tab name="jobs" label="Jobs" />
+          <q-tab name="activities" label="Activities" />
+        </q-tabs>
 
-      <q-tab-panels class="col-12" v-model="tab">
-        <q-tab-panel name="jobs">
-          <q-table
-            v-if="jobs"
-            title="Jobs"
-            :rows="jobs"
-            :columns="[
-              { name: 'key', align: 'left', label: 'Key', field: 'key' },
-              {
-                name: 'elementId',
-                align: 'left',
-                label: 'Element ID',
-                field: 'elementId',
-              },
-              {
-                name: 'processInstanceKey',
-                align: 'left',
-                label: 'Process Instance Key',
-                field: 'processInstanceKey',
-              },
-              { name: 'state', align: 'left', label: 'State', field: 'state' },
-            ]"
-            row-key="key"
-          />
-        </q-tab-panel>
+        <q-tab-panels class="col-12" v-model="tab">
+          <q-tab-panel name="jobs" class="q-pa-none">
+            <q-table
+              v-if="jobs"
+              :rows="jobs"
+              :columns="[
+                { name: 'key', align: 'left', label: 'Key', field: 'key' },
+                {
+                  name: 'elementId',
+                  align: 'left',
+                  label: 'Element ID',
+                  field: 'elementId',
+                },
+                {
+                  name: 'processInstanceKey',
+                  align: 'left',
+                  label: 'Process Instance Key',
+                  field: 'processInstanceKey',
+                },
+                {
+                  name: 'state',
+                  align: 'left',
+                  label: 'State',
+                  field: 'state',
+                },
+                {
+                  name: 'createdAt',
+                  align: 'left',
+                  label: 'Created At',
+                  field: (row) => new Date(row.createdAt).toLocaleString(),
+                },
+              ]"
+              row-key="key"
+            />
+          </q-tab-panel>
 
-        <q-tab-panel name="activities">
-          <q-table
-            v-if="activities"
-            title="Activities"
-            :rows="activities"
-            :columns="[
-              { name: 'key', align: 'left', label: 'Key', field: 'key' },
-              {
-                name: 'elementId',
-                align: 'left',
-                label: 'Element ID',
-                field: 'elementId',
-              },
-              {
-                name: 'processInstanceKey',
-                align: 'left',
-                label: 'Process Instance Key',
-                field: 'processInstanceKey',
-              },
-              { name: 'state', align: 'left', label: 'State', field: 'state' },
-            ]"
-            row-key="key"
-          />
-        </q-tab-panel>
-      </q-tab-panels>
+          <q-tab-panel name="activities" class="q-pa-none">
+            <q-table
+              v-if="activities"
+              :rows="activities"
+              :columns="[
+                { name: 'key', align: 'left', label: 'Key', field: 'key' },
+                {
+                  name: 'elementId',
+                  align: 'left',
+                  label: 'Element ID',
+                  field: 'elementId',
+                },
+                {
+                  name: 'processInstanceKey',
+                  align: 'left',
+                  label: 'Process Instance Key',
+                  field: 'processInstanceKey',
+                },
+                {
+                  name: 'state',
+                  align: 'left',
+                  label: 'State',
+                  field: 'state',
+                },
+                {
+                  name: 'createdAt',
+                  align: 'left',
+                  label: 'Created At',
+                  field: (row) => new Date(row.createdAt).toLocaleString(),
+                },
+              ]"
+              row-key="key"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
     </div>
   </div>
 </template>

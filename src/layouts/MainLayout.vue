@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr fff">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -8,26 +8,26 @@
           round
           icon="menu"
           aria-label="Menu"
-          @click="toggleLeftDrawer"
+          @click="onMenuClick"
         />
 
         <q-toolbar-title> GoBPM Showcase </q-toolbar-title>
 
+        <q-btn
+          v-for="link in linksList"
+          :key="link.title"
+          stretch
+          flat
+          :label="link.title"
+          :to="link.to"
+          :icon="link.icon"
+        >
+        </q-btn>
+        <q-space />
+
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Entities </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -37,7 +37,6 @@
 
 <script setup>
 import { ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
 
 defineOptions({
   name: "MainLayout",
@@ -48,19 +47,17 @@ const linksList = [
     title: "Process Definitions",
     caption: "process-definitions",
     icon: "description",
-    to: "process-definitions",
+    to: "/process-definitions",
   },
   {
     title: "Process Instances",
     caption: "process-instances",
     icon: "assignment_turned_in",
-    to: "process-instances",
+    to: "/process-instances",
   },
 ];
 
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
+function onMenuClick() {
+  console.log("Menu clicked");
 }
 </script>
