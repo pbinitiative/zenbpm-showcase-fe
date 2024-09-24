@@ -9,6 +9,10 @@ const routes = [
         component: () => import("pages/ProcessDefinitionsPage.vue"),
       },
       {
+        path: "process-definitions/:processDefinitionKey",
+        component: () => import("pages/ProcessDefinitionDetailPage.vue"),
+      },
+      {
         path: "process-instances",
         component: () => import("pages/ProcessInstancesPage.vue"),
       },

@@ -2,15 +2,6 @@
   <q-layout view="hHh Lpr fff">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="onMenuClick"
-        />
-
         <q-toolbar-title> GoBPM Showcase </q-toolbar-title>
 
         <q-btn
@@ -46,13 +37,13 @@ const linksList = [
   {
     title: "Process Definitions",
     caption: "process-definitions",
-    icon: "description",
+    // icon: "description",
     to: "/process-definitions",
   },
   {
     title: "Process Instances",
     caption: "process-instances",
-    icon: "assignment_turned_in",
+    // icon: "assignment_turned_in",
     to: "/process-instances",
   },
 ];

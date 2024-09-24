@@ -4,9 +4,10 @@
       title="Process Instances"
       :rows="processInstances"
       :columns="columns"
-      row-key="Key"
+      row-key="key"
       :filter="filter"
       :pagination="pagination"
+      @row-click="(evt, row) => $router.push(`/process-instances/${row.key}`)"
     >
       <template v-slot:top-right>
         <q-input
@@ -26,49 +27,66 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ProcessInstancesApi, ApiClient } from "src/api-client/src";
+import { ref, onMounted } from "vue";
+
+const processInstancesApi = ref(null);
+const processInstances = ref([]);
+
+onMounted(() => {
+  const client = new ApiClient("/api");
+  processInstancesApi.value = new ProcessInstancesApi(client);
+
+  processInstancesApi.value.getProcessInstances().end((err, res) => {
+    if (err) {
+      console.log(err);
+    } else {
+      processInstances.value.push(...res.body.items);
+    }
+  });
+});
 
 const columns = [
   {
     name: "Key",
     label: "Key",
-    field: "Key",
+    field: "key",
     sortable: true,
   },
   {
     name: "ProcessDefinitionKey",
     label: "ProcessDefinitionKey",
-    field: "ProcessDefinitionKey",
+    field: "processDefinitionKey",
     sortable: true,
   },
   {
     name: "CreatedAt",
     label: "CreatedAt",
-    field: "CreatedAt",
+    field: "createdAt",
     sortable: true,
   },
   {
     name: "State",
     label: "State",
-    field: "State",
+    field: "state",
     sortable: true,
   },
   {
     name: "VariableHolder",
     label: "VariableHolder",
-    field: "VariableHolder",
+    field: "variableHolder",
     sortable: true,
   },
   {
     name: "CaughtEvents",
     label: "CaughtEvents",
-    field: "CaughtEvents",
+    field: "caughtEvents",
     sortable: true,
   },
   {
     name: "Activities",
     label: "Activities",
-    field: "Activities",
+    field: "activities",
     sortable: true,
   },
 ];
@@ -81,6 +99,4 @@ const pagination = ref({
   rowsPerPage: 10,
   rowsNumber: 10,
 });
-
-const processInstances = ref([]);
 </script>

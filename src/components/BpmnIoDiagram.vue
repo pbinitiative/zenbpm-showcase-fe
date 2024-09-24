@@ -1,44 +1,94 @@
 <template>
-  <div ref="diagramRef" style="height: 600px"></div>
+  <div ref="diagramRef" style="height: 500px"></div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
 import BpmnViewer from "bpmn-js";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
   diagramData: {
     type: String,
     required: true,
   },
+  overlays: {
+    type: Object,
+    default: () => {},
+  },
 });
 
 const diagramRef = ref(null);
+const bpmnViewer = ref(null);
 
-onMounted(async () => {
-  const bpmnViewer = new BpmnViewer({
-    container: diagramRef.value,
-  });
-
-  const xml = atob(props.diagramData);
-  await bpmnViewer.importXML(xml);
+function applyOverlays() {
   // access viewer components
-  var canvas = bpmnViewer.get("canvas");
-  var overlays = bpmnViewer.get("overlays");
+  var canvas = bpmnViewer.value.get("canvas");
+  var overlays = bpmnViewer.value.get("overlays");
 
   // zoom to fit full viewport
   canvas.zoom("fit-viewport");
 
   // attach an overlay to a node
-  overlays.add("SCAN_OK", "note", {
-    position: {
-      bottom: 0,
-      right: 0,
-    },
-    html: '<div class="diagram-note">Mixed up the labels?</div>',
+  for (const [bpmnId, data] of Object.entries(props.overlays)) {
+    if (
+      data.bpmnElementType != "SEQUENCE_FLOW" &&
+      data.state == "ELEMENT_ACTIVATED"
+    ) {
+      overlays.add(bpmnId, data.state, {
+        position: {
+          bottom: 3,
+          right: 3,
+        },
+        html: `<div class="overlay element-active">⌖</div>`,
+      });
+    }
+    canvas.addMarker(bpmnId, "highlighted");
+  }
+}
+
+onMounted(async () => {
+  bpmnViewer.value = new BpmnViewer({
+    container: diagramRef.value,
   });
 
-  // add marker
-  canvas.addMarker("SCAN_OK", "needs-discussion");
+  const xml = atob(props.diagramData);
+  await bpmnViewer.value.importXML(xml);
+  applyOverlays();
 });
+
+watch(
+  () => props.overlays,
+  () => applyOverlays()
+);
 </script>
+
+<style>
+.overlay {
+  color: white;
+  font-weight: bold;
+  font-size: 14pt;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  width: 22px;
+  height: 22px;
+}
+.element-completed {
+  background-color: grey;
+}
+
+.element-active {
+  background-color: var(--q-positive);
+}
+
+.highlighted .djs-visual rect,
+.highlighted .djs-visual circle {
+  stroke: var(--q-primary) !important;
+}
+.highlighted .djs-visual path {
+  stroke: var(--q-primary) !important;
+  fill: var(--q-primary) !important;
+}
+</style>
