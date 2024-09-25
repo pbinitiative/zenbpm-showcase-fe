@@ -84,11 +84,12 @@ watch(
 }
 
 .highlighted .djs-visual rect,
+.highlighted .djs-visual polygon,
 .highlighted .djs-visual circle {
   stroke: var(--q-primary) !important;
 }
 .highlighted .djs-visual path {
   stroke: var(--q-primary) !important;
-  fill: var(--q-primary) !important;
+  /* fill: var(--q-primary) !important; */
 }
 </style>

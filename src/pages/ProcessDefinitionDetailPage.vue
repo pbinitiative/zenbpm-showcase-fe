@@ -71,7 +71,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { QForm } from "quasar";
 
@@ -88,6 +88,8 @@ const processDefinitionsApi = ref(null);
 const processInstancesApi = ref(null);
 const processDefinition = ref({});
 const route = useRoute();
+
+const router = useRouter();
 
 const $q = useQuasar();
 
@@ -130,6 +132,7 @@ function startProcessInstance() {
         } else {
           console.log(res);
           // TODO: redirect to process instance detail page
+          router.push(`/process-instances/${res.key}`);
         }
       }
     );

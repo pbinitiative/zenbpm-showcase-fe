@@ -216,13 +216,13 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import {
-  ProcessInstancesApi,
-  ProcessDefinitionsApi,
   ApiClient,
   JobsApi,
+  ProcessDefinitionsApi,
+  ProcessInstancesApi,
 } from "src/api-client/src";
 import BpmnIoDiagram from "src/components/BpmnIoDiagram.vue";
 
@@ -236,6 +236,7 @@ const jobs = ref([]);
 const route = useRoute();
 const tab = ref("jobs");
 const overlays = ref({});
+const $router = useRouter();
 
 onMounted(async () => {
   console.log("ProcessInstanceDetail");
@@ -306,6 +307,8 @@ function complete(job) {
   jobsApi.value.completeJob({ jobKey: job.key }, (err, res) => {
     if (err) {
       console.log(err);
+    } else {
+      $router.go();
     }
   });
 }
