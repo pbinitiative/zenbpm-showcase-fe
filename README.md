@@ -1,41 +1,18 @@
 # GoBPM Showcase FE (gobpm-showcase-fe)
 
-This is first Go BPS showcase for presentatino purposes
+This is first GoBPS showcase for presentation purposes
 
-## Install the dependencies
+> ⚠️ Warning: this is just a sample, not a real application.
+
+## Steps to run the app
+
 ```bash
-yarn
-# or
+# 1. Clone the repository
+git clone <FILL_REPO_URL>
+# 2. Install dependencies
+cd gobpm-showcase-fe
 npm install
+# 3. Run the app
+npm run dev
+# 4. Open http://localhost:9000 in your browser
 ```
-
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
-
-
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
-```
-
-
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
