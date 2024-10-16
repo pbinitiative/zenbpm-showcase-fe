@@ -217,13 +217,13 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import config from "../config/config";
 
 import {
-  ApiClient,
   JobsApi,
   ProcessDefinitionsApi,
   ProcessInstancesApi,
-} from "src/api-client/src";
+} from "src/api-client";
 import BpmnIoDiagram from "src/components/BpmnIoDiagram.vue";
 
 const processInstancesApi = ref(null);
@@ -240,38 +240,30 @@ const $router = useRouter();
 
 onMounted(async () => {
   console.log("ProcessInstanceDetail");
-  const client = new ApiClient("/api");
-  processInstancesApi.value = new ProcessInstancesApi(client);
-  processDefinitionsApi.value = new ProcessDefinitionsApi(client);
-  jobsApi.value = new JobsApi(client);
+  processInstancesApi.value = new ProcessInstancesApi(config);
+  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
+  jobsApi.value = new JobsApi(config);
 
   try {
-    processInstancesApi.value.getProcessInstance(
-      route.params.processInstanceKey,
-      (err, res) => {
-        if (err) {
-          console.log(err);
-        }
-        processInstance.value = res;
+    processInstancesApi.value
+      .getProcessInstance(route.params.processInstanceKey)
+      .then((res) => {
+        processInstance.value = res.data;
         // Load process definition
-        processDefinitionsApi.value.getProcessDefinition(
-          processInstance.value.processDefinitionKey,
-          (err, res) => {
-            if (err) {
-              console.log(err);
-            }
-            processDefinition.value = res;
-          }
-        );
+        processDefinitionsApi.value
+          .getProcessDefinition(processInstance.value.processDefinitionKey)
+          .then((res) => {
+            processDefinition.value = res.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
         // Load activities
-        processInstancesApi.value.getActivities(
-          route.params.processInstanceKey,
-          (err, res) => {
-            if (err) {
-              console.log(err);
-            }
-            activities.value.push(...res.items);
+        processInstancesApi.value
+          .getActivities(route.params.processInstanceKey)
+          .then((res) => {
+            activities.value = res.data.items;
 
             for (let i = 0; i < activities.value.length; i++) {
               overlays.value[activities.value[i].elementId] = {
@@ -279,21 +271,24 @@ onMounted(async () => {
                 bpmnElementType: activities.value[i].bpmnElementType,
               };
             }
-          }
-        );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
         // Load jobs
-        processInstancesApi.value.getJobs(
-          route.params.processInstanceKey,
-          (err, res) => {
-            if (err) {
-              console.log(err);
-            }
-            jobs.value.push(...res.items);
-          }
-        );
-      }
-    );
+        processInstancesApi.value
+          .getJobs(route.params.processInstanceKey)
+          .then((res) => {
+            jobs.value = res.data.items;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } catch (err) {
     console.log(err);
   }
@@ -304,12 +299,13 @@ function getVariableTableRows() {
 }
 
 function complete(job) {
-  jobsApi.value.completeJob({ jobKey: job.key }, (err, res) => {
-    if (err) {
-      console.log(err);
-    } else {
+  jobsApi.value
+    .completeJob({ jobKey: job.key })
+    .then(() => {
       $router.go();
-    }
-  });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 </script>

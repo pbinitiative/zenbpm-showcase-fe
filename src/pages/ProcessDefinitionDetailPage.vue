@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <q-page class="q-pa-md">
     <div class="row q-col-gutter-md">
       <div class="col-12 col-md-3">
         <q-card>
@@ -58,31 +58,24 @@
         </q-card>
       </div>
     </div>
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn
-        fab
-        icon="add"
-        color="primary"
-        @click="startProcessInstance"
-      ></q-btn>
-    </q-page-sticky>
-  </div>
+  </q-page>
+  <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <q-btn fab icon="add" color="primary" @click="startProcessInstance">
+      <q-tooltip>Create&nbsp;new&nbsp;process&nbsp;instance</q-tooltip>
+    </q-btn>
+  </q-page-sticky>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { QForm } from "quasar";
-
 import { useQuasar } from "quasar";
 
-import {
-  ProcessDefinitionsApi,
-  ProcessInstancesApi,
-  ApiClient,
-} from "src/api-client/src";
+import { ProcessDefinitionsApi, ProcessInstancesApi } from "src/api-client";
 import BpmnIoDiagram from "src/components/BpmnIoDiagram.vue";
+
+import config from "../config/config";
 
 const processDefinitionsApi = ref(null);
 const processInstancesApi = ref(null);
@@ -94,18 +87,16 @@ const router = useRouter();
 const $q = useQuasar();
 
 onMounted(async () => {
-  const client = new ApiClient("/api");
-  processDefinitionsApi.value = new ProcessDefinitionsApi(client);
-  processInstancesApi.value = new ProcessInstancesApi(client);
-  processDefinitionsApi.value.getProcessDefinition(
-    route.params.processDefinitionKey,
-    (err, res) => {
-      if (err) {
-        console.log(err);
-      }
-      processDefinition.value = res;
-    }
-  );
+  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
+  processInstancesApi.value = new ProcessInstancesApi(config);
+  processDefinitionsApi.value
+    .getProcessDefinition(route.params.processDefinitionKey)
+    .then((res) => {
+      processDefinition.value = res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 function startProcessInstance() {
@@ -121,21 +112,19 @@ function startProcessInstance() {
   });
 
   dialogRef.onOk((variables) => {
-    processInstancesApi.value.createProcessInstance(
-      {
+    processInstancesApi.value
+      .createProcessInstance({
         processDefinitionKey: processDefinition.value.key,
         variables: JSON.parse(variables),
-      },
-      (err, res) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(res);
-          // TODO: redirect to process instance detail page
-          router.push(`/process-instances/${res.key}`);
-        }
-      }
-    );
+      })
+      .then((res) => {
+        console.log(res);
+        // TODO: redirect to process instance detail page
+        router.push(`/process-instances/${res.data.key}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   dialogRef.onCancel(() => {

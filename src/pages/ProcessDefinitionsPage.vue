@@ -23,29 +23,53 @@
           </template>
         </q-input>
       </template>
-    </q-table>
-  </q-page>
+    </q-table> </q-page
+  ><q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <q-btn fab icon="add" color="primary" @click="fileInput.click()">
+      <q-tooltip>Deploy new process definition</q-tooltip>
+    </q-btn>
+  </q-page-sticky>
+  <input
+    type="file"
+    ref="fileInput"
+    @change="deployProcess"
+    accept=".bpmn"
+    style="display: none"
+  />
 </template>
 
 <script setup>
-import { ProcessDefinitionsApi, ApiClient } from "src/api-client/src";
+import { ProcessDefinitionsApi } from "src/api-client";
 import { ref, onMounted } from "vue";
+
+import config from "../config/config";
 
 const processDefinitions = ref([]);
 const processDefinitionsApi = ref(null);
 
 onMounted(() => {
-  const client = new ApiClient("/api");
-  processDefinitionsApi.value = new ProcessDefinitionsApi(client);
+  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
 
-  processDefinitionsApi.value.getProcessDefinitions().end((err, res) => {
-    if (err) {
+  processDefinitionsApi.value
+    .getProcessDefinitions()
+    .then((res) => {
+      processDefinitions.value.push(...res.data.items);
+    })
+    .catch((err) => {
       console.log(err);
-    } else {
-      processDefinitions.value.push(...res.body.items);
-    }
-  });
+    });
 });
+
+const fileInput = ref(null);
+
+const deployProcess = () => {
+  const selectedFile = fileInput.value.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    processDefinitionsApi.value.createProcessDefinition(e.target.result).then;
+  };
+  reader.readAsText(selectedFile);
+};
 
 const columns = [
   {

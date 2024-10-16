@@ -27,23 +27,24 @@
 </template>
 
 <script setup>
-import { ProcessInstancesApi, ApiClient } from "src/api-client/src";
+import { ProcessInstancesApi } from "src/api-client";
 import { ref, onMounted } from "vue";
+import config from "../config/config";
 
 const processInstancesApi = ref(null);
 const processInstances = ref([]);
 
 onMounted(() => {
-  const client = new ApiClient("/api");
-  processInstancesApi.value = new ProcessInstancesApi(client);
+  processInstancesApi.value = new ProcessInstancesApi(config);
 
-  processInstancesApi.value.getProcessInstances().end((err, res) => {
-    if (err) {
+  processInstancesApi.value
+    .getProcessInstances()
+    .then((res) => {
+      processInstances.value.push(...res.data.items);
+    })
+    .catch((err) => {
       console.log(err);
-    } else {
-      processInstances.value.push(...res.body.items);
-    }
-  });
+    });
 });
 
 const columns = [
