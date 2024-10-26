@@ -16,3 +16,11 @@ npm install
 npm run dev
 # 4. Open http://localhost:9000 in your browser
 ```
+
+## Docker
+
+To build a Docker image:
+
+```bash
+docker build -t gobpms-showcase-fe .
+```
