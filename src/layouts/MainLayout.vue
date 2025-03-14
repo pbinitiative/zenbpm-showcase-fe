@@ -2,7 +2,7 @@
   <q-layout view="hHh Lpr fff">
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title> GoBPM Showcase </q-toolbar-title>
+        <q-toolbar-title> ZenBPM Showcase </q-toolbar-title>
 
         <q-btn
           v-for="link in linksList"
