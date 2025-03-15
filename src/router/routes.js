@@ -21,7 +21,7 @@ const routes = [
         component: () => import("pages/ProcessInstanceDetailPage.vue"),
       },
       {
-        path: "forms/:formKey",
+        path: "tasklist/:id?/:action?/",
         component: () => import("pages/FormPage.vue"),
       },
     ],

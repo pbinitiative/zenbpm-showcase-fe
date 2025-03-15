@@ -40,7 +40,7 @@ onMounted(() => {
   processInstancesApi.value
     .getProcessInstances()
     .then((res) => {
-      processInstances.value.push(...res.data.items);
+      processInstances.value.push(...res.data.processInstances[0].items);
     })
     .catch((err) => {
       console.log(err);

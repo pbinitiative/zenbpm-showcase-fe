@@ -5,7 +5,7 @@ info:
   version: 0.1.0
 servers:
   - url: http://localhost:8091
-  - url: http://gobpms.127.0.0.1.nip.io/api
+  - url: http://zenbpms.127.0.0.1.nip.io/api
 tags:
   - name: process-definitions
   - name: process-instances

@@ -85,7 +85,7 @@ module.exports = configure(function (/* ctx */) {
         "/api": {
           target: "http://localhost:8080",
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
+          rewrite: (path) => path.replace(/^\/api/, "/v1"),
         },
       },
     },
@@ -193,7 +193,7 @@ module.exports = configure(function (/* ctx */) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: "gobpm-showcase-fe",
+        appId: "zenbpm-showcase-fe",
       },
     },
 

@@ -46,6 +46,11 @@ const linksList = [
     // icon: "assignment_turned_in",
     to: "/process-instances",
   },
+  {
+    title: "Tasklist",
+    caption: "tasklist",
+    to: "/tasklist",
+  },
 ];
 
 function onMenuClick() {
