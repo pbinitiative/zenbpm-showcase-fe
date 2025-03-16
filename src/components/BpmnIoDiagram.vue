@@ -51,8 +51,10 @@ onMounted(async () => {
     container: diagramRef.value,
   });
 
-  const xml = atob(props.diagramData);
-  await bpmnViewer.value.importXML(xml);
+  const decodedString = new TextDecoder().decode(
+    Uint8Array.from(atob(props.diagramData), (c) => c.charCodeAt(0))
+  );
+  await bpmnViewer.value.importXML(decodedString);
   applyOverlays();
 });
 

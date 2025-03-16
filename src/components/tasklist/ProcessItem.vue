@@ -7,8 +7,8 @@
   >
     <q-item-section>
       <div class="text-h6 q-mb-sm">
-        {{ props.metadata.name }}
-        <q-item-label caption v-if="props.metadata.agenda">
+        {{ props.metadata ? props.metadata.name : process.bpmnProcessId }}
+        <q-item-label caption v-if="props.metadata && props.metadata.agenda">
           <div>
             <q-badge color="purple" :label="props.metadata.agenda" />
           </div>

@@ -113,6 +113,12 @@
                   field: 'elementId',
                 },
                 {
+                  name: 'type',
+                  align: 'left',
+                  label: 'Job type',
+                  field: 'type',
+                },
+                {
                   name: 'processInstanceKey',
                   align: 'left',
                   label: 'Process Instance Key',
@@ -188,7 +194,7 @@
               :rows="
                 Object.keys(getVariableTableRows()).map((key) => ({
                   key: key,
-                  value: getVariableTableRows()[key],
+                  value: mapVariableValue(getVariableTableRows()[key]),
                 }))
               "
               :columns="[
@@ -296,6 +302,14 @@ onMounted(async () => {
 
 function getVariableTableRows() {
   return JSON.parse(processInstance.value.variableHolder);
+}
+
+function mapVariableValue(value) {
+  if (typeof value === "object") {
+    return JSON.stringify(value);
+  } else {
+    return value;
+  }
 }
 
 function complete(job) {
