@@ -16,6 +16,9 @@
         <q-item-label caption>
           <div><q-icon name="tag" />{{ process.key }}</div>
         </q-item-label>
+        <q-item-label caption>
+          <q-badge color="primary" :label="'v' + process.version" />
+        </q-item-label>
       </div>
     </q-item-section>
   </q-item>
