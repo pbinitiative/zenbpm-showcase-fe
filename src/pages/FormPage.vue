@@ -6,25 +6,43 @@
         <q-tab name="processes" label="Processes" />
       </q-tabs>
       <q-list separator v-if="tab == 'tasks'">
-        <TaskItem
-          v-for="task in tasks"
-          :key="task.id"
-          :task="task"
-          :active-task="activeTask"
-          @click="selectTask(task)"
-        />
+        <template v-if="tasks.length > 0">
+          <TaskItem
+            v-for="task in tasks"
+            :key="task.id"
+            :task="task"
+            :active-task="activeTask"
+            @click="selectTask(task)"
+          />
+        </template>
+        <q-item v-else>
+          <q-item-section>
+            <q-item-label class="text-grey text-italic"
+              >No tasks found</q-item-label
+            >
+          </q-item-section>
+        </q-item>
       </q-list>
       <q-list separator v-else-if="tab == 'processes'">
-        <ProcessItem
-          v-for="process in processes"
-          :key="process.id"
-          :process="process"
-          :metadata="
-            processesMetadata.find((p) => p.id == process.bpmnProcessId)
-          "
-          :active-process="activeProcess"
-          @click="selectProcess(process)"
-        />
+        <template v-if="processes.length > 0">
+          <ProcessItem
+            v-for="process in processes"
+            :key="process.id"
+            :process="process"
+            :metadata="
+              processesMetadata.find((p) => p.id == process.bpmnProcessId)
+            "
+            :active-process="activeProcess"
+            @click="selectProcess(process)"
+          />
+        </template>
+        <q-item v-else>
+          <q-item-section>
+            <q-item-label class="text-grey text-italic"
+              >No processes found</q-item-label
+            >
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-scroll-area>
   </q-drawer>
@@ -48,7 +66,12 @@
           @click="submit"
         />
       </div>
-      <div v-else class="q-pa-md text-negative">Formulář nevybrán.</div>
+      <q-banner v-else class="q-ma-md bg-primary text-white">
+        <template v-slot:avatar>
+          <q-icon name="warning" />
+        </template>
+        No form selected. Please select a form in the left menu.
+      </q-banner>
     </div>
   </div>
 </template>
@@ -61,12 +84,17 @@ import ProcessItem from "src/components/tasklist/ProcessItem.vue";
 import TaskHeader from "src/components/tasklist/TaskHeader.vue";
 import ProcessHeader from "src/components/tasklist/ProcessHeader.vue";
 
-import { ProcessDefinitionsApi, ProcessInstancesApi } from "src/api-client";
+import {
+  ProcessDefinitionsApi,
+  ProcessInstancesApi,
+  JobsApi,
+} from "src/api-client";
 
 import config from "../config/config";
 
 const processInstancesApi = new ProcessInstancesApi(config);
 const processDefinitionsApi = new ProcessDefinitionsApi(config);
+const jobsApi = new JobsApi(config);
 
 const route = useRoute();
 const router = useRouter();
@@ -76,8 +104,8 @@ const formData = ref({});
 
 const tasks = ref([]);
 
-const getTaskById = (id) => {
-  return tasks.value.find((task) => task.id == id);
+const getTaskByKey = (key) => {
+  return tasks.value.find((task) => task.key == key);
 };
 
 const getProcessById = (id) => {
@@ -101,7 +129,7 @@ const processesMetadata = ref([
 ]);
 
 const currentFormComponent = shallowRef(null);
-onMounted(() => {
+onMounted(async () => {
   // setCurrentComponent();
   processes.value.length = 0;
 
@@ -113,42 +141,54 @@ onMounted(() => {
     .catch((err) => {
       console.log(err);
     });
-  const originalStringify = JSON.stringify;
-  JSON.stringify = function (value, replacer, space) {
-    return originalStringify(
-      value,
-      (key, val) =>
-        typeof val === "bigint"
-          ? val.toString()
-          : replacer
-          ? replacer(key, val)
-          : val,
-      space
-    );
-  };
+
+  await loadUserTasks();
+  setCurrentComponent();
 });
 
 const selectTask = (task) => {
   router.push({
-    path: `/tasklist/${task.id}`,
+    path: `/tasklist/${task.key}`,
+  });
+};
+
+const loadUserTasks = async () => {
+  tasks.value.length = 0;
+  await jobsApi.activateJobs("user-task-type").then((res) => {
+    tasks.value.push(...res.data);
   });
 };
 
 const submit = () => {
   console.log(formData.value);
-  processInstancesApi
-    .createProcessInstance({
-      processDefinitionKey: BigInt(activeProcess.value.key),
-      variables: formData.value,
-    })
-    .then((res) => {
-      console.log(res);
-      // TODO: redirect to process instance detail page
-      router.push(`/tasklist/`);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if (activeProcess.value) {
+    processInstancesApi
+      .createProcessInstance({
+        processDefinitionKey: String(activeProcess.value.key),
+        variables: formData.value,
+      })
+      .then((res) => {
+        console.log(res);
+        tab.value = "tasks";
+        loadUserTasks();
+        formData.value = {};
+        router.push(`/tasklist/`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else if (activeTask.value) {
+    jobsApi
+      .completeJob({ jobKey: activeTask.value.key, variables: formData.value })
+      .then(() => {
+        tab.value = "tasks";
+        loadUserTasks();
+        router.push(`/tasklist/`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };
 
 const selectProcess = (process) => {
@@ -166,7 +206,7 @@ const setCurrentComponent = () => {
     activeProcess.value = null;
     return;
   }
-  currentFormComponent.value = defineAsyncComponent(() => {
+  currentFormComponent.value = defineAsyncComponent(async () => {
     if (action == "start") {
       activeTask.value = null;
       const process = getProcessById(id);
@@ -175,7 +215,9 @@ const setCurrentComponent = () => {
       } else {
         activeProcess.value = process;
         try {
-          return import(`../forms/${process.bpmnProcessId}-start-form.vue`);
+          return await import(
+            `../forms/${process.bpmnProcessId}-start-form.vue`
+          );
         } catch (error) {
           console.log(error);
           currentFormComponent.value = null;
@@ -183,14 +225,28 @@ const setCurrentComponent = () => {
       }
     }
     activeProcess.value = null;
-    const task = getTaskById(id);
+    const task = getTaskByKey(id);
     if (!task) {
       activeTask.value = null;
       currentFormComponent.value = null;
     } else {
       activeTask.value = task;
+      await processInstancesApi
+        .getProcessInstance(task.processInstanceKey)
+        .then((res) => {
+          formData.value = JSON.parse(res.data.variableHolder);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       try {
-        return import(`../forms/${task.formKey}-task-form.vue`);
+        const formId = task.elementId.substring(
+          0,
+          task.elementId.lastIndexOf("-")
+        );
+
+        return await import(`../forms/${formId}-form.vue`);
       } catch (error) {
         console.log(error);
         currentFormComponent.value = null;

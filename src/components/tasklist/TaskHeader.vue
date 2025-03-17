@@ -23,7 +23,7 @@
         <div class="col">
           <q-item-label caption>
             <q-icon name="event" class="q-mr-xs" />
-            {{ new Date(task.startDate).toLocaleString("cs-CZ") }}
+            {{ new Date(task.createdAt).toLocaleString("cs-CZ") }}
           </q-item-label>
         </div>
       </div>

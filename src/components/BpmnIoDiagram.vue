@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import BpmnViewer from "bpmn-js";
+import BpmnViewer from "bpmn-js/lib/NavigatedViewer";
 import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
@@ -88,10 +88,10 @@ watch(
 .highlighted .djs-visual rect,
 .highlighted .djs-visual polygon,
 .highlighted .djs-visual circle {
-  stroke: var(--q-primary) !important;
+  stroke: var(--q-positive) !important;
 }
 .highlighted .djs-visual path {
-  stroke: var(--q-primary) !important;
+  stroke: var(--q-positive) !important;
   /* fill: var(--q-primary) !important; */
 }
 </style>

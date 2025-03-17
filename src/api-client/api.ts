@@ -111,10 +111,16 @@ export interface ActivityPage {
 export interface CompleteJobRequest {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof CompleteJobRequest
      */
-    'jobKey': number;
+    'jobKey': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof CompleteJobRequest
+     */
+    'variables'?: object;
 }
 /**
  * 
@@ -159,7 +165,7 @@ export interface GetProcessInstances200Response {
      * @type {number}
      * @memberof GetProcessInstances200Response
      */
-    'total'?: number;
+    'total': number;
     /**
      * 
      * @type {Array<ProcessInstancePage>}
@@ -185,6 +191,12 @@ export interface Job {
      * @memberof Job
      */
     'elementId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Job
+     */
+    'type'?: string;
     /**
      * 
      * @type {string}
@@ -364,13 +376,13 @@ export interface ProcessInstance {
      * @type {string}
      * @memberof ProcessInstance
      */
-    'key'?: string;
+    'key': string;
     /**
      * 
      * @type {string}
      * @memberof ProcessInstance
      */
-    'processDefinitionKey'?: string;
+    'processDefinitionKey': string;
     /**
      * 
      * @type {string}
@@ -382,7 +394,7 @@ export interface ProcessInstance {
      * @type {string}
      * @memberof ProcessInstance
      */
-    'state'?: ProcessInstanceStateEnum;
+    'state': ProcessInstanceStateEnum;
     /**
      * 
      * @type {string}
@@ -442,6 +454,31 @@ export interface ProcessInstancePage {
      */
     'items'?: Array<ProcessInstance>;
 }
+/**
+ * 
+ * @export
+ * @interface PublishMessageRequest
+ */
+export interface PublishMessageRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PublishMessageRequest
+     */
+    'processInstanceKey': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublishMessageRequest
+     */
+    'messageName': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof PublishMessageRequest
+     */
+    'variables'?: object;
+}
 
 /**
  * JobsApi - axios parameter creator
@@ -449,6 +486,40 @@ export interface ProcessInstancePage {
  */
 export const JobsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Activate jobs
+         * @param {string} jobType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        activateJobs: async (jobType: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'jobType' is not null or undefined
+            assertParamExists('activateJobs', 'jobType', jobType)
+            const localVarPath = `/jobs/{jobType}/activate`
+                .replace(`{${"jobType"}}`, encodeURIComponent(String(jobType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Complete a job
@@ -497,6 +568,19 @@ export const JobsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Activate jobs
+         * @param {string} jobType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async activateJobs(jobType: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Job>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.activateJobs(jobType, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['JobsApi.activateJobs']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Complete a job
          * @param {CompleteJobRequest} completeJobRequest 
          * @param {*} [options] Override http request option.
@@ -520,6 +604,16 @@ export const JobsApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @summary Activate jobs
+         * @param {string} jobType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        activateJobs(jobType: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<Job>> {
+            return localVarFp.activateJobs(jobType, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Complete a job
          * @param {CompleteJobRequest} completeJobRequest 
          * @param {*} [options] Override http request option.
@@ -540,6 +634,18 @@ export const JobsApiFactory = function (configuration?: Configuration, basePath?
 export class JobsApi extends BaseAPI {
     /**
      * 
+     * @summary Activate jobs
+     * @param {string} jobType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof JobsApi
+     */
+    public activateJobs(jobType: string, options?: RawAxiosRequestConfig) {
+        return JobsApiFp(this.configuration).activateJobs(jobType, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Complete a job
      * @param {CompleteJobRequest} completeJobRequest 
      * @param {*} [options] Override http request option.
@@ -548,6 +654,116 @@ export class JobsApi extends BaseAPI {
      */
     public completeJob(completeJobRequest: CompleteJobRequest, options?: RawAxiosRequestConfig) {
         return JobsApiFp(this.configuration).completeJob(completeJobRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * MessagesApi - axios parameter creator
+ * @export
+ */
+export const MessagesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Publish a message
+         * @param {PublishMessageRequest} publishMessageRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishMessage: async (publishMessageRequest: PublishMessageRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'publishMessageRequest' is not null or undefined
+            assertParamExists('publishMessage', 'publishMessageRequest', publishMessageRequest)
+            const localVarPath = `/messages`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(publishMessageRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MessagesApi - functional programming interface
+ * @export
+ */
+export const MessagesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MessagesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Publish a message
+         * @param {PublishMessageRequest} publishMessageRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async publishMessage(publishMessageRequest: PublishMessageRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publishMessage(publishMessageRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MessagesApi.publishMessage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * MessagesApi - factory interface
+ * @export
+ */
+export const MessagesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MessagesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Publish a message
+         * @param {PublishMessageRequest} publishMessageRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publishMessage(publishMessageRequest: PublishMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.publishMessage(publishMessageRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MessagesApi - object-oriented interface
+ * @export
+ * @class MessagesApi
+ * @extends {BaseAPI}
+ */
+export class MessagesApi extends BaseAPI {
+    /**
+     * 
+     * @summary Publish a message
+     * @param {PublishMessageRequest} publishMessageRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MessagesApi
+     */
+    public publishMessage(publishMessageRequest: PublishMessageRequest, options?: RawAxiosRequestConfig) {
+        return MessagesApiFp(this.configuration).publishMessage(publishMessageRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -598,11 +814,11 @@ export const ProcessDefinitionsApiAxiosParamCreator = function (configuration?: 
         /**
          * 
          * @summary Get process definition
-         * @param {number} processDefinitionKey 
+         * @param {string} processDefinitionKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessDefinition: async (processDefinitionKey: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProcessDefinition: async (processDefinitionKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processDefinitionKey' is not null or undefined
             assertParamExists('getProcessDefinition', 'processDefinitionKey', processDefinitionKey)
             const localVarPath = `/process-definitions/{processDefinitionKey}`
@@ -685,11 +901,11 @@ export const ProcessDefinitionsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get process definition
-         * @param {number} processDefinitionKey 
+         * @param {string} processDefinitionKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProcessDefinition(processDefinitionKey: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessDefinitionDetail>> {
+        async getProcessDefinition(processDefinitionKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessDefinitionDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProcessDefinition(processDefinitionKey, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessDefinitionsApi.getProcessDefinition']?.[localVarOperationServerIndex]?.url;
@@ -730,11 +946,11 @@ export const ProcessDefinitionsApiFactory = function (configuration?: Configurat
         /**
          * 
          * @summary Get process definition
-         * @param {number} processDefinitionKey 
+         * @param {string} processDefinitionKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessDefinition(processDefinitionKey: number, options?: RawAxiosRequestConfig): AxiosPromise<ProcessDefinitionDetail> {
+        getProcessDefinition(processDefinitionKey: string, options?: RawAxiosRequestConfig): AxiosPromise<ProcessDefinitionDetail> {
             return localVarFp.getProcessDefinition(processDefinitionKey, options).then((request) => request(axios, basePath));
         },
         /**
@@ -771,12 +987,12 @@ export class ProcessDefinitionsApi extends BaseAPI {
     /**
      * 
      * @summary Get process definition
-     * @param {number} processDefinitionKey 
+     * @param {string} processDefinitionKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessDefinitionsApi
      */
-    public getProcessDefinition(processDefinitionKey: number, options?: RawAxiosRequestConfig) {
+    public getProcessDefinition(processDefinitionKey: string, options?: RawAxiosRequestConfig) {
         return ProcessDefinitionsApiFp(this.configuration).getProcessDefinition(processDefinitionKey, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -839,11 +1055,11 @@ export const ProcessInstancesApiAxiosParamCreator = function (configuration?: Co
         /**
          * 
          * @summary Get list of activities for a process instance
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getActivities: async (processInstanceKey: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getActivities: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getActivities', 'processInstanceKey', processInstanceKey)
             const localVarPath = `/process-instances/{processInstanceKey}/activities`
@@ -873,11 +1089,11 @@ export const ProcessInstancesApiAxiosParamCreator = function (configuration?: Co
         /**
          * 
          * @summary Get list of jobs for a process instance
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getJobs: async (processInstanceKey: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getJobs: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getJobs', 'processInstanceKey', processInstanceKey)
             const localVarPath = `/process-instances/{processInstanceKey}/jobs`
@@ -907,11 +1123,11 @@ export const ProcessInstancesApiAxiosParamCreator = function (configuration?: Co
         /**
          * 
          * @summary Get state of a process instance selected by processInstanceId
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessInstance: async (processInstanceKey: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProcessInstance: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getProcessInstance', 'processInstanceKey', processInstanceKey)
             const localVarPath = `/process-instances/{processInstanceKey}`
@@ -941,13 +1157,13 @@ export const ProcessInstancesApiAxiosParamCreator = function (configuration?: Co
         /**
          * 
          * @summary Get list of running process instances
-         * @param {number} [processDefinitionKey] 
+         * @param {string} [processDefinitionKey] 
          * @param {number} [offset] 
          * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessInstances: async (processDefinitionKey?: number, offset?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProcessInstances: async (processDefinitionKey?: string, offset?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/process-instances/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1009,11 +1225,11 @@ export const ProcessInstancesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get list of activities for a process instance
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getActivities(processInstanceKey: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityPage>> {
+        async getActivities(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityPage>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getActivities(processInstanceKey, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstancesApi.getActivities']?.[localVarOperationServerIndex]?.url;
@@ -1022,11 +1238,11 @@ export const ProcessInstancesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get list of jobs for a process instance
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getJobs(processInstanceKey: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JobPage>> {
+        async getJobs(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JobPage>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getJobs(processInstanceKey, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstancesApi.getJobs']?.[localVarOperationServerIndex]?.url;
@@ -1035,11 +1251,11 @@ export const ProcessInstancesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get state of a process instance selected by processInstanceId
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProcessInstance(processInstanceKey: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessInstance>> {
+        async getProcessInstance(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessInstance>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProcessInstance(processInstanceKey, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstancesApi.getProcessInstance']?.[localVarOperationServerIndex]?.url;
@@ -1048,13 +1264,13 @@ export const ProcessInstancesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get list of running process instances
-         * @param {number} [processDefinitionKey] 
+         * @param {string} [processDefinitionKey] 
          * @param {number} [offset] 
          * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProcessInstances(processDefinitionKey?: number, offset?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProcessInstances200Response>> {
+        async getProcessInstances(processDefinitionKey?: string, offset?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProcessInstances200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProcessInstances(processDefinitionKey, offset, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstancesApi.getProcessInstances']?.[localVarOperationServerIndex]?.url;
@@ -1083,43 +1299,43 @@ export const ProcessInstancesApiFactory = function (configuration?: Configuratio
         /**
          * 
          * @summary Get list of activities for a process instance
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getActivities(processInstanceKey: number, options?: RawAxiosRequestConfig): AxiosPromise<ActivityPage> {
+        getActivities(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<ActivityPage> {
             return localVarFp.getActivities(processInstanceKey, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get list of jobs for a process instance
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getJobs(processInstanceKey: number, options?: RawAxiosRequestConfig): AxiosPromise<JobPage> {
+        getJobs(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<JobPage> {
             return localVarFp.getJobs(processInstanceKey, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get state of a process instance selected by processInstanceId
-         * @param {number} processInstanceKey 
+         * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessInstance(processInstanceKey: number, options?: RawAxiosRequestConfig): AxiosPromise<ProcessInstance> {
+        getProcessInstance(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<ProcessInstance> {
             return localVarFp.getProcessInstance(processInstanceKey, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get list of running process instances
-         * @param {number} [processDefinitionKey] 
+         * @param {string} [processDefinitionKey] 
          * @param {number} [offset] 
          * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessInstances(processDefinitionKey?: number, offset?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<GetProcessInstances200Response> {
+        getProcessInstances(processDefinitionKey?: string, offset?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<GetProcessInstances200Response> {
             return localVarFp.getProcessInstances(processDefinitionKey, offset, size, options).then((request) => request(axios, basePath));
         },
     };
@@ -1147,50 +1363,50 @@ export class ProcessInstancesApi extends BaseAPI {
     /**
      * 
      * @summary Get list of activities for a process instance
-     * @param {number} processInstanceKey 
+     * @param {string} processInstanceKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstancesApi
      */
-    public getActivities(processInstanceKey: number, options?: RawAxiosRequestConfig) {
+    public getActivities(processInstanceKey: string, options?: RawAxiosRequestConfig) {
         return ProcessInstancesApiFp(this.configuration).getActivities(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get list of jobs for a process instance
-     * @param {number} processInstanceKey 
+     * @param {string} processInstanceKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstancesApi
      */
-    public getJobs(processInstanceKey: number, options?: RawAxiosRequestConfig) {
+    public getJobs(processInstanceKey: string, options?: RawAxiosRequestConfig) {
         return ProcessInstancesApiFp(this.configuration).getJobs(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get state of a process instance selected by processInstanceId
-     * @param {number} processInstanceKey 
+     * @param {string} processInstanceKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstancesApi
      */
-    public getProcessInstance(processInstanceKey: number, options?: RawAxiosRequestConfig) {
+    public getProcessInstance(processInstanceKey: string, options?: RawAxiosRequestConfig) {
         return ProcessInstancesApiFp(this.configuration).getProcessInstance(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get list of running process instances
-     * @param {number} [processDefinitionKey] 
+     * @param {string} [processDefinitionKey] 
      * @param {number} [offset] 
      * @param {number} [size] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstancesApi
      */
-    public getProcessInstances(processDefinitionKey?: number, offset?: number, size?: number, options?: RawAxiosRequestConfig) {
+    public getProcessInstances(processDefinitionKey?: string, offset?: number, size?: number, options?: RawAxiosRequestConfig) {
         return ProcessInstancesApiFp(this.configuration).getProcessInstances(processDefinitionKey, offset, size, options).then((request) => request(this.axios, this.basePath));
     }
 }

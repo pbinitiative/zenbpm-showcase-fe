@@ -4,12 +4,10 @@ info:
   description: REST API for lib-bpmn-engine
   version: 0.1.0
 servers:
-  - url: http://localhost:8091
-  - url: http://zenbpms.127.0.0.1.nip.io/api
+  - url: http://localhost:8080/v1
 tags:
   - name: process-definitions
   - name: process-instances
-  - name: cluster
 paths:
   /process-definitions:
     post:
@@ -58,8 +56,7 @@ paths:
           required: true
           in: path
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         200:
           description: Process definition
@@ -105,8 +102,7 @@ paths:
         - name: processDefinitionKey
           in: query
           schema:
-            type: integer
-            format: int64
+            type: string
         - name: offset
           in: query
           schema:
@@ -124,6 +120,8 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - total
                 properties:
                   total:
                     type: integer
@@ -142,8 +140,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         200:
           description: State of a process instance
@@ -163,8 +160,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         200:
           description: List of jobs
@@ -183,8 +179,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         200:
           description: List of activities
@@ -209,32 +204,57 @@ paths:
               properties:
                 jobKey:
                   type: string
+                variables:
+                  type: object
       responses:
         201:
           description: Job completed
-  /cluster:
-    get:
-      operationId: getClusterInfo
+  /jobs/{jobType}/activate:
+    post:
+      operationId: activateJobs
       tags:
-        - cluster
-      summary: Get cluster information
+        - jobs
+      summary: Activate jobs
+      parameters:
+        - name: jobType
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         200:
-          description: Cluster information
+          description: Jobs activated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ClusterInfo"
-
-  /cluster/rebalance:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Job"
+  /messages:
     post:
-      operationId: rebalance
+      operationId: publishMessage
       tags:
-        - cluster
-      summary: Rebalance cluster
+        - messages
+      summary: Publish a message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - processInstanceKey
+                - messageName
+              properties:
+                processInstanceKey:
+                  type: string
+                messageName:
+                  type: string
+                variables:
+                  type: object
       responses:
-        200:
-          description: Cluster rebalanced
+        201:
+          description: Message sent
 
 components:
   schemas:
@@ -286,6 +306,11 @@ components:
         - $ref: "#/components/schemas/PageMetadata"
     ProcessInstance:
       type: object
+      required:
+        - key
+        - processDefinitionKey
+        - createAt
+        - state
       properties:
         key:
           type: string
@@ -324,6 +349,8 @@ components:
           type: string
         elementId:
           type: string
+        type:
+          type: string
         elementInstanceKey:
           type: string
         processInstanceKey:
@@ -361,24 +388,3 @@ components:
           type: string
         bpmnElementType:
           type: string
-
-    ClusterInfo:
-      type: object
-      properties:
-        partitions:
-          type: array
-          items:
-            type: object
-            $ref: "#/components/schemas/ClusterPartition"
-
-    ClusterPartition:
-      type: object
-      properties:
-        id:
-          type: string
-        leader:
-          type: string
-        members:
-          type: array
-          items:
-            type: string

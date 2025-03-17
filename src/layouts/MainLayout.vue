@@ -1,7 +1,12 @@
 <template>
   <q-layout view="hHh Lpr fff">
-    <q-header elevated>
+    <q-header elevated class="text-white">
       <q-toolbar>
+        <q-img
+          class="gt-xs q-mr-xs"
+          src="/logo.png"
+          style="height: 40px; width: 40px"
+        />
         <q-toolbar-title> ZenBPM Showcase </q-toolbar-title>
 
         <q-btn
@@ -35,6 +40,11 @@ defineOptions({
 
 const linksList = [
   {
+    title: "Tasklist",
+    caption: "tasklist",
+    to: "/tasklist",
+  },
+  {
     title: "Process Definitions",
     caption: "process-definitions",
     // icon: "description",
@@ -45,11 +55,6 @@ const linksList = [
     caption: "process-instances",
     // icon: "assignment_turned_in",
     to: "/process-instances",
-  },
-  {
-    title: "Tasklist",
-    caption: "tasklist",
-    to: "/tasklist",
   },
 ];
 

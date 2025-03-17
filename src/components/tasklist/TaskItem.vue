@@ -6,16 +6,16 @@
     active-class="bg-blue-1"
   >
     <q-item-section>
-      <div class="text-h6 q-mb-sm">{{ props.task.name }}</div>
+      <div class="text-h6 q-mb-sm">{{ props.task.elementId }}</div>
 
       <q-item-label caption>
         <div>
-          <q-badge color="primary" :label="props.task.process" />
+          <q-badge color="primary" :label="props.task.processInstanceKey" />
         </div>
       </q-item-label>
       <q-item-label caption>
         <q-icon name="event" class="q-mr-sm" />
-        {{ props.task.startDate.toLocaleString("cs-CZ") }}
+        {{ new Date(props.task.createdAt).toLocaleString() }}
       </q-item-label>
     </q-item-section>
     <q-item-section side style="align-self: flex-end">
