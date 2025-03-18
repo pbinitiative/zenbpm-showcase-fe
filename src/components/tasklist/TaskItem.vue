@@ -6,11 +6,16 @@
     active-class="bg-blue-1"
   >
     <q-item-section>
-      <div class="text-h6 q-mb-sm">{{ props.task.elementId }}</div>
+      <div class="text-h6 q-mb-sm">
+        {{ metadata ? metadata.name : props.task.elementId }}
+      </div>
 
       <q-item-label caption>
         <div>
-          <q-badge color="primary" :label="props.task.processInstanceKey" />
+          <q-badge
+            color="primary"
+            :label="metadata ? metadata.process : props.task.processInstanceKey"
+          />
         </div>
       </q-item-label>
       <q-item-label caption>
@@ -35,5 +40,5 @@
   </q-item>
 </template>
 <script setup>
-const props = defineProps(["task", "activeTask"]);
+const props = defineProps(["task", "activeTask", "metadata"]);
 </script>

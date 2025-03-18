@@ -10,6 +10,7 @@
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
+    "open-api-gen": "npx @openapitools/openapi-generator-cli generate -i ./open-api/api.yaml -g typescript-axios -o ./src/api-client",
     "build": "quasar build"
   },
   "dependencies": {

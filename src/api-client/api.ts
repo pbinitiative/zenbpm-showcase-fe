@@ -221,6 +221,12 @@ export interface Job {
      * @memberof Job
      */
     'createdAt'?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof Job
+     */
+    'variableHolder'?: object;
 }
 /**
  * 

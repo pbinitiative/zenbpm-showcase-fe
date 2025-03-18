@@ -7,6 +7,7 @@
       row-key="key"
       :filter="filter"
       :pagination="pagination"
+      :rows-per-page-options="[15]"
       @row-click="(evt, row) => $router.push(`/process-instances/${row.key}`)"
     >
       <template v-slot:top-right>

@@ -8,7 +8,7 @@
           </q-card-section>
           <q-card-section>
             <q-list dense>
-              <q-item>
+              <q-item class="row">
                 <q-item-section>
                   <q-item-label>Key</q-item-label>
                 </q-item-section>
@@ -16,9 +16,9 @@
                   <q-item-label caption>{{ processInstance.key }}</q-item-label>
                 </q-item-section>
               </q-item>
-              <q-item>
+              <q-item class="row">
                 <q-item-section>
-                  <q-item-label>CreatedAt</q-item-label>
+                  <q-item-label>Created at</q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>{{
@@ -32,13 +32,13 @@
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>{{
-                    processInstance.state
+                    mapState(processInstance.state)
                   }}</q-item-label>
                 </q-item-section>
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-item-label>ProcessDefinitionKey</q-item-label>
+                  <q-item-label>Process definition key</q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>{{
@@ -128,7 +128,7 @@
                   name: 'state',
                   align: 'left',
                   label: 'State',
-                  field: 'state',
+                  field: (row) => mapState(row.state),
                 },
                 {
                   name: 'createdAt',
@@ -250,6 +250,10 @@ onMounted(async () => {
   processDefinitionsApi.value = new ProcessDefinitionsApi(config);
   jobsApi.value = new JobsApi(config);
 
+  reload();
+});
+
+function reload() {
   try {
     processInstancesApi.value
       .getProcessInstance(route.params.processInstanceKey)
@@ -298,7 +302,7 @@ onMounted(async () => {
   } catch (err) {
     console.log(err);
   }
-});
+}
 
 function getVariableTableRows() {
   return JSON.parse(processInstance.value.variableHolder);
@@ -321,5 +325,47 @@ function complete(job) {
     .catch((err) => {
       console.log(err);
     });
+}
+
+function mapState(state) {
+  /*
+"ACTIVE":       1,
+	"COMPENSATED":  2,
+	"COMPENSATING": 3,
+	"COMPLETED":    4,
+	"COMPLETING":   5,
+	"FAILED":       6,
+	"FAILING":      7,
+	"READY":        8,
+	"TERMINATED":   9,
+	"TERMINATING":  10,
+	"WITHDRAWN":    11,
+  */
+  switch (state) {
+    case "1":
+      return "ACTIVE";
+    case "2":
+      return "COMPENSATED";
+    case "3":
+      return "COMPENSATING";
+    case "4":
+      return "COMPLETED";
+    case "5":
+      return "COMPLETING";
+    case "6":
+      return "FAILED";
+    case "7":
+      return "FAILING";
+    case "8":
+      return "READY";
+    case "9":
+      return "TERMINATED";
+    case "10":
+      return "TERMINATING";
+    case "11":
+      return "WITHDRAWN";
+    default:
+      return state;
+  }
 }
 </script>

@@ -11,6 +11,7 @@
             v-for="task in tasks"
             :key="task.id"
             :task="task"
+            :metadata="tasksMetadata.find((t) => t.id == task.elementId)"
             :active-task="activeTask"
             @click="selectTask(task)"
           />
@@ -47,7 +48,11 @@
     </q-scroll-area>
   </q-drawer>
   <div>
-    <TaskHeader v-if="activeTask" :task="activeTask" />
+    <TaskHeader
+      v-if="activeTask"
+      :task="activeTask"
+      :metadata="tasksMetadata.find((t) => t.id == activeTask.elementId)"
+    />
     <ProcessHeader
       v-else-if="activeProcess"
       :process="
@@ -125,6 +130,19 @@ const processesMetadata = ref([
     id: "policy-change-process",
     name: "Změna smlovy",
     agenda: "Likvidace",
+  },
+]);
+
+const tasksMetadata = ref([
+  {
+    id: "claim-check-task-1",
+    name: "Provedení manuální likvidace",
+    process: "Zpracování pojistné události",
+  },
+  {
+    id: "claim-check-task-2",
+    name: "Provedení revize",
+    process: "Zpracování pojistné události",
   },
 ]);
 
@@ -231,15 +249,7 @@ const setCurrentComponent = () => {
       currentFormComponent.value = null;
     } else {
       activeTask.value = task;
-      await processInstancesApi
-        .getProcessInstance(task.processInstanceKey)
-        .then((res) => {
-          formData.value = JSON.parse(res.data.variableHolder);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
+      formData.value = task.variableHolder;
       try {
         const formId = task.elementId.substring(
           0,
