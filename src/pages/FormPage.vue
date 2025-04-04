@@ -62,13 +62,10 @@
 
     <div>
       <div v-if="currentFormComponent">
-        <component :is="currentFormComponent" v-model="formData" />
-        <q-btn
-          type="submit"
-          label="Odeslat"
-          color="primary"
-          class="q-ma-xl"
-          @click="submit"
+        <component
+          :is="currentFormComponent"
+          v-model="formData"
+          @submit="submit"
         />
       </div>
       <q-banner v-else class="q-ma-md bg-primary text-white">
@@ -135,12 +132,12 @@ const processesMetadata = ref([
 
 const tasksMetadata = ref([
   {
-    id: "claim-check-task-1",
+    id: "example-claim-check-task-1",
     name: "Provedení manuální likvidace",
     process: "Zpracování pojistné události",
   },
   {
-    id: "claim-check-task-2",
+    id: "example-claim-check-task-2",
     name: "Provedení revize",
     process: "Zpracování pojistné události",
   },
@@ -177,7 +174,8 @@ const loadUserTasks = async () => {
   });
 };
 
-const submit = () => {
+const submit = (data) => {
+  formData.value = data;
   console.log(formData.value);
   if (activeProcess.value) {
     processInstancesApi

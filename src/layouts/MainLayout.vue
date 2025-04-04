@@ -5,7 +5,7 @@
         <q-img
           class="gt-xs q-mr-xs"
           src="/logo.png"
-          style="height: 40px; width: 40px"
+          style="height: 50px; width: 50px"
         />
         <q-toolbar-title> ZenBPM Showcase </q-toolbar-title>
 
@@ -21,7 +21,7 @@
         </q-btn>
         <q-space />
 
-        <div>Quasar v{{ $q.version }}</div>
+        <!-- <div>Quasar v{{ $q.version }}</div> -->
       </q-toolbar>
     </q-header>
 

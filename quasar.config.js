@@ -87,6 +87,11 @@ module.exports = configure(function (/* ctx */) {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, "/v1"),
         },
+        "/minio": {
+          target: "http://localhost:8085",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/minio/, ""),
+        },
       },
     },
 
