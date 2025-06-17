@@ -85,7 +85,7 @@ module.exports = configure(function (/* ctx */) {
         "/api": {
           target: "http://localhost:8080",
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
+          rewrite: (path) => path.replace(/^\/api/, "/v1"),
         },
       },
     },
