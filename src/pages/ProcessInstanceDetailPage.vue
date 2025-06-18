@@ -79,7 +79,7 @@
             <BpmnIoDiagram
               :diagram-data="processDefinition.bpmnData"
               :overlays="overlays"
-              v-if="processDefinition.bpmnData && activities.length > 0"
+              v-if="processDefinition.bpmnData"
             />
           </q-card-section>
         </q-card>
@@ -137,7 +137,7 @@
               <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
                   <q-btn
-                    v-if="props.row.state == 1"
+                    v-if="props.row.state === 1"
                     label="Complete"
                     color="primary"
                     @click="complete(props.row)"
@@ -263,7 +263,9 @@ onMounted(async () => {
         processInstancesApi.value
           .getActivities(route.params.processInstanceKey)
           .then((res) => {
-            activities.value = res.data.items;
+            activities.value = (res.data.count === 0)
+              ? []
+              : res.data.items;
 
             for (let i = 0; i < activities.value.length; i++) {
               overlays.value[activities.value[i].elementId] = {

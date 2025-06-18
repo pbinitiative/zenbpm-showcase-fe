@@ -31,8 +31,8 @@ function applyOverlays() {
   // attach an overlay to a node
   for (const [bpmnId, data] of Object.entries(props.overlays)) {
     if (
-      data.bpmnElementType != "SEQUENCE_FLOW" &&
-      data.state == "ELEMENT_ACTIVATED"
+      data.bpmnElementType !== "SEQUENCE_FLOW" &&
+      data.state === "ELEMENT_ACTIVATED"
     ) {
       overlays.add(bpmnId, data.state, {
         position: {
@@ -51,7 +51,9 @@ onMounted(async () => {
     container: diagramRef.value,
   });
 
-  const xml = atob(props.diagramData);
+  const xml = (props.diagramData[0] === '<')
+    ? props.diagramData
+    : atob(props.diagramData);
   await bpmnViewer.value.importXML(xml);
   applyOverlays();
 });
