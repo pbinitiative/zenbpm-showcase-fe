@@ -1,6 +1,6 @@
-# GoBPM Showcase FE (gobpm-showcase-fe)
+# ZenBPM Showcase FE (zenbpm-showcase-fe)
 
-This is first GoBPS showcase for presentation purposes
+This is first ZenBPM showcase for presentation purposes
 
 > ⚠️ Warning: this is just a sample, not a real application.
 
@@ -10,7 +10,7 @@ This is first GoBPS showcase for presentation purposes
 # 1. Clone the repository
 git clone <FILL_REPO_URL>
 # 2. Install dependencies
-cd gobpm-showcase-fe
+cd zenbpm-showcase-fe
 npm install
 # 3. Run the app
 npm run dev
@@ -22,5 +22,5 @@ npm run dev
 To build a Docker image:
 
 ```bash
-docker build -t gobpms-showcase-fe .
+docker build -t zenbpm-showcase-fe .
 ```

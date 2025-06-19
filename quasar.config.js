@@ -193,7 +193,7 @@ module.exports = configure(function (/* ctx */) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: "gobpm-showcase-fe",
+        appId: "zenbpm-showcase-fe",
       },
     },
 
