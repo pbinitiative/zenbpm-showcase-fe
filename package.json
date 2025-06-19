@@ -1,8 +1,8 @@
 {
-  "name": "gobpm-showcase-fe",
+  "name": "zenbpm-showcase-fe",
   "version": "0.0.1",
-  "description": "This is first Go BPS showcase for presentatino purposes",
-  "productName": "GoBPM Showcase FE",
+  "description": "This is first ZenBPM showcase for presentatino purposes",
+  "productName": "ZenBPM Showcase FE",
   "author": "Adam Klíma <adam.klima@ibpm.cz>",
   "private": true,
   "scripts": {
