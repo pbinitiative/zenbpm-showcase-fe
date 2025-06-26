@@ -79,6 +79,7 @@
             <BpmnIoDiagram
               :diagram-data="processDefinition.bpmnData"
               :overlays="overlays"
+              :history="history"
               v-if="processDefinition.bpmnData"
             />
           </q-card-section>
@@ -96,6 +97,7 @@
         >
           <q-tab name="jobs" label="Jobs" />
           <q-tab name="activities" label="Activities" />
+          <q-tab name="history" label="History" />
           <q-tab name="variables" label="Variables" />
         </q-tabs>
 
@@ -182,6 +184,35 @@
             />
           </q-tab-panel>
 
+          <q-tab-panel name="history" class="q-pa-none">
+            <q-table
+              v-if="history"
+              :rows="history"
+              :columns="[
+                { name: 'key', align: 'left', label: 'Key', field: 'key' },
+                {
+                  name: 'elementId',
+                  align: 'left',
+                  label: 'Element ID',
+                  field: 'elementId',
+                },
+                {
+                  name: 'processInstanceKey',
+                  align: 'left',
+                  label: 'Process Instance Key',
+                  field: 'processInstanceKey',
+                },
+                {
+                  name: 'createdAt',
+                  align: 'left',
+                  label: 'Created At',
+                  field: (row) => new Date(row.createdAt).toLocaleString(),
+                },
+              ]"
+              row-key="key"
+            />
+          </q-tab-panel>
+
           <q-tab-panel name="variables" class="q-pa-none">
             <q-table
               v-if="processInstance.variableHolder"
@@ -232,6 +263,7 @@ const jobsApi = ref(null);
 const processInstance = ref({});
 const processDefinition = ref({});
 const activities = ref([]);
+const history = ref([]);
 const jobs = ref([]);
 const route = useRoute();
 const tab = ref("jobs");
@@ -277,6 +309,19 @@ onMounted(async () => {
           .catch((err) => {
             console.log(err);
           });
+
+        // Load history
+        processInstancesApi.value
+          .getHistory(route.params.processInstanceKey)
+          .then((res) => {
+            history.value = (res.data.count === 0)
+              ? []
+              : res.data.items;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
 
         // Load jobs
         processInstancesApi.value

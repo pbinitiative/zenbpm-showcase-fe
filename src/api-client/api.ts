@@ -157,6 +157,68 @@ export interface CreateProcessInstanceRequest {
 /**
  * 
  * @export
+ * @interface FlowElementHistory
+ */
+export interface FlowElementHistory {
+    /**
+     * 
+     * @type {string}
+     * @memberof FlowElementHistory
+     */
+    'key'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FlowElementHistory
+     */
+    'processInstanceKey'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FlowElementHistory
+     */
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FlowElementHistory
+     */
+    'elementId'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface FlowElementHistoryPage
+ */
+export interface FlowElementHistoryPage {
+    /**
+     * 
+     * @type {number}
+     * @memberof FlowElementHistoryPage
+     */
+    'offset': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FlowElementHistoryPage
+     */
+    'size': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FlowElementHistoryPage
+     */
+    'count': number;
+    /**
+     * 
+     * @type {Array<FlowElementHistory>}
+     * @memberof FlowElementHistoryPage
+     */
+    'items'?: Array<FlowElementHistory>;
+}
+/**
+ * 
+ * @export
  * @interface Job
  */
 export interface Job {
@@ -1120,6 +1182,40 @@ export const ProcessInstancesApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
+         * @summary Get list of visited flow elements for a process instance
+         * @param {string} processInstanceKey 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHistory: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'processInstanceKey' is not null or undefined
+            assertParamExists('getHistory', 'processInstanceKey', processInstanceKey)
+            const localVarPath = `/process-instances/{processInstanceKey}/history`
+                .replace(`{${"processInstanceKey"}}`, encodeURIComponent(String(processInstanceKey)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get list of jobs for a process instance
          * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
@@ -1271,6 +1367,19 @@ export const ProcessInstancesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get list of visited flow elements for a process instance
+         * @param {string} processInstanceKey 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getHistory(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FlowElementHistoryPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(processInstanceKey, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProcessInstancesApi.getHistory']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Get list of jobs for a process instance
          * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
@@ -1342,6 +1451,16 @@ export const ProcessInstancesApiFactory = function (configuration?: Configuratio
         },
         /**
          * 
+         * @summary Get list of visited flow elements for a process instance
+         * @param {string} processInstanceKey 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHistory(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<FlowElementHistoryPage> {
+            return localVarFp.getHistory(processInstanceKey, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get list of jobs for a process instance
          * @param {string} processInstanceKey 
          * @param {*} [options] Override http request option.
@@ -1404,6 +1523,18 @@ export class ProcessInstancesApi extends BaseAPI {
      */
     public getActivities(processInstanceKey: string, options?: RawAxiosRequestConfig) {
         return ProcessInstancesApiFp(this.configuration).getActivities(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get list of visited flow elements for a process instance
+     * @param {string} processInstanceKey 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProcessInstancesApi
+     */
+    public getHistory(processInstanceKey: string, options?: RawAxiosRequestConfig) {
+        return ProcessInstancesApiFp(this.configuration).getHistory(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
