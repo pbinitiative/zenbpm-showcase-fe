@@ -15,10 +15,23 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  history: {
+    type: Array,
+    default: () => [],
+  }
 });
 
 const diagramRef = ref(null);
 const bpmnViewer = ref(null);
+
+function applyHistory() {
+  if (!bpmnViewer.value || !props.history) return;
+  var canvas = bpmnViewer.value.get("canvas");
+  for (let i = 0; i < props.history.length; i++) {
+    canvas.addMarker(props.history[i].elementId, "highlighted");
+    canvas.addMarker(props.history[i].elementId, "element-completed");
+  }
+}
 
 function applyOverlays() {
   // access viewer components
@@ -58,8 +71,13 @@ onMounted(async () => {
     );
   await bpmnViewer.value.importXML(xml);
   applyOverlays();
+  applyHistory();
 });
 
+watch(
+  () => props.history,
+  () => applyHistory()
+);
 watch(
   () => props.overlays,
   () => applyOverlays()
