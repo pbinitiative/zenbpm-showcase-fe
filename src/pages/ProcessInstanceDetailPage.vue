@@ -79,7 +79,8 @@
             <BpmnIoDiagram
               :diagram-data="processDefinition.bpmnData"
               :overlays="overlays"
-              v-if="processDefinition.bpmnData && activities.length > 0"
+              :history="history"
+              v-if="processDefinition.bpmnData"
             />
           </q-card-section>
         </q-card>
@@ -96,6 +97,7 @@
         >
           <q-tab name="jobs" label="Jobs" />
           <q-tab name="activities" label="Activities" />
+          <q-tab name="history" label="History" />
           <q-tab name="variables" label="Variables" />
         </q-tabs>
 
@@ -143,7 +145,7 @@
               <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
                   <q-btn
-                    v-if="props.row.state == 1"
+                    v-if="props.row.state === 1"
                     label="Complete"
                     color="primary"
                     @click="complete(props.row)"
@@ -176,6 +178,35 @@
                   align: 'left',
                   label: 'State',
                   field: 'state',
+                },
+                {
+                  name: 'createdAt',
+                  align: 'left',
+                  label: 'Created At',
+                  field: (row) => new Date(row.createdAt).toLocaleString(),
+                },
+              ]"
+              row-key="key"
+            />
+          </q-tab-panel>
+
+          <q-tab-panel name="history" class="q-pa-none">
+            <q-table
+              v-if="history"
+              :rows="history"
+              :columns="[
+                { name: 'key', align: 'left', label: 'Key', field: 'key' },
+                {
+                  name: 'elementId',
+                  align: 'left',
+                  label: 'Element ID',
+                  field: 'elementId',
+                },
+                {
+                  name: 'processInstanceKey',
+                  align: 'left',
+                  label: 'Process Instance Key',
+                  field: 'processInstanceKey',
                 },
                 {
                   name: 'createdAt',
@@ -238,6 +269,7 @@ const jobsApi = ref(null);
 const processInstance = ref({});
 const processDefinition = ref({});
 const activities = ref([]);
+const history = ref([]);
 const jobs = ref([]);
 const route = useRoute();
 const tab = ref("jobs");
@@ -273,7 +305,9 @@ function reload() {
         processInstancesApi.value
           .getActivities(route.params.processInstanceKey)
           .then((res) => {
-            activities.value = res.data.items;
+            activities.value = (res.data.count === 0)
+              ? []
+              : res.data.items;
 
             for (let i = 0; i < activities.value.length; i++) {
               overlays.value[activities.value[i].elementId] = {
@@ -285,6 +319,19 @@ function reload() {
           .catch((err) => {
             console.log(err);
           });
+
+        // Load history
+        processInstancesApi.value
+          .getHistory(route.params.processInstanceKey)
+          .then((res) => {
+            history.value = (res.data.count === 0)
+              ? []
+              : res.data.items;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
 
         // Load jobs
         processInstancesApi.value

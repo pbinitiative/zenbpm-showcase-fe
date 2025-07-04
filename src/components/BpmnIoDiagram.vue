@@ -15,10 +15,23 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  history: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const diagramRef = ref(null);
 const bpmnViewer = ref(null);
+
+function applyHistory() {
+  if (!bpmnViewer.value || !props.history) return;
+  var canvas = bpmnViewer.value.get("canvas");
+  for (let i = 0; i < props.history.length; i++) {
+    canvas.addMarker(props.history[i].elementId, "highlighted");
+    canvas.addMarker(props.history[i].elementId, "element-completed");
+  }
+}
 
 function applyOverlays() {
   // access viewer components
@@ -31,8 +44,8 @@ function applyOverlays() {
   // attach an overlay to a node
   for (const [bpmnId, data] of Object.entries(props.overlays)) {
     if (
-      data.bpmnElementType != "SEQUENCE_FLOW" &&
-      data.state == "ELEMENT_ACTIVATED"
+      data.bpmnElementType !== "SEQUENCE_FLOW" &&
+      data.state === "ELEMENT_ACTIVATED"
     ) {
       overlays.add(bpmnId, data.state, {
         position: {
@@ -51,13 +64,21 @@ onMounted(async () => {
     container: diagramRef.value,
   });
 
-  const decodedString = new TextDecoder().decode(
-    Uint8Array.from(atob(props.diagramData), (c) => c.charCodeAt(0))
-  );
-  await bpmnViewer.value.importXML(decodedString);
+  const xml =
+    props.diagramData[0] === "<"
+      ? props.diagramData
+      : new TextDecoder().decode(
+          Uint8Array.from(atob(props.diagramData), (c) => c.charCodeAt(0))
+        );
+  await bpmnViewer.value.importXML(xml);
   applyOverlays();
+  applyHistory();
 });
 
+watch(
+  () => props.history,
+  () => applyHistory()
+);
 watch(
   () => props.overlays,
   () => applyOverlays()
