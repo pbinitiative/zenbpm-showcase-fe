@@ -247,7 +247,7 @@ const setCurrentComponent = () => {
       currentFormComponent.value = null;
     } else {
       activeTask.value = task;
-      formData.value = task.variableHolder;
+      formData.value = task.variables;
       try {
         const formId = task.elementId.substring(
           0,

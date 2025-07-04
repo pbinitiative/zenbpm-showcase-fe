@@ -145,7 +145,7 @@
               <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
                   <q-btn
-                    v-if="props.row.state === 1"
+                    v-if="props.row.state === 'ActivityStateActive'"
                     label="Complete"
                     color="primary"
                     @click="complete(props.row)"
@@ -221,11 +221,11 @@
 
           <q-tab-panel name="variables" class="q-pa-none">
             <q-table
-              v-if="processInstance.variableHolder"
+              v-if="processInstance.variables"
               :rows="
-                Object.keys(getVariableTableRows()).map((key) => ({
+                Object.keys(processInstance.variables).map((key) => ({
                   key: key,
-                  value: mapVariableValue(getVariableTableRows()[key]),
+                  value: mapVariableValue(processInstance.variables[key]),
                 }))
               "
               :columns="[
@@ -305,9 +305,7 @@ function reload() {
         processInstancesApi.value
           .getActivities(route.params.processInstanceKey)
           .then((res) => {
-            activities.value = (res.data.count === 0)
-              ? []
-              : res.data.items;
+            activities.value = res.data.count === 0 ? [] : res.data.items;
 
             for (let i = 0; i < activities.value.length; i++) {
               overlays.value[activities.value[i].elementId] = {
@@ -324,14 +322,11 @@ function reload() {
         processInstancesApi.value
           .getHistory(route.params.processInstanceKey)
           .then((res) => {
-            history.value = (res.data.count === 0)
-              ? []
-              : res.data.items;
+            history.value = res.data.count === 0 ? [] : res.data.items;
           })
           .catch((err) => {
             console.log(err);
           });
-
 
         // Load jobs
         processInstancesApi.value
@@ -352,7 +347,7 @@ function reload() {
 }
 
 function getVariableTableRows() {
-  return JSON.parse(processInstance.value.variableHolder);
+  return JSON.parse(processInstance.value.variables);
 }
 
 function mapVariableValue(value) {

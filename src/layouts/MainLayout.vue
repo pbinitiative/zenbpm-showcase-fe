@@ -50,12 +50,12 @@ const linksList = [
     // icon: "description",
     to: "/process-definitions",
   },
-  {
-    title: "Process Instances",
-    caption: "process-instances",
-    // icon: "assignment_turned_in",
-    to: "/process-instances",
-  },
+  // {
+  //   title: "Process Instances",
+  //   caption: "process-instances",
+  //   // icon: "assignment_turned_in",
+  //   to: "/process-instances",
+  // },
 ];
 
 function onMenuClick() {

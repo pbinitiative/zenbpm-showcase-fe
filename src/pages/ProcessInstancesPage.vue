@@ -74,9 +74,9 @@ const columns = [
     sortable: true,
   },
   {
-    name: "VariableHolder",
-    label: "VariableHolder",
-    field: "variableHolder",
+    name: "Variables",
+    label: "Variables",
+    field: "variables",
     sortable: true,
   },
   {

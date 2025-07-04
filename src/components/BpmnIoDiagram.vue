@@ -71,7 +71,9 @@ onMounted(async () => {
           Uint8Array.from(atob(props.diagramData), (c) => c.charCodeAt(0))
         );
   await bpmnViewer.value.importXML(xml);
-  applyOverlays();
+  if (props.overlays) {
+    applyOverlays();
+  }
   applyHistory();
 });
 
