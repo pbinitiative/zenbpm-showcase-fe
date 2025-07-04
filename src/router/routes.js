@@ -20,6 +20,10 @@ const routes = [
         path: "process-instances/:processInstanceKey",
         component: () => import("pages/ProcessInstanceDetailPage.vue"),
       },
+      {
+        path: "tasklist/:id?/:action?/",
+        component: () => import("pages/FormPage.vue"),
+      },
     ],
   },
 

@@ -7,6 +7,7 @@
       row-key="key"
       :filter="filter"
       :pagination="pagination"
+      :rows-per-page-options="[15]"
       @row-click="(evt, row) => $router.push(`/process-instances/${row.key}`)"
     >
       <template v-slot:top-right>
@@ -40,7 +41,7 @@ onMounted(() => {
   processInstancesApi.value
     .getProcessInstances()
     .then((res) => {
-      processInstances.value.push(...res.data.items);
+      processInstances.value.push(...res.data.processInstances[0].items);
     })
     .catch((err) => {
       console.log(err);
@@ -73,9 +74,9 @@ const columns = [
     sortable: true,
   },
   {
-    name: "VariableHolder",
-    label: "VariableHolder",
-    field: "variableHolder",
+    name: "Variables",
+    label: "Variables",
+    field: "variables",
     sortable: true,
   },
   {

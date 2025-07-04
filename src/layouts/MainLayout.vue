@@ -1,7 +1,12 @@
 <template>
   <q-layout view="hHh Lpr fff">
-    <q-header elevated>
+    <q-header elevated class="text-white">
       <q-toolbar>
+        <q-img
+          class="gt-xs q-mr-xs"
+          src="/logo.png"
+          style="height: 50px; width: 50px"
+        />
         <q-toolbar-title> ZenBPM Showcase </q-toolbar-title>
 
         <q-btn
@@ -16,7 +21,7 @@
         </q-btn>
         <q-space />
 
-        <div>Quasar v{{ $q.version }}</div>
+        <!-- <div>Quasar v{{ $q.version }}</div> -->
       </q-toolbar>
     </q-header>
 
@@ -35,17 +40,22 @@ defineOptions({
 
 const linksList = [
   {
+    title: "Tasklist",
+    caption: "tasklist",
+    to: "/tasklist",
+  },
+  {
     title: "Process Definitions",
     caption: "process-definitions",
     // icon: "description",
     to: "/process-definitions",
   },
-  {
-    title: "Process Instances",
-    caption: "process-instances",
-    // icon: "assignment_turned_in",
-    to: "/process-instances",
-  },
+  // {
+  //   title: "Process Instances",
+  //   caption: "process-instances",
+  //   // icon: "assignment_turned_in",
+  //   to: "/process-instances",
+  // },
 ];
 
 function onMenuClick() {
