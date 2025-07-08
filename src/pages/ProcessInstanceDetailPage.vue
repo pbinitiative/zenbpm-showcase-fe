@@ -80,6 +80,7 @@
               :diagram-data="processDefinition.bpmnData"
               :overlays="overlays"
               :history="history"
+              :incidents="incidents"
               v-if="processDefinition.bpmnData"
             />
           </q-card-section>
@@ -98,6 +99,7 @@
           <q-tab name="jobs" label="Jobs" />
           <q-tab name="activities" label="Activities" />
           <q-tab name="history" label="History" />
+          <q-tab name="incidents" label="Incidents" />
           <q-tab name="variables" label="Variables" />
         </q-tabs>
 
@@ -219,6 +221,67 @@
             />
           </q-tab-panel>
 
+          <q-tab-panel name="incidents" class="q-pa-none">
+            <q-table
+              v-if="incidents"
+              :rows="incidents"
+              :columns="[
+                { name: 'key', align: 'left', label: 'Key', field: 'key' },
+                {
+                  name: 'elementId',
+                  align: 'left',
+                  label: 'Element ID',
+                  field: 'elementId',
+                },
+                {
+                  name: 'message',
+                  align: 'left',
+                  label: 'Message',
+                  field: 'message'
+                },
+                {
+                  name: 'createdAt',
+                  align: 'left',
+                  label: 'Created At',
+                  field: (row) => new Date(row.createdAt).toLocaleString(),
+                },
+                {
+                  name: 'resolvedAt',
+                  align: 'left',
+                  label: 'Resolved At',
+                  field: (row) =>
+                    row.resolvedAt ? new Date(row.resolvedAt).toLocaleString() : '',
+                },
+                {
+                  name: 'actions',
+                  label: 'Action',
+                },
+              ]"
+              row-key="key"
+            >
+              <template v-slot:body-cell-message="props">
+                <q-td :props="props">
+                  <div>
+                    {{ props.row.message.substring(0, 50) + '...' }}
+                    <q-tooltip anchor="top middle" self="bottom middle">
+                      {{ props.row.message }}
+                    </q-tooltip>
+                  </div>
+                </q-td>
+              </template>
+              <template v-slot:body-cell-actions="props">
+                <q-td :props="props">
+                  <q-btn
+                    v-if="!props.row.resolvedAt"
+                    label="Resolve"
+                    color="primary"
+                    @click="resolve(props.row)"
+                  ></q-btn>
+                </q-td>
+              </template>
+            </q-table>
+          </q-tab-panel>
+
           <q-tab-panel name="variables" class="q-pa-none">
             <q-table
               v-if="processInstance.variables"
@@ -257,6 +320,7 @@ import { useRoute, useRouter } from "vue-router";
 import config from "../config/config";
 
 import {
+  IncidentsApi,
   JobsApi,
   ProcessDefinitionsApi,
   ProcessInstancesApi,
@@ -266,10 +330,12 @@ import BpmnIoDiagram from "src/components/BpmnIoDiagram.vue";
 const processInstancesApi = ref(null);
 const processDefinitionsApi = ref(null);
 const jobsApi = ref(null);
+const incidentApi = ref(null);
 const processInstance = ref({});
 const processDefinition = ref({});
 const activities = ref([]);
 const history = ref([]);
+const incidents = ref([]);
 const jobs = ref([]);
 const route = useRoute();
 const tab = ref("jobs");
@@ -281,6 +347,7 @@ onMounted(async () => {
   processInstancesApi.value = new ProcessInstancesApi(config);
   processDefinitionsApi.value = new ProcessDefinitionsApi(config);
   jobsApi.value = new JobsApi(config);
+  incidentApi.value = new IncidentsApi(config);
 
   reload();
 });
@@ -328,6 +395,23 @@ function reload() {
             console.log(err);
           });
 
+        // Load incidents
+        processInstancesApi.value
+          .getIncidents(route.params.processInstanceKey)
+          .then((res) => {
+            incidents.value = res.data.count === 0 ? [] : res.data.items;
+
+            for (let i = 0; i < incidents.value.length; i++) {
+              overlays.value[incidents.value[i].elementId] = {
+                state: 'incident',
+                bpmnElementType: incidents.value[i].bpmnElementType,
+              };
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
         // Load jobs
         processInstancesApi.value
           .getJobs(route.params.processInstanceKey)
@@ -361,6 +445,18 @@ function mapVariableValue(value) {
 function complete(job) {
   jobsApi.value
     .completeJob({ jobKey: job.key })
+    .then(() => {
+      $router.go();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function resolve(incident) {
+
+  incidentApi.value
+    .resolveIncident(incident.key)
     .then(() => {
       $router.go();
     })
