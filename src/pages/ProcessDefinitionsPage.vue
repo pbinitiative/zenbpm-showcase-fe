@@ -1,6 +1,6 @@
 <template>
-  <q-page class="q-pa-md">
-    <q-table
+  <q-page class="q-pa-md pb-100">
+  <q-table
       v-if="processDefinitions"
       title="Process Definitions"
       :rows="processDefinitions"
@@ -24,11 +24,17 @@
           </template>
         </q-input>
       </template>
-    </q-table> </q-page
-  ><q-page-sticky position="bottom-right" :offset="[18, 18]">
-    <q-btn fab icon="add" color="primary" @click="fileInput.click()">
-      <q-tooltip>Deploy new process definition</q-tooltip>
-    </q-btn>
+    </q-table>
+  </q-page>
+  <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <div class="q-gutter-x-sm">
+      <q-btn fab icon="upload" color="primary" @click="fileInput.click()">
+        <q-tooltip>Deploy new process definition from file</q-tooltip>
+      </q-btn>
+      <q-btn fab icon="edit" color="primary" @click="editNewProcessDefinition">
+        <q-tooltip>Edit&nbsp;new&nbsp;process&nbsp;definition</q-tooltip>
+      </q-btn>
+    </div>
   </q-page-sticky>
   <input
     type="file"
@@ -44,9 +50,11 @@ import { ProcessDefinitionsApi } from "src/api-client";
 import { ref, onMounted } from "vue";
 
 import config from "../config/config";
+import {useRouter} from "vue-router";
 
 const processDefinitions = ref([]);
 const processDefinitionsApi = ref(null);
+const router = useRouter();
 
 onMounted(() => {
   processDefinitionsApi.value = new ProcessDefinitionsApi(config);
@@ -98,4 +106,13 @@ const columns = [
     sortable: true,
   },
 ];
+
+function editNewProcessDefinition() {
+  router.push(`/process-definitions/new`);
+}
 </script>
+<style>
+.pb-100 {
+  padding-bottom: 100px;
+}
+</style>

@@ -1,5 +1,8 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page v-if="loading" class="q-pa-md flex flex-center">
+    <q-spinner-gears size="50px" color="primary" />
+  </q-page>
+  <q-page class="q-pa-md pb-100" v-if="!loading">
     <div class="row q-col-gutter-md">
       <div class="col-12 col-md-3">
         <q-card>
@@ -98,10 +101,15 @@
       </template>
     </q-table>
   </q-page>
-  <q-page-sticky position="bottom-right" :offset="[18, 18]">
-    <q-btn fab icon="add" color="primary" @click="startProcessInstance">
-      <q-tooltip>Create&nbsp;new&nbsp;process&nbsp;instance</q-tooltip>
-    </q-btn>
+  <q-page-sticky v-if="!loading" position="bottom-right" :offset="[18, 18]">
+    <div class="q-gutter-x-sm">
+      <q-btn fab icon="add" color="primary" @click="startProcessInstance">
+        <q-tooltip>Create&nbsp;new&nbsp;process&nbsp;instance</q-tooltip>
+      </q-btn>
+      <q-btn fab icon="edit" color="primary" @click="editProcessDefinition">
+        <q-tooltip>Edit process definition</q-tooltip>
+      </q-btn>
+    </div>
   </q-page-sticky>
 </template>
 
@@ -122,6 +130,8 @@ const processDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
 const route = useRoute();
+const loading = ref(true);
+const reloadInterval = ref(100);
 
 const router = useRouter();
 
@@ -194,15 +204,23 @@ const processInstances = computed(() => {
 });
 
 onMounted(async () => {
+  getProcessDefinition();
+});
+
+function getProcessDefinition() {
   processDefinitionsApi.value = new ProcessDefinitionsApi(config);
   processInstancesApi.value = new ProcessInstancesApi(config);
   processDefinitionsApi.value
     .getProcessDefinition(route.params.processDefinitionKey)
     .then((res) => {
       processDefinition.value = res.data;
+      loading.value = false;
     })
     .catch((err) => {
       console.log(err);
+      setTimeout(getProcessDefinition, reloadInterval.value);
+      if (reloadInterval.value < 10000) reloadInterval.value *= 2;
+      console.log(reloadInterval.value);
     });
   processInstancesApi.value
     .getProcessInstances(route.params.processDefinitionKey)
@@ -216,7 +234,7 @@ onMounted(async () => {
     .catch((err) => {
       console.log(err);
     });
-});
+}
 
 function startProcessInstance() {
   const dialogRef = $q.dialog({
@@ -250,4 +268,14 @@ function startProcessInstance() {
     console.log("Cancel");
   });
 }
+
+function editProcessDefinition() {
+  router.push(`/process-definitions/edit/${processDefinition.value.key}`);
+}
+
 </script>
+<style>
+.pb-100 {
+  padding-bottom: 100px;
+}
+</style>
