@@ -120,7 +120,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 
 import { ProcessDefinitionsApi, ProcessInstancesApi } from "src/api-client";
-import BpmnIoDiagram from "src/components/BpmnIoDiagram.vue";
+import BpmnIoDiagram from "components/diagrams/BpmnIoDiagram.vue";
 
 import config from "../config/config";
 
@@ -220,7 +220,6 @@ function getProcessDefinition() {
       console.log(err);
       setTimeout(getProcessDefinition, reloadInterval.value);
       if (reloadInterval.value < 10000) reloadInterval.value *= 2;
-      console.log(reloadInterval.value);
     });
   processInstancesApi.value
     .getProcessInstances(route.params.processDefinitionKey)
@@ -274,8 +273,4 @@ function editProcessDefinition() {
 }
 
 </script>
-<style>
-.pb-100 {
-  padding-bottom: 100px;
-}
-</style>
+

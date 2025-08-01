@@ -32,7 +32,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 
 defineOptions({
   name: "MainLayout",
@@ -56,6 +55,11 @@ const linksList = [
   //   // icon: "assignment_turned_in",
   //   to: "/process-instances",
   // },
+  {
+    title: "Business Rules",
+    caption: "business-rules",
+    to: "/business-rules",
+  },
 ];
 
 function onMenuClick() {
