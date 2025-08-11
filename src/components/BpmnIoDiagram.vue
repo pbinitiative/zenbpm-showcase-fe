@@ -19,6 +19,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  incidents: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const diagramRef = ref(null);
@@ -41,6 +45,19 @@ function applyOverlays() {
   // zoom to fit full viewport
   canvas.zoom("fit-viewport");
 
+  // Count incidents by element ID
+  const incidentCounts = {};
+  if (props.incidents && props.incidents.length > 0) {
+    props.incidents.forEach(incident => {
+      if (!incident.resolvedAt) { // Only count unresolved incidents
+        if (!incidentCounts[incident.elementId]) {
+          incidentCounts[incident.elementId] = 0;
+        }
+        incidentCounts[incident.elementId]++;
+      }
+    });
+  }
+
   // attach an overlay to a node
   for (const [bpmnId, data] of Object.entries(props.overlays)) {
     if (
@@ -55,6 +72,18 @@ function applyOverlays() {
         html: `<div class="overlay element-active">⌖</div>`,
       });
     }
+
+    // Add incident count overlay if there are incidents for this element
+    if (incidentCounts[bpmnId] && incidentCounts[bpmnId] > 0) {
+      overlays.add(bpmnId, "incidents", {
+        position: {
+          top: 0,
+          right: 0,
+        },
+        html: `<div class="overlay incident-count">Incidents:&nbsp;${incidentCounts[bpmnId]}</div>`,
+      });
+    }
+
     canvas.addMarker(bpmnId, "highlighted");
   }
 }
@@ -85,6 +114,10 @@ watch(
   () => props.overlays,
   () => applyOverlays()
 );
+watch(
+  () => props.incidents,
+  () => applyOverlays()
+);
 </script>
 
 <style>
@@ -106,6 +139,14 @@ watch(
 
 .element-active {
   background-color: var(--q-positive);
+}
+
+.incident-count {
+  background-color: var(--q-negative);
+  width: auto;
+  height: auto;
+  padding: 3px 6px;
+  font-size: 12px;
 }
 
 .highlighted .djs-visual rect,
