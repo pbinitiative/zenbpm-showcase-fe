@@ -13,6 +13,14 @@ const routes = [
         component: () => import("pages/ProcessDefinitionDetailPage.vue"),
       },
       {
+        path: "process-definitions/new",
+        component: () => import("pages/ProcessDefinitionEditorPage.vue"),
+      },
+      {
+        path: "process-definitions/edit/:processDefinitionKey",
+        component: () => import("pages/ProcessDefinitionEditorPage.vue"),
+      },
+      {
         path: "process-instances",
         component: () => import("pages/ProcessInstancesPage.vue"),
       },
