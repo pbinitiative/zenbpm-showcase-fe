@@ -1,13 +1,12 @@
 <template>
-  <q-page class="q-pa-md pb-100">
-    <div class="row q-col-gutter-md">
-
+  <q-page class="q-pa-md pb-100 column">
+    <div class="col row q-col-gutter-md">
       <div class="col-12 col-md-12">
-        <q-card>
+        <q-card class="column full-height">
           <q-card-section>
             <div class="text-h6">Business Rule Editor</div>
           </q-card-section>
-          <q-card-section>
+          <q-card-section class="col q-pa-none">
             <DmnEditor
               ref="dmnEditorRef"
               :diagram-data="route.params.decisionDefinitionKey ? decisionDefinition.dmnData : emptyProcess()"
@@ -36,8 +35,9 @@
         <q-tab-panels class="col-12" v-model="tab">
           <q-tab-panel name="log" class="q-pa-none">
             <q-table
-              :rows="log"
-              :columns="[
+                style="max-height: 250px;"
+                :rows="log"
+                :columns="[
                 {
                   name: 'time',
                   label: 'Time',

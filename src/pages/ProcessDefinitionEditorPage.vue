@@ -1,13 +1,12 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row q-col-gutter-md">
-
+  <q-page class="q-pa-md pb-100 column">
+    <div class="col row q-col-gutter-md">
       <div class="col-12 col-md-12">
-        <q-card>
+        <q-card class="column full-height">
           <q-card-section>
             <div class="text-h6">Process Definition Editor</div>
           </q-card-section>
-          <q-card-section>
+          <q-card-section class="col q-pa-none">
             <BpmnEditor
               ref="bpmnEditorRef"
               :diagram-data="route.params.processDefinitionKey ? processDefinition.bpmnData : emptyProcess()"
@@ -36,6 +35,7 @@
         <q-tab-panels class="col-12" v-model="tab">
           <q-tab-panel name="log" class="q-pa-none">
             <q-table
+              style="max-height: 250px;"
               :rows="log"
               :columns="[
                 {

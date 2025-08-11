@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <div class="col-10" ref="diagramRef" style="height: 500px"></div>
+  <div class="col row full-height">
+    <div class="col-10 full-height" ref="diagramRef"></div>
     <div class="col-2" ref="propertiesRef"></div>
   </div>
 </template>
@@ -44,7 +44,6 @@ onMounted(async () => {
   dmnEditor.value = new DmnJS({
     container: diagramRef.value,
     width: "100%",
-    height: "500px",
     keyboard: {
       bindTo: window,
     },
