@@ -320,16 +320,16 @@ import { useRoute, useRouter } from "vue-router";
 import config from "../config/config";
 
 import {
-  IncidentsApi,
-  JobsApi,
-  ProcessDefinitionsApi,
-  ProcessInstancesApi,
+  IncidentApi,
+  JobApi,
+  ProcessDefinitionApi,
+  ProcessInstanceApi,
 } from "src/api-client";
 import BpmnIoDiagram from "components/diagrams/BpmnIoDiagram.vue";
 
-const processInstancesApi = ref(null);
-const processDefinitionsApi = ref(null);
-const jobsApi = ref(null);
+const processInstanceApi = ref(null);
+const processDefinitionApi = ref(null);
+const jobApi = ref(null);
 const incidentApi = ref(null);
 const processInstance = ref({});
 const processDefinition = ref({});
@@ -344,22 +344,22 @@ const $router = useRouter();
 
 onMounted(async () => {
   console.log("ProcessInstanceDetail");
-  processInstancesApi.value = new ProcessInstancesApi(config);
-  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
-  jobsApi.value = new JobsApi(config);
-  incidentApi.value = new IncidentsApi(config);
+  processInstanceApi.value = new ProcessInstanceApi(config);
+  processDefinitionApi.value = new ProcessDefinitionApi(config);
+  jobApi.value = new JobApi(config);
+  incidentApi.value = new IncidentApi(config);
 
   reload();
 });
 
 function reload() {
   try {
-    processInstancesApi.value
+    processInstanceApi.value
       .getProcessInstance(route.params.processInstanceKey)
       .then((res) => {
         processInstance.value = res.data;
         // Load process definition
-        processDefinitionsApi.value
+        processDefinitionApi.value
           .getProcessDefinition(processInstance.value.processDefinitionKey)
           .then((res) => {
             processDefinition.value = res.data;
@@ -369,7 +369,7 @@ function reload() {
           });
 
         // Load activities
-        processInstancesApi.value
+        processInstanceApi.value
           .getActivities(route.params.processInstanceKey)
           .then((res) => {
             activities.value = res.data.count === 0 ? [] : res.data.items;
@@ -386,7 +386,7 @@ function reload() {
           });
 
         // Load history
-        processInstancesApi.value
+        processInstanceApi.value
           .getHistory(route.params.processInstanceKey)
           .then((res) => {
             history.value = res.data.count === 0 ? [] : res.data.items;
@@ -396,7 +396,7 @@ function reload() {
           });
 
         // Load incidents
-        processInstancesApi.value
+        processInstanceApi.value
           .getIncidents(route.params.processInstanceKey)
           .then((res) => {
             incidents.value = res.data.count === 0 ? [] : res.data.items;
@@ -413,7 +413,7 @@ function reload() {
           });
 
         // Load jobs
-        processInstancesApi.value
+        processInstanceApi.value
           .getJobs(route.params.processInstanceKey)
           .then((res) => {
             jobs.value = res.data.items;
@@ -443,7 +443,7 @@ function mapVariableValue(value) {
 }
 
 function complete(job) {
-  jobsApi.value
+  jobApi.value
     .completeJob({ jobKey: job.key })
     .then(() => {
       $router.go();
