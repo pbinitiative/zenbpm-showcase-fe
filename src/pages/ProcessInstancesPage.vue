@@ -28,17 +28,17 @@
 </template>
 
 <script setup>
-import { ProcessInstancesApi } from "src/api-client";
+import { ProcessInstanceApi } from "src/api-client";
 import { ref, onMounted } from "vue";
 import config from "../config/config";
 
-const processInstancesApi = ref(null);
+const processInstanceApi = ref(null);
 const processInstances = ref([]);
 
 onMounted(() => {
-  processInstancesApi.value = new ProcessInstancesApi(config);
+  processInstanceApi.value = new ProcessInstanceApi(config);
 
-  processInstancesApi.value
+  processInstanceApi.value
     .getProcessInstances()
     .then((res) => {
       processInstances.value.push(...res.data.processInstances[0].items);

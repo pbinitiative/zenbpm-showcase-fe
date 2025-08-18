@@ -43,9 +43,9 @@
 import { onMounted, ref } from "vue";
 
 import config from "../../config/config";
-import { DecisionEvaluationApi } from "src/api-client";
+import { DecisionApi } from "src/api-client";
 
-const decisionEvaluationApi = ref(null);
+const decisionApi = ref(null);
 const variables = ref("");
 const loading = ref(false);
 const result = ref(undefined);
@@ -57,7 +57,7 @@ const decisionDefinitionKey = ref("");
 const matchedRules = ref([]);
 
 onMounted(() => {
-  decisionEvaluationApi.value = new DecisionEvaluationApi(config);
+  decisionApi.value = new DecisionApi(config);
 })
 
 const updateVariables = (value) => {
@@ -75,8 +75,7 @@ const evaluate = async () => {
   } else {
     jsonError.value = false;
   }
-  decisionEvaluationApi.value.evaluateDecision({
-    decisionId: decisionId.value,
+  decisionApi.value.evaluateDecision(decisionId.value, {
     variables: JSON.parse(variables.value),
     decisionDefinitionKey: decisionDefinitionKey.value,
   })
