@@ -119,13 +119,13 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useQuasar } from "quasar";
 
-import { ProcessDefinitionsApi, ProcessInstancesApi } from "src/api-client";
+import { ProcessDefinitionApi, ProcessInstanceApi } from "src/api-client";
 import BpmnIoDiagram from "components/diagrams/BpmnIoDiagram.vue";
 
 import config from "../config/config";
 
-const processDefinitionsApi = ref(null);
-const processInstancesApi = ref(null);
+const processDefinitionApi = ref(null);
+const processInstanceApi = ref(null);
 const processDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
@@ -208,9 +208,9 @@ onMounted(async () => {
 });
 
 function getProcessDefinition() {
-  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
-  processInstancesApi.value = new ProcessInstancesApi(config);
-  processDefinitionsApi.value
+  processDefinitionApi.value = new ProcessDefinitionApi(config);
+  processInstanceApi.value = new ProcessInstanceApi(config);
+  processDefinitionApi.value
     .getProcessDefinition(route.params.processDefinitionKey)
     .then((res) => {
       processDefinition.value = res.data;
@@ -221,7 +221,7 @@ function getProcessDefinition() {
       setTimeout(getProcessDefinition, reloadInterval.value);
       if (reloadInterval.value < 10000) reloadInterval.value *= 2;
     });
-  processInstancesApi.value
+  processInstanceApi.value
     .getProcessInstances(route.params.processDefinitionKey)
     .then((res) => {
       partitionsData.value = res.data.partitions || [];
@@ -248,7 +248,7 @@ function startProcessInstance() {
   });
 
   dialogRef.onOk((variables) => {
-    processInstancesApi.value
+    processInstanceApi.value
       .createProcessInstance({
         processDefinitionKey: processDefinition.value.key,
         variables: JSON.parse(variables),

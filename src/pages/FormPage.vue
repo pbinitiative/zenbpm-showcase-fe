@@ -96,17 +96,17 @@ import ProcessHeader from "src/components/tasklist/ProcessHeader.vue";
 import { loadExtSFC } from "src/sfc-loader";
 
 import {
-  ProcessDefinitionsApi,
-  ProcessInstancesApi,
-  JobsApi,
+  ProcessDefinitionApi,
+  ProcessInstanceApi,
+  JobApi,
   JobState,
 } from "src/api-client";
 
 import config from "../config/config";
 
-const processInstancesApi = new ProcessInstancesApi(config);
-const processDefinitionsApi = new ProcessDefinitionsApi(config);
-const jobsApi = new JobsApi(config);
+const processInstanceApi = new ProcessInstanceApi(config);
+const processDefinitionApi = new ProcessDefinitionApi(config);
+const jobApi = new JobApi(config);
 
 const route = useRoute();
 const router = useRouter();
@@ -140,7 +140,7 @@ onMounted(async () => {
   // setCurrentComponent();
   processes.value.length = 0;
 
-  processDefinitionsApi
+  processDefinitionApi
     .getProcessDefinitions()
     .then((res) => {
       processes.value.push(...res.data.items);
@@ -161,7 +161,7 @@ const selectTask = (task) => {
 
 const loadUserTasks = async () => {
   tasks.value.length = 0;
-  await jobsApi.getJobs("user-task-type", JobState.Active).then((res) => {
+  await jobApi.getJobs("user-task-type", JobState.Active).then((res) => {
     tasks.value.push(...res.data.partitions[0].items);
   });
 };
@@ -170,7 +170,7 @@ const submit = (data) => {
   formData.value = data;
   console.log(formData.value);
   if (activeProcess.value) {
-    processInstancesApi
+    processInstanceApi
       .createProcessInstance({
         processDefinitionKey: String(activeProcess.value.key),
         variables: formData.value,
@@ -186,7 +186,7 @@ const submit = (data) => {
         console.log(err);
       });
   } else if (activeTask.value) {
-    jobsApi
+    jobApi
       .completeJob({ jobKey: activeTask.value.key, variables: formData.value })
       .then(() => {
         tab.value = "tasks";

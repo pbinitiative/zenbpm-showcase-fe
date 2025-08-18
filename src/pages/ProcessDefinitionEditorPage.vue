@@ -19,7 +19,7 @@
     </div>
 
    <div class="row q-col-gutter-md q-mt-md q-ml-none"
-        v-if="log.length"
+        v-if="log.length && showLog"
    >
       <q-card class="col-12">
         <q-tabs
@@ -87,9 +87,14 @@
 
   </q-page>
   <q-page-sticky position="bottom-right" :offset="[18, 18]">
-    <q-btn fab icon="rocket" color="primary" @click="deployProcessDefinition">
-      <q-tooltip>Deploy process definition</q-tooltip>
-    </q-btn>
+    <div class="q-gutter-x-sm">
+      <q-btn v-if="log.length" fab :icon="showLog?'keyboard_arrow_down':'keyboard_arrow_up'" color="primary" @click="() => showLog = !showLog">
+        <q-tooltip>{{showLog ? "Hide" : "Show"}} Log</q-tooltip>
+      </q-btn>
+      <q-btn fab icon="rocket" color="primary" @click="deployProcessDefinition">
+        <q-tooltip>Deploy process definition</q-tooltip>
+      </q-btn>
+    </div>
   </q-page-sticky>
 </template>
 
@@ -97,13 +102,13 @@
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { ProcessDefinitionsApi } from "src/api-client";
+import { ProcessDefinitionApi } from "src/api-client";
 import BpmnEditor from "components/diagrams/BpmnEditor.vue";
 
 import config from "../config/config";
 import {useQuasar} from "quasar";
 
-const processDefinitionsApi = ref(null);
+const processDefinitionApi = ref(null);
 const processDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
@@ -111,6 +116,7 @@ const route = useRoute();
 const bpmnEditorRef = ref(null);
 const log = ref([]);
 const tab = ref("log");
+const showLog = ref(true);
 
 const router = useRouter();
 const $q = useQuasar()
@@ -124,8 +130,8 @@ const partitionOptions = computed(() =>
 );
 
 onMounted(async () => {
-  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
-  processDefinitionsApi.value
+  processDefinitionApi.value = new ProcessDefinitionApi(config);
+  processDefinitionApi.value
     .getProcessDefinition(route.params.processDefinitionKey)
     .then((res) => {
       processDefinition.value = res.data;
@@ -149,8 +155,8 @@ async function deployProcessDefinition() {
       return;
     }
 
-    const response = await processDefinitionsApi.value.createProcessDefinition(xmlToSend);
-    if (response.data.processDefinitionKey === route.params.processDefinitionKey) {
+    const response = await processDefinitionApi.value.createProcessDefinition(xmlToSend);
+    if (response.status === 409) {
       log.value.unshift({
         time: new Date(),
         icon: 'close',
