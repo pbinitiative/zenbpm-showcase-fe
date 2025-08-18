@@ -46,28 +46,34 @@
 </template>
 
 <script setup>
-import { ProcessDefinitionsApi } from "src/api-client";
+import { ProcessDefinitionApi } from "src/api-client";
 import { ref, onMounted } from "vue";
 
 import config from "../config/config";
 import {useRouter} from "vue-router";
+import {useQuasar} from "quasar";
 
 const processDefinitions = ref([]);
-const processDefinitionsApi = ref(null);
+const processDefinitionApi = ref(null);
 const router = useRouter();
+const $q = useQuasar()
 
 onMounted(() => {
-  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
+  loadProcessDefinitions();
+});
 
-  processDefinitionsApi.value
+const loadProcessDefinitions = () => {
+  processDefinitionApi.value = new ProcessDefinitionApi(config);
+
+  processDefinitionApi.value
     .getProcessDefinitions()
     .then((res) => {
-      processDefinitions.value.push(...res.data.items);
+      processDefinitions.value = res.data.items;
     })
     .catch((err) => {
       console.log(err);
     });
-});
+}
 
 const fileInput = ref(null);
 
@@ -75,7 +81,24 @@ const deployProcess = () => {
   const selectedFile = fileInput.value.files[0];
   const reader = new FileReader();
   reader.onload = (e) => {
-    processDefinitionsApi.value.createProcessDefinition(e.target.result).then;
+    processDefinitionApi.value.createProcessDefinition(e.target.result)
+      .then(() => {
+        loadProcessDefinitions();
+      })
+      .catch((error) => {
+        console.log(error)
+        $q.notify({
+          message: error.response.data.message,
+          position: 'bottom',
+          timeout: 5000,
+          actions: [
+            {
+              icon: 'close',
+              color: 'white',
+            }
+          ]
+        })
+      });
   };
   reader.readAsText(selectedFile);
 };

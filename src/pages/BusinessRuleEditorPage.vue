@@ -19,7 +19,7 @@
     </div>
 
    <div class="row q-col-gutter-md q-mt-md q-ml-none"
-        v-if="log.length"
+        v-if="log.length && showLog"
    >
       <q-card class="col-12">
         <q-tabs
@@ -87,9 +87,14 @@
 
   </q-page>
   <q-page-sticky position="bottom-right" :offset="[18, 18]">
-    <q-btn fab icon="rocket" color="primary" @click="deployDecisionDefinition">
-      <q-tooltip>Deploy business rule</q-tooltip>
-    </q-btn>
+    <div class="q-gutter-x-sm">
+      <q-btn v-if="log.length" fab :icon="showLog?'keyboard_arrow_down':'keyboard_arrow_up'" color="primary" @click="() => showLog = !showLog">
+        <q-tooltip>{{showLog ? "Hide" : "Show"}} Log</q-tooltip>
+      </q-btn>
+      <q-btn fab icon="rocket" color="primary" @click="deployDecisionDefinition">
+        <q-tooltip>Deploy business rule</q-tooltip>
+      </q-btn>
+    </div>
   </q-page-sticky>
 </template>
 
@@ -97,13 +102,13 @@
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { DecisionDefinitionsApi } from "src/api-client";
+import { DecisionDefinitionApi } from "src/api-client";
 
 import config from "../config/config";
 import { useQuasar } from "quasar";
 import DmnEditor from "components/diagrams/DmnEditor.vue";
 
-const decisionDefinitionsApi = ref(null);
+const decisionDefinitionApi = ref(null);
 const decisionDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
@@ -111,6 +116,7 @@ const route = useRoute();
 const dmnEditorRef = ref(null);
 const log = ref([]);
 const tab = ref("log");
+const showLog = ref(true);
 
 const router = useRouter();
 const $q = useQuasar()
@@ -124,12 +130,12 @@ const partitionOptions = computed(() =>
 );
 
 onMounted(() => {
-  decisionDefinitionsApi.value = new DecisionDefinitionsApi(config);
+  decisionDefinitionApi.value = new DecisionDefinitionApi(config);
   if (!route.params.decisionDefinitionKey) {
     decisionDefinition.value = emptyProcess();
     return;
   }
-  decisionDefinitionsApi.value
+  decisionDefinitionApi.value
     .getDecisionDefinition(route.params.decisionDefinitionKey)
     .then((res) => {
       decisionDefinition.value = res.data;
@@ -153,9 +159,9 @@ async function deployDecisionDefinition() {
       return;
     }
 
-    const response = await decisionDefinitionsApi.value.createDecisionDefinition(xmlToSend);
+    const response = await decisionDefinitionApi.value.createDecisionDefinition(xmlToSend);
     console.log(response.data.decisionDefinitionKey ,"===", route.params.decisionDefinitionKey)
-    if (response.data.decisionDefinitionKey === route.params.decisionDefinitionKey) {
+    if (response.status === 409) {
       log.value.unshift({
         time: new Date(),
         icon: 'close',
