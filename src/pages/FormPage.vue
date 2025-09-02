@@ -120,26 +120,26 @@ const processes = ref([]);
 const processesMetadata = ref([
   {
     id: "example-claim-handling",
-    name: "Zpracování pojistné události",
-    agenda: "Likvidace",
+    name: "Claim Handling",
+    agenda: "Insurance Claim Handling",
   },
   {
     id: "policy-change-process",
-    name: "Změna smlovy",
-    agenda: "Likvidace",
+    name: "Policy Change",
+    agenda: "Insurance Policy Change",
   },
 ]);
 
 const tasksMetadata = ref([
   {
     id: "example-claim-check-task-1",
-    name: "Provedení manuální likvidace",
-    process: "Zpracování pojistné události",
+    name: "Manual Damage Assessment",
+    process: "Claim Handling",
   },
   {
     id: "example-claim-check-task-2",
-    name: "Provedení revize",
-    process: "Zpracování pojistné události",
+    name: "Revision",
+    process: "Claim Handling",
   },
 ]);
 
