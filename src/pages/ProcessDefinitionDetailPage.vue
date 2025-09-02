@@ -221,6 +221,10 @@ function getProcessDefinition() {
       setTimeout(getProcessDefinition, reloadInterval.value);
       if (reloadInterval.value < 10000) reloadInterval.value *= 2;
     });
+  getProcessInstances();
+}
+
+function getProcessInstances() {
   processInstanceApi.value
     .getProcessInstances(route.params.processDefinitionKey)
     .then((res) => {
@@ -240,8 +244,8 @@ function startProcessInstance() {
     title: "New Process Instance",
     message: "Enter process variables in JSON format",
     prompt: {
-      model: "",
-      type: "text", // optional
+      model: "{}",
+      type: "text",
     },
     cancel: true,
     persistent: true,
@@ -260,6 +264,12 @@ function startProcessInstance() {
       })
       .catch((err) => {
         console.log(err);
+        $q.notify({
+          color: "negative",
+          message: "Failed during executing process instance",
+          icon: "report_problem",
+        });
+        getProcessInstances();
       });
   });
 

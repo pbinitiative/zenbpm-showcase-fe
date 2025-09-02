@@ -1,14 +1,15 @@
 <template>
   <q-page class="q-pa-md pb-100">
   <q-table
+      ref="tableRef"
       v-if="processDefinitions"
       title="Process Definitions"
       :rows="processDefinitions"
       :columns="columns"
       row-key="key"
       :filter="filter"
-      :pagination="pagination"
-      :rows-per-page-options="[15]"
+      v-model:pagination="pagination"
+      @request="loadProcessDefinitions"
       @row-click="(evt, row) => $router.push(`/process-definitions/${row.key}`)"
     >
       <template v-slot:top-right>
@@ -55,20 +56,36 @@ import {useQuasar} from "quasar";
 
 const processDefinitions = ref([]);
 const processDefinitionApi = ref(null);
+const tableRef = ref(null)
+const pagination = ref({
+      sortBy: 'desc',
+      descending: false,
+      page: 1,
+      rowsPerPage: 10,
+      rowsNumber: 0
+    })
+
 const router = useRouter();
 const $q = useQuasar()
 
 onMounted(() => {
-  loadProcessDefinitions();
+  tableRef.value.requestServerInteraction()
 });
 
-const loadProcessDefinitions = () => {
+const loadProcessDefinitions = (props) => {
+  const { page, rowsPerPage, sortBy, descending } = props.pagination
   processDefinitionApi.value = new ProcessDefinitionApi(config);
 
   processDefinitionApi.value
-    .getProcessDefinitions()
+    .getProcessDefinitions(page, rowsPerPage)
     .then((res) => {
       processDefinitions.value = res.data.items;
+      pagination.value.page = page;
+      pagination.value.rowsPerPage = rowsPerPage;
+      pagination.value.sortBy = sortBy;
+      pagination.value.descending = descending;
+      pagination.value.rowsNumber = res.data.count;
+      console.log("RES", res)
     })
     .catch((err) => {
       console.log(err);
@@ -83,7 +100,7 @@ const deployProcess = () => {
   reader.onload = (e) => {
     processDefinitionApi.value.createProcessDefinition(e.target.result)
       .then(() => {
-        loadProcessDefinitions();
+        loadProcessDefinitions({pagination: pagination.value});
       })
       .catch((error) => {
         console.log(error)

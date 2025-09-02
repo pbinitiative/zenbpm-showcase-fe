@@ -34,43 +34,43 @@ export interface Activity {
      * @type {string}
      * @memberof Activity
      */
-    'key'?: string;
+    'key': string;
     /**
      * 
      * @type {string}
      * @memberof Activity
      */
-    'processInstanceKey'?: string;
+    'processInstanceKey': string;
     /**
      * 
      * @type {string}
      * @memberof Activity
      */
-    'processDefinitionKey'?: string;
+    'processDefinitionKey': string;
     /**
      * 
      * @type {string}
      * @memberof Activity
      */
-    'createdAt'?: string;
+    'createdAt': string;
     /**
      * 
      * @type {string}
      * @memberof Activity
      */
-    'state'?: string;
+    'state': string;
     /**
      * 
      * @type {string}
      * @memberof Activity
      */
-    'elementId'?: string;
+    'elementId': string;
     /**
      * 
      * @type {string}
      * @memberof Activity
      */
-    'bpmnElementType'?: string;
+    'bpmnElementType': string;
 }
 /**
  * 
@@ -79,23 +79,29 @@ export interface Activity {
  */
 export interface ActivityPage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof ActivityPage
      */
-    'offset': number;
+    'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof ActivityPage
      */
     'size': number;
     /**
-     * 
+     * Number of items returned in the current page
      * @type {number}
      * @memberof ActivityPage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof ActivityPage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<Activity>}
@@ -230,23 +236,29 @@ export interface DecisionDefinitionSimple {
  */
 export interface DecisionDefinitionsPage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof DecisionDefinitionsPage
      */
-    'offset': number;
+    'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof DecisionDefinitionsPage
      */
     'size': number;
     /**
-     * 
+     * Number of items returned in the current page
      * @type {number}
      * @memberof DecisionDefinitionsPage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof DecisionDefinitionsPage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<DecisionDefinitionSimple>}
@@ -466,25 +478,25 @@ export interface FlowElementHistory {
      * @type {string}
      * @memberof FlowElementHistory
      */
-    'key'?: string;
+    'key': string;
     /**
      * 
      * @type {string}
      * @memberof FlowElementHistory
      */
-    'processInstanceKey'?: string;
+    'processInstanceKey': string;
     /**
      * 
      * @type {string}
      * @memberof FlowElementHistory
      */
-    'createdAt'?: string;
+    'createdAt': string;
     /**
      * 
      * @type {string}
      * @memberof FlowElementHistory
      */
-    'elementId'?: string;
+    'elementId': string;
 }
 /**
  * 
@@ -493,23 +505,29 @@ export interface FlowElementHistory {
  */
 export interface FlowElementHistoryPage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof FlowElementHistoryPage
      */
-    'offset': number;
+    'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof FlowElementHistoryPage
      */
     'size': number;
     /**
-     * 
+     * Number of items returned in the current page
      * @type {number}
      * @memberof FlowElementHistoryPage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof FlowElementHistoryPage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<FlowElementHistory>}
@@ -579,23 +597,29 @@ export interface Incident {
  */
 export interface IncidentPage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof IncidentPage
      */
-    'offset': number;
+    'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof IncidentPage
      */
     'size': number;
     /**
-     * 
+     * Number of items returned in the current page
      * @type {number}
      * @memberof IncidentPage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof IncidentPage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<Incident>}
@@ -661,23 +685,29 @@ export interface Job {
  */
 export interface JobPage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof JobPage
      */
-    'offset': number;
+    'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof JobPage
      */
     'size': number;
     /**
-     * 
+     * Number of items returned in the current page
      * @type {number}
      * @memberof JobPage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof JobPage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<Job>}
@@ -692,23 +722,29 @@ export interface JobPage {
  */
 export interface JobPartitionPage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof JobPartitionPage
      */
     'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof JobPartitionPage
      */
     'size': number;
     /**
-     * number of items returned
+     * Number of items returned in the current page
      * @type {number}
      * @memberof JobPartitionPage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof JobPartitionPage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<PartitionJobs>}
@@ -758,23 +794,29 @@ export interface ModelError {
  */
 export interface PageMetadata {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof PageMetadata
      */
-    'offset': number;
+    'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof PageMetadata
      */
     'size': number;
     /**
-     * 
+     * Number of items returned in the current page
      * @type {number}
      * @memberof PageMetadata
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof PageMetadata
+     */
+    'totalCount': number;
 }
 /**
  * 
@@ -821,23 +863,29 @@ export interface PartitionProcessInstances {
  */
 export interface PartitionedPageMetadata {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof PartitionedPageMetadata
      */
     'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof PartitionedPageMetadata
      */
     'size': number;
     /**
-     * number of items returned
+     * Number of items returned in the current page
      * @type {number}
      * @memberof PartitionedPageMetadata
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof PartitionedPageMetadata
+     */
+    'totalCount': number;
 }
 /**
  * 
@@ -902,23 +950,29 @@ export interface ProcessDefinitionSimple {
  */
 export interface ProcessDefinitionsPage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof ProcessDefinitionsPage
      */
-    'offset': number;
+    'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof ProcessDefinitionsPage
      */
     'size': number;
     /**
-     * 
+     * Number of items returned in the current page
      * @type {number}
      * @memberof ProcessDefinitionsPage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof ProcessDefinitionsPage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<ProcessDefinitionSimple>}
@@ -979,23 +1033,29 @@ export type ProcessInstanceStateEnum = typeof ProcessInstanceStateEnum[keyof typ
  */
 export interface ProcessInstancePage {
     /**
-     * 
+     * Current page number (1-based indexing)
      * @type {number}
      * @memberof ProcessInstancePage
      */
     'page': number;
     /**
-     * 
+     * Number of items per page
      * @type {number}
      * @memberof ProcessInstancePage
      */
     'size': number;
     /**
-     * number of items returned
+     * Number of items returned in the current page
      * @type {number}
      * @memberof ProcessInstancePage
      */
     'count': number;
+    /**
+     * Total number of items available
+     * @type {number}
+     * @memberof ProcessInstancePage
+     */
+    'totalCount': number;
     /**
      * 
      * @type {Array<PartitionProcessInstances>}
@@ -1014,7 +1074,7 @@ export interface PublishMessageRequest {
      * @type {string}
      * @memberof PublishMessageRequest
      */
-    'processInstanceKey': string;
+    'correlationKey': string;
     /**
      * 
      * @type {string}
@@ -1061,7 +1121,7 @@ export const DecisionApiAxiosParamCreator = function (configuration?: Configurat
             assertParamExists('evaluateDecision', 'decisionId', decisionId)
             // verify required parameter 'evaluateDecisionRequest' is not null or undefined
             assertParamExists('evaluateDecision', 'evaluateDecisionRequest', evaluateDecisionRequest)
-            const localVarPath = `/decision/{decisionId}/evaluate`
+            const localVarPath = `/decisions/{decisionId}/evaluate`
                 .replace(`{${"decisionId"}}`, encodeURIComponent(String(decisionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1175,7 +1235,7 @@ export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: 
         createDecisionDefinition: async (body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             assertParamExists('createDecisionDefinition', 'body', body)
-            const localVarPath = `/decision-definition`;
+            const localVarPath = `/decision-definitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1211,7 +1271,7 @@ export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: 
         getDecisionDefinition: async (decisionDefinitionKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'decisionDefinitionKey' is not null or undefined
             assertParamExists('getDecisionDefinition', 'decisionDefinitionKey', decisionDefinitionKey)
-            const localVarPath = `/decision-definition/{decisionDefinitionKey}`
+            const localVarPath = `/decision-definitions/{decisionDefinitionKey}`
                 .replace(`{${"decisionDefinitionKey"}}`, encodeURIComponent(String(decisionDefinitionKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1238,11 +1298,13 @@ export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: 
         /**
          * 
          * @summary Get list of decision definitions
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDecisionDefinitions: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/decision-definition`;
+        getDecisionDefinitions: async (page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/decision-definitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1253,6 +1315,14 @@ export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -1304,11 +1374,13 @@ export const DecisionDefinitionApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get list of decision definitions
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDecisionDefinitions(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DecisionDefinitionsPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDecisionDefinitions(options);
+        async getDecisionDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DecisionDefinitionsPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDecisionDefinitions(page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DecisionDefinitionApi.getDecisionDefinitions']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1346,11 +1418,13 @@ export const DecisionDefinitionApiFactory = function (configuration?: Configurat
         /**
          * 
          * @summary Get list of decision definitions
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDecisionDefinitions(options?: RawAxiosRequestConfig): AxiosPromise<DecisionDefinitionsPage> {
-            return localVarFp.getDecisionDefinitions(options).then((request) => request(axios, basePath));
+        getDecisionDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<DecisionDefinitionsPage> {
+            return localVarFp.getDecisionDefinitions(page, size, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1389,12 +1463,14 @@ export class DecisionDefinitionApi extends BaseAPI {
     /**
      * 
      * @summary Get list of decision definitions
+     * @param {number} [page] Page number (1-based indexing)
+     * @param {number} [size] Number of items per page (max 100)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DecisionDefinitionApi
      */
-    public getDecisionDefinitions(options?: RawAxiosRequestConfig) {
-        return DecisionDefinitionApiFp(this.configuration).getDecisionDefinitions(options).then((request) => request(this.axios, this.basePath));
+    public getDecisionDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return DecisionDefinitionApiFp(this.configuration).getDecisionDefinitions(page, size, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1416,7 +1492,7 @@ export const IncidentApiAxiosParamCreator = function (configuration?: Configurat
         resolveIncident: async (incidentKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'incidentKey' is not null or undefined
             assertParamExists('resolveIncident', 'incidentKey', incidentKey)
-            const localVarPath = `/incident/{incidentKey}/resolve`
+            const localVarPath = `/incidents/{incidentKey}/resolve`
                 .replace(`{${"incidentKey"}}`, encodeURIComponent(String(incidentKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1524,7 +1600,7 @@ export const JobApiAxiosParamCreator = function (configuration?: Configuration) 
         completeJob: async (completeJobRequest: CompleteJobRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'completeJobRequest' is not null or undefined
             assertParamExists('completeJob', 'completeJobRequest', completeJobRequest)
-            const localVarPath = `/job`;
+            const localVarPath = `/jobs`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1561,7 +1637,7 @@ export const JobApiAxiosParamCreator = function (configuration?: Configuration) 
          * @throws {RequiredError}
          */
         getJobs: async (jobType?: string, state?: JobState, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/job`;
+            const localVarPath = `/jobs`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1728,7 +1804,7 @@ export const MessageApiAxiosParamCreator = function (configuration?: Configurati
         publishMessage: async (publishMessageRequest: PublishMessageRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'publishMessageRequest' is not null or undefined
             assertParamExists('publishMessage', 'publishMessageRequest', publishMessageRequest)
-            const localVarPath = `/message`;
+            const localVarPath = `/messages`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1838,7 +1914,7 @@ export const ProcessDefinitionApiAxiosParamCreator = function (configuration?: C
         createProcessDefinition: async (body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             assertParamExists('createProcessDefinition', 'body', body)
-            const localVarPath = `/process-definition`;
+            const localVarPath = `/process-definitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1874,7 +1950,7 @@ export const ProcessDefinitionApiAxiosParamCreator = function (configuration?: C
         getProcessDefinition: async (processDefinitionKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processDefinitionKey' is not null or undefined
             assertParamExists('getProcessDefinition', 'processDefinitionKey', processDefinitionKey)
-            const localVarPath = `/process-definition/{processDefinitionKey}`
+            const localVarPath = `/process-definitions/{processDefinitionKey}`
                 .replace(`{${"processDefinitionKey"}}`, encodeURIComponent(String(processDefinitionKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1901,11 +1977,13 @@ export const ProcessDefinitionApiAxiosParamCreator = function (configuration?: C
         /**
          * 
          * @summary Get list of process definitions
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessDefinitions: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/process-definition`;
+        getProcessDefinitions: async (page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/process-definitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1916,6 +1994,14 @@ export const ProcessDefinitionApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -1967,11 +2053,13 @@ export const ProcessDefinitionApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get list of process definitions
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProcessDefinitions(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessDefinitionsPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProcessDefinitions(options);
+        async getProcessDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessDefinitionsPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProcessDefinitions(page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessDefinitionApi.getProcessDefinitions']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2009,11 +2097,13 @@ export const ProcessDefinitionApiFactory = function (configuration?: Configurati
         /**
          * 
          * @summary Get list of process definitions
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessDefinitions(options?: RawAxiosRequestConfig): AxiosPromise<ProcessDefinitionsPage> {
-            return localVarFp.getProcessDefinitions(options).then((request) => request(axios, basePath));
+        getProcessDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<ProcessDefinitionsPage> {
+            return localVarFp.getProcessDefinitions(page, size, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2052,12 +2142,14 @@ export class ProcessDefinitionApi extends BaseAPI {
     /**
      * 
      * @summary Get list of process definitions
+     * @param {number} [page] Page number (1-based indexing)
+     * @param {number} [size] Number of items per page (max 100)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessDefinitionApi
      */
-    public getProcessDefinitions(options?: RawAxiosRequestConfig) {
-        return ProcessDefinitionApiFp(this.configuration).getProcessDefinitions(options).then((request) => request(this.axios, this.basePath));
+    public getProcessDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ProcessDefinitionApiFp(this.configuration).getProcessDefinitions(page, size, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2079,7 +2171,7 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
         createProcessInstance: async (createProcessInstanceRequest: CreateProcessInstanceRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createProcessInstanceRequest' is not null or undefined
             assertParamExists('createProcessInstance', 'createProcessInstanceRequest', createProcessInstanceRequest)
-            const localVarPath = `/process-instance`;
+            const localVarPath = `/process-instances`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2109,13 +2201,15 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
          * 
          * @summary Get list of activities for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getActivities: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getActivities: async (processInstanceKey: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getActivities', 'processInstanceKey', processInstanceKey)
-            const localVarPath = `/process-instance/{processInstanceKey}/activities`
+            const localVarPath = `/process-instances/{processInstanceKey}/activities`
                 .replace(`{${"processInstanceKey"}}`, encodeURIComponent(String(processInstanceKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2127,6 +2221,14 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -2143,13 +2245,15 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
          * 
          * @summary Get list of visited flow elements for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHistory: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getHistory: async (processInstanceKey: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getHistory', 'processInstanceKey', processInstanceKey)
-            const localVarPath = `/process-instance/{processInstanceKey}/history`
+            const localVarPath = `/process-instances/{processInstanceKey}/history`
                 .replace(`{${"processInstanceKey"}}`, encodeURIComponent(String(processInstanceKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2161,6 +2265,14 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -2177,13 +2289,15 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
          * 
          * @summary Get list of incidents for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getIncidents: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getIncidents: async (processInstanceKey: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getIncidents', 'processInstanceKey', processInstanceKey)
-            const localVarPath = `/process-instance/{processInstanceKey}/incidents`
+            const localVarPath = `/process-instances/{processInstanceKey}/incidents`
                 .replace(`{${"processInstanceKey"}}`, encodeURIComponent(String(processInstanceKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2195,6 +2309,14 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -2217,7 +2339,7 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
         getProcessInstance: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getProcessInstance', 'processInstanceKey', processInstanceKey)
-            const localVarPath = `/process-instance/{processInstanceKey}`
+            const localVarPath = `/process-instances/{processInstanceKey}`
                 .replace(`{${"processInstanceKey"}}`, encodeURIComponent(String(processInstanceKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2245,13 +2367,15 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
          * 
          * @summary Get list of jobs for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessInstanceJobs: async (processInstanceKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProcessInstanceJobs: async (processInstanceKey: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processInstanceKey' is not null or undefined
             assertParamExists('getProcessInstanceJobs', 'processInstanceKey', processInstanceKey)
-            const localVarPath = `/process-instance/{processInstanceKey}/jobs`
+            const localVarPath = `/process-instances/{processInstanceKey}/jobs`
                 .replace(`{${"processInstanceKey"}}`, encodeURIComponent(String(processInstanceKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2263,6 +2387,14 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -2278,16 +2410,16 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
         /**
          * 
          * @summary Get list of running process instances
-         * @param {string} processDefinitionKey 
-         * @param {number} [page] 
-         * @param {number} [size] 
+         * @param {string} processDefinitionKey Key of the process definition
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getProcessInstances: async (processDefinitionKey: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'processDefinitionKey' is not null or undefined
             assertParamExists('getProcessInstances', 'processDefinitionKey', processDefinitionKey)
-            const localVarPath = `/process-instance`;
+            const localVarPath = `/process-instances`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2349,11 +2481,13 @@ export const ProcessInstanceApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get list of activities for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getActivities(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getActivities(processInstanceKey, options);
+        async getActivities(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ActivityPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getActivities(processInstanceKey, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstanceApi.getActivities']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2362,11 +2496,13 @@ export const ProcessInstanceApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get list of visited flow elements for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getHistory(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FlowElementHistoryPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(processInstanceKey, options);
+        async getHistory(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FlowElementHistoryPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(processInstanceKey, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstanceApi.getHistory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2375,11 +2511,13 @@ export const ProcessInstanceApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get list of incidents for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getIncidents(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IncidentPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getIncidents(processInstanceKey, options);
+        async getIncidents(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IncidentPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getIncidents(processInstanceKey, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstanceApi.getIncidents']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2401,11 +2539,13 @@ export const ProcessInstanceApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get list of jobs for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProcessInstanceJobs(processInstanceKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JobPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProcessInstanceJobs(processInstanceKey, options);
+        async getProcessInstanceJobs(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JobPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProcessInstanceJobs(processInstanceKey, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProcessInstanceApi.getProcessInstanceJobs']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2413,9 +2553,9 @@ export const ProcessInstanceApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get list of running process instances
-         * @param {string} processDefinitionKey 
-         * @param {number} [page] 
-         * @param {number} [size] 
+         * @param {string} processDefinitionKey Key of the process definition
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2449,31 +2589,37 @@ export const ProcessInstanceApiFactory = function (configuration?: Configuration
          * 
          * @summary Get list of activities for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getActivities(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<ActivityPage> {
-            return localVarFp.getActivities(processInstanceKey, options).then((request) => request(axios, basePath));
+        getActivities(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<ActivityPage> {
+            return localVarFp.getActivities(processInstanceKey, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get list of visited flow elements for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHistory(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<FlowElementHistoryPage> {
-            return localVarFp.getHistory(processInstanceKey, options).then((request) => request(axios, basePath));
+        getHistory(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<FlowElementHistoryPage> {
+            return localVarFp.getHistory(processInstanceKey, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get list of incidents for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getIncidents(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<IncidentPage> {
-            return localVarFp.getIncidents(processInstanceKey, options).then((request) => request(axios, basePath));
+        getIncidents(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<IncidentPage> {
+            return localVarFp.getIncidents(processInstanceKey, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2489,18 +2635,20 @@ export const ProcessInstanceApiFactory = function (configuration?: Configuration
          * 
          * @summary Get list of jobs for a process instance
          * @param {string} processInstanceKey 
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProcessInstanceJobs(processInstanceKey: string, options?: RawAxiosRequestConfig): AxiosPromise<JobPage> {
-            return localVarFp.getProcessInstanceJobs(processInstanceKey, options).then((request) => request(axios, basePath));
+        getProcessInstanceJobs(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<JobPage> {
+            return localVarFp.getProcessInstanceJobs(processInstanceKey, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get list of running process instances
-         * @param {string} processDefinitionKey 
-         * @param {number} [page] 
-         * @param {number} [size] 
+         * @param {string} processDefinitionKey Key of the process definition
+         * @param {number} [page] Page number (1-based indexing)
+         * @param {number} [size] Number of items per page
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2533,36 +2681,42 @@ export class ProcessInstanceApi extends BaseAPI {
      * 
      * @summary Get list of activities for a process instance
      * @param {string} processInstanceKey 
+     * @param {number} [page] Page number (1-based indexing)
+     * @param {number} [size] Number of items per page (max 100)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstanceApi
      */
-    public getActivities(processInstanceKey: string, options?: RawAxiosRequestConfig) {
-        return ProcessInstanceApiFp(this.configuration).getActivities(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
+    public getActivities(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ProcessInstanceApiFp(this.configuration).getActivities(processInstanceKey, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get list of visited flow elements for a process instance
      * @param {string} processInstanceKey 
+     * @param {number} [page] Page number (1-based indexing)
+     * @param {number} [size] Number of items per page (max 100)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstanceApi
      */
-    public getHistory(processInstanceKey: string, options?: RawAxiosRequestConfig) {
-        return ProcessInstanceApiFp(this.configuration).getHistory(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
+    public getHistory(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ProcessInstanceApiFp(this.configuration).getHistory(processInstanceKey, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get list of incidents for a process instance
      * @param {string} processInstanceKey 
+     * @param {number} [page] Page number (1-based indexing)
+     * @param {number} [size] Number of items per page (max 100)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstanceApi
      */
-    public getIncidents(processInstanceKey: string, options?: RawAxiosRequestConfig) {
-        return ProcessInstanceApiFp(this.configuration).getIncidents(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
+    public getIncidents(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ProcessInstanceApiFp(this.configuration).getIncidents(processInstanceKey, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2581,20 +2735,22 @@ export class ProcessInstanceApi extends BaseAPI {
      * 
      * @summary Get list of jobs for a process instance
      * @param {string} processInstanceKey 
+     * @param {number} [page] Page number (1-based indexing)
+     * @param {number} [size] Number of items per page (max 100)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstanceApi
      */
-    public getProcessInstanceJobs(processInstanceKey: string, options?: RawAxiosRequestConfig) {
-        return ProcessInstanceApiFp(this.configuration).getProcessInstanceJobs(processInstanceKey, options).then((request) => request(this.axios, this.basePath));
+    public getProcessInstanceJobs(processInstanceKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ProcessInstanceApiFp(this.configuration).getProcessInstanceJobs(processInstanceKey, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get list of running process instances
-     * @param {string} processDefinitionKey 
-     * @param {number} [page] 
-     * @param {number} [size] 
+     * @param {string} processDefinitionKey Key of the process definition
+     * @param {number} [page] Page number (1-based indexing)
+     * @param {number} [size] Number of items per page
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcessInstanceApi
@@ -2607,222 +2763,6 @@ export class ProcessInstanceApi extends BaseAPI {
 
 
 /**
- * StartCpuProfileApi - axios parameter creator
- * @export
- */
-export const StartCpuProfileApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStartCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'nodeId' is not null or undefined
-            assertParamExists('testStartCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/start-cpu-profile`
-                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * StartCpuProfileApi - functional programming interface
- * @export
- */
-export const StartCpuProfileApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = StartCpuProfileApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.testStartCpuProfile(nodeId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StartCpuProfileApi.testStartCpuProfile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * StartCpuProfileApi - factory interface
- * @export
- */
-export const StartCpuProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = StartCpuProfileApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.testStartCpuProfile(nodeId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * StartCpuProfileApi - object-oriented interface
- * @export
- * @class StartCpuProfileApi
- * @extends {BaseAPI}
- */
-export class StartCpuProfileApi extends BaseAPI {
-    /**
-     * 
-     * @summary start a cpu profiler
-     * @param {string} nodeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof StartCpuProfileApi
-     */
-    public testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
-        return StartCpuProfileApiFp(this.configuration).testStartCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * StopCpuProfileApi - axios parameter creator
- * @export
- */
-export const StopCpuProfileApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStopCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'nodeId' is not null or undefined
-            assertParamExists('testStopCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/stop-cpu-profile`
-                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * StopCpuProfileApi - functional programming interface
- * @export
- */
-export const StopCpuProfileApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = StopCpuProfileApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TestStopCpuProfile200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.testStopCpuProfile(nodeId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StopCpuProfileApi.testStopCpuProfile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * StopCpuProfileApi - factory interface
- * @export
- */
-export const StopCpuProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = StopCpuProfileApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<TestStopCpuProfile200Response> {
-            return localVarFp.testStopCpuProfile(nodeId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * StopCpuProfileApi - object-oriented interface
- * @export
- * @class StopCpuProfileApi
- * @extends {BaseAPI}
- */
-export class StopCpuProfileApi extends BaseAPI {
-    /**
-     * 
-     * @summary stop a cpu profiler
-     * @param {string} nodeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof StopCpuProfileApi
-     */
-    public testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
-        return StopCpuProfileApiFp(this.configuration).testStopCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
  * TestApi - axios parameter creator
  * @export
  */
@@ -2831,14 +2771,14 @@ export const TestApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary start a cpu profiler
-         * @param {string} nodeId 
+         * @param {string} nodeId ID of the node to profile
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         testStartCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'nodeId' is not null or undefined
             assertParamExists('testStartCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/start-cpu-profile`
+            const localVarPath = `/tests/{nodeId}/start-cpu-profile`
                 .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2865,14 +2805,14 @@ export const TestApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary stop a cpu profiler
-         * @param {string} nodeId 
+         * @param {string} nodeId ID of the node to stop profiling
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         testStopCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'nodeId' is not null or undefined
             assertParamExists('testStopCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/stop-cpu-profile`
+            const localVarPath = `/tests/{nodeId}/stop-cpu-profile`
                 .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2909,7 +2849,7 @@ export const TestApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary start a cpu profiler
-         * @param {string} nodeId 
+         * @param {string} nodeId ID of the node to profile
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2922,7 +2862,7 @@ export const TestApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary stop a cpu profiler
-         * @param {string} nodeId 
+         * @param {string} nodeId ID of the node to stop profiling
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2945,7 +2885,7 @@ export const TestApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary start a cpu profiler
-         * @param {string} nodeId 
+         * @param {string} nodeId ID of the node to profile
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2955,7 +2895,7 @@ export const TestApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary stop a cpu profiler
-         * @param {string} nodeId 
+         * @param {string} nodeId ID of the node to stop profiling
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2975,7 +2915,7 @@ export class TestApi extends BaseAPI {
     /**
      * 
      * @summary start a cpu profiler
-     * @param {string} nodeId 
+     * @param {string} nodeId ID of the node to profile
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TestApi
@@ -2987,400 +2927,7 @@ export class TestApi extends BaseAPI {
     /**
      * 
      * @summary stop a cpu profiler
-     * @param {string} nodeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TestApi
-     */
-    public testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
-        return TestApiFp(this.configuration).testStopCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * StartCpuProfileApi - axios parameter creator
- * @export
- */
-export const StartCpuProfileApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStartCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'nodeId' is not null or undefined
-            assertParamExists('testStartCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/start-cpu-profile`
-                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * StartCpuProfileApi - functional programming interface
- * @export
- */
-export const StartCpuProfileApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = StartCpuProfileApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.testStartCpuProfile(nodeId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StartCpuProfileApi.testStartCpuProfile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * StartCpuProfileApi - factory interface
- * @export
- */
-export const StartCpuProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = StartCpuProfileApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.testStartCpuProfile(nodeId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * StartCpuProfileApi - object-oriented interface
- * @export
- * @class StartCpuProfileApi
- * @extends {BaseAPI}
- */
-export class StartCpuProfileApi extends BaseAPI {
-    /**
-     * 
-     * @summary start a cpu profiler
-     * @param {string} nodeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof StartCpuProfileApi
-     */
-    public testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
-        return StartCpuProfileApiFp(this.configuration).testStartCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * StopCpuProfileApi - axios parameter creator
- * @export
- */
-export const StopCpuProfileApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStopCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'nodeId' is not null or undefined
-            assertParamExists('testStopCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/stop-cpu-profile`
-                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * StopCpuProfileApi - functional programming interface
- * @export
- */
-export const StopCpuProfileApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = StopCpuProfileApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TestStopCpuProfile200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.testStopCpuProfile(nodeId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StopCpuProfileApi.testStopCpuProfile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * StopCpuProfileApi - factory interface
- * @export
- */
-export const StopCpuProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = StopCpuProfileApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<TestStopCpuProfile200Response> {
-            return localVarFp.testStopCpuProfile(nodeId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * StopCpuProfileApi - object-oriented interface
- * @export
- * @class StopCpuProfileApi
- * @extends {BaseAPI}
- */
-export class StopCpuProfileApi extends BaseAPI {
-    /**
-     * 
-     * @summary stop a cpu profiler
-     * @param {string} nodeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof StopCpuProfileApi
-     */
-    public testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
-        return StopCpuProfileApiFp(this.configuration).testStopCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * TestApi - axios parameter creator
- * @export
- */
-export const TestApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStartCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'nodeId' is not null or undefined
-            assertParamExists('testStartCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/start-cpu-profile`
-                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStopCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'nodeId' is not null or undefined
-            assertParamExists('testStopCpuProfile', 'nodeId', nodeId)
-            const localVarPath = `/test/{nodeId}/stop-cpu-profile`
-                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * TestApi - functional programming interface
- * @export
- */
-export const TestApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = TestApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.testStartCpuProfile(nodeId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TestApi.testStartCpuProfile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TestStopCpuProfile200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.testStopCpuProfile(nodeId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TestApi.testStopCpuProfile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * TestApi - factory interface
- * @export
- */
-export const TestApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = TestApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary start a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.testStartCpuProfile(nodeId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary stop a cpu profiler
-         * @param {string} nodeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<TestStopCpuProfile200Response> {
-            return localVarFp.testStopCpuProfile(nodeId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * TestApi - object-oriented interface
- * @export
- * @class TestApi
- * @extends {BaseAPI}
- */
-export class TestApi extends BaseAPI {
-    /**
-     * 
-     * @summary start a cpu profiler
-     * @param {string} nodeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TestApi
-     */
-    public testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
-        return TestApiFp(this.configuration).testStartCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary stop a cpu profiler
-     * @param {string} nodeId 
+     * @param {string} nodeId ID of the node to stop profiling
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TestApi

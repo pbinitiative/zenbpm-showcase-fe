@@ -22,9 +22,10 @@ tags:
   - name: job
   - name: message
   - name: incident
+  - name: test
 
 paths:
-  /decision-definition:
+  /decision-definitions:
     post:
       operationId: createDecisionDefinition
       summary: Deploy a new decision definition
@@ -33,7 +34,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X POST http://localhost:8080/v1/decision-definition \
+            curl -X POST http://localhost:8080/v1/decision-definitions \
               -H "Content-Type: application/xml" \
               --data-binary @decision.dmn
       requestBody:
@@ -77,24 +78,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        413:
-          description: Payload too large
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        422:
-          description: Unprocessable Content - invalid DMN XML
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         502:
           description: Failed to redirect request to responsible node
           content:
@@ -110,7 +93,27 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/decision-definition
+            curl -X GET "http://localhost:8080/v1/decision-definitions?page=1&size=10"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of decision definitions
@@ -129,17 +132,18 @@ paths:
                   - key: "4503599627370497"
                     version: 1
                     decisionDefinitionId: "credit-score-check"
-                offset: 0
+                page: 1
                 size: 10
                 count: 3
-        500:
-          description: Internal server error
+                totalCount: 3
+        502:
+          description: Failed to redirect request to responsible node
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /decision-definition/{decisionDefinitionKey}:
+  /decision-definitions/{decisionDefinitionKey}:
     get:
       operationId: getDecisionDefinition
       summary: Get decision definition
@@ -148,7 +152,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/decision-definition/123456789
+            curl -X GET http://localhost:8080/v1/decision-definitions/123456789
       parameters:
         - name: decisionDefinitionKey
           required: true
@@ -181,20 +185,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: Decision definition not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
+        502:
+          description: Failed to redirect request to responsible node
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /decision/{decisionId}/evaluate:
+  /decisions/{decisionId}/evaluate:
     post:
       operationId: evaluateDecision
       summary: Evaluate latest version of decision directly in engine
@@ -203,7 +201,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X POST http://localhost:8080/v1/decision/sample-decision-id/evaluate \
+            curl -X POST http://localhost:8080/v1/decisions/sample-decision-id/evaluate \
               -H "Content-Type: application/json" \
               -d '{
                 "bindingType": "latest",
@@ -280,24 +278,6 @@ paths:
                         inputExpression: "income"
                         inputValue: {"income": 50000}
                 decisionOutput: {"approved": true}
-        400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: Decision not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        422:
-          description: Unprocessable Content - invalid variables JSON
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         500:
           description: Internal server error
           content:
@@ -305,7 +285,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /process-definition:
+  /process-definitions:
     post:
       operationId: createProcessDefinition
       summary: Deploy a new process definition
@@ -314,7 +294,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X POST http://localhost:8080/v1/process-definition \
+            curl -X POST http://localhost:8080/v1/process-definitions \
               -H "Content-Type: application/xml" \
               --data-binary @process.bpmn
       requestBody:
@@ -358,24 +338,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        413:
-          description: Payload too large
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        422:
-          description: Unprocessable Content - invalid BPMN XML
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         502:
           description: Failed to redirect request to responsible node
           content:
@@ -390,7 +352,27 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-definition
+            curl -X GET "http://localhost:8080/v1/process-definitions?page=1&size=10"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of process definitions
@@ -409,15 +391,10 @@ paths:
                   - key: "4503599627370500"
                     version: 1
                     bpmnProcessId: "credit-check"
-                offset: 0
+                page: 1
                 size: 10
                 count: 3
-        400:
-          description: Bad request - invalid query parameters
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                totalCount: 3
         500:
           description: Internal server error
           content:
@@ -425,7 +402,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /process-definition/{processDefinitionKey}:
+  /process-definitions/{processDefinitionKey}:
     get:
       operationId: getProcessDefinition
       summary: Get process definition
@@ -434,7 +411,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-definition/123456789
+            curl -X GET http://localhost:8080/v1/process-definitions/123456789
       parameters:
         - name: processDefinitionKey
           required: true
@@ -467,12 +444,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: Process definition not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         500:
           description: Internal server error
           content:
@@ -480,7 +451,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /process-instance:
+  /process-instances:
     post:
       operationId: createProcessInstance
       summary: Create a new process instance
@@ -489,7 +460,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X POST http://localhost:8080/v1/process-instance \
+            curl -X POST http://localhost:8080/v1/process-instances \
               -H "Content-Type: application/json" \
               -d '{
                 "processDefinitionKey": "123456789",
@@ -540,18 +511,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: Process definition not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        422:
-          description: Unprocessable Content - invalid variables JSON
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         500:
           description: Internal server error
           content:
@@ -572,27 +531,33 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET "http://localhost:8080/v1/process-instance?processDefinitionKey=123456789&page=1&size=10"
+            curl -X GET "http://localhost:8080/v1/process-instances?processDefinitionKey=123456789&page=1&size=10"
       parameters:
         - name: processDefinitionKey
           in: query
           required: true
           schema:
             type: string
+            pattern: '^\d{15,20}$'
+          description: Key of the process definition
           example: "4503599627370498"
         - name: page
           in: query
           schema:
             type: integer
             format: int32
+            minimum: 1
             default: 1
+          description: Page number (1-based indexing)
           example: 1
         - name: size
           in: query
           schema:
             type: integer
             format: int32
+            minimum: 1
             default: 10
+          description: Number of items per page
           example: 10
       responses:
         200:
@@ -634,14 +599,9 @@ paths:
                 page: 1
                 size: 10
                 count: 3
+                totalCount: 3
         400:
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: Process definition not found
           content:
             application/json:
               schema:
@@ -659,7 +619,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /process-instance/{processInstanceKey}:
+  /process-instances/{processInstanceKey}:
     get:
       operationId: getProcessInstance
       tags:
@@ -668,7 +628,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789
+            curl -X GET http://localhost:8080/v1/process-instances/123456789
       parameters:
         - name: processInstanceKey
           in: path
@@ -701,12 +661,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: Process instance not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         500:
           description: Internal server error
           content:
@@ -720,7 +674,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /process-instance/{processInstanceKey}/jobs:
+  /process-instances/{processInstanceKey}/jobs:
     get:
       operationId: getProcessInstanceJobs
       tags:
@@ -729,7 +683,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/jobs
+            curl -X GET "http://localhost:8080/v1/process-instances/123456789/jobs?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -738,6 +692,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of jobs
@@ -765,17 +738,12 @@ paths:
                     variables:
                       result: "approved"
                       score: 85
-                offset: 0
+                page: 1
                 size: 10
                 count: 2
+                totalCount: 2
         400:
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: Process instance not found
           content:
             application/json:
               schema:
@@ -793,7 +761,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /process-instance/{processInstanceKey}/activities:
+  /process-instances/{processInstanceKey}/activities:
     get:
       operationId: getActivities
       tags:
@@ -802,7 +770,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/activities
+            curl -X GET "http://localhost:8080/v1/process-instances/123456789/activities?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -811,6 +779,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of activities
@@ -834,35 +821,12 @@ paths:
                     state: "active"
                     elementId: "Task_CheckApplication"
                     bpmnElementType: "userTask"
-                offset: 0
+                page: 1
                 size: 10
                 count: 2
-        400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: Process instance not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        502:
-          description: Failed to collect data from responsible node
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                totalCount: 2
 
-  /process-instance/{processInstanceKey}/history:
+  /process-instances/{processInstanceKey}/history:
     get:
       operationId: getHistory
       tags:
@@ -871,7 +835,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/history
+            curl -X GET "http://localhost:8080/v1/process-instances/123456789/history?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -880,6 +844,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of activities
@@ -901,23 +884,12 @@ paths:
                     elementId: "Task_CheckApplication"
                     processInstanceKey: "4503599627370501"
                     createdAt: "2025-08-22T14:30:27Z"
-                offset: 0
+                page: 1
                 size: 10
                 count: 3
+                totalCount: 3
         400:
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: Process instance not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
           content:
             application/json:
               schema:
@@ -929,7 +901,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /process-instance/{processInstanceKey}/incidents:
+  /process-instances/{processInstanceKey}/incidents:
     get:
       operationId: getIncidents
       tags:
@@ -938,7 +910,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/incidents
+            curl -X GET "http://localhost:8080/v1/process-instances/123456789/incidents?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -947,6 +919,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of incidents
@@ -971,23 +962,12 @@ paths:
                     createdAt: "2025-08-22T14:36:22Z"
                     resolvedAt: "2025-08-22T14:45:18Z"
                     executionToken: "123457"
-                offset: 0
+                page: 1
                 size: 10
                 count: 2
+                totalCount: 2
         400:
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: Process instance not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
           content:
             application/json:
               schema:
@@ -999,7 +979,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /job:
+  /jobs:
     get:
       operationId: getJobs
       tags:
@@ -1008,7 +988,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET "http://localhost:8080/v1/job?jobType=service-task&state=active&page=1&size=10"
+            curl -X GET "http://localhost:8080/v1/jobs?jobType=service-task&state=active&page=1&size=10"
       parameters:
         - name: jobType
           in: query
@@ -1072,14 +1052,15 @@ paths:
                 page: 1
                 size: 10
                 count: 2
-        400:
-          description: Bad request
+                totalCount: 2
+        500:
+          description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
+        502:
+          description: Failed to collect data from responsible node
           content:
             application/json:
               schema:
@@ -1092,7 +1073,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X POST http://localhost:8080/v1/job \
+            curl -X POST http://localhost:8080/v1/jobs \
               -H "Content-Type: application/json" \
               -d '{
                 "jobKey": "123456789",
@@ -1130,30 +1111,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: Job not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        409:
-          description: Conflict - job already completed or in wrong state
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        422:
-          description: Unprocessable Content - invalid variables JSON
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         502:
           description: Failed to redirect request to responsible node
           content:
@@ -1161,7 +1118,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /message:
+  /messages:
     post:
       operationId: publishMessage
       tags:
@@ -1170,10 +1127,10 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X POST http://localhost:8080/v1/message \
+            curl -X POST http://localhost:8080/v1/messages \
               -H "Content-Type: application/json" \
               -d '{
-                "processInstanceKey": "instance-key-789",
+                "correlationKey": "instance-key-789",
                 "messageName": "payment-received",
                 "variables": {
                   "paymentId": "123456789",
@@ -1187,10 +1144,10 @@ paths:
             schema:
               type: object
               required:
-                - processInstanceKey
+                - correlationKey
                 - messageName
               properties:
-                processInstanceKey:
+                correlationKey:
                   type: string
                   pattern: '^\d{15,20}$'
                 messageName:
@@ -1198,7 +1155,7 @@ paths:
                 variables:
                   type: object
             example:
-              processInstanceKey: "4503599627370501"
+              correlationKey: "4503599627370501"
               messageName: "payment-received"
               variables:
                 paymentId: "pay-123-abc"
@@ -1214,24 +1171,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: Process instance not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        422:
-          description: Unprocessable Content - invalid variables JSON
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         502:
           description: Failed to redirect request to responsible node
           content:
@@ -1239,7 +1178,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /incident/{incidentKey}/resolve:
+  /incidents/{incidentKey}/resolve:
     post:
       operationId: resolveIncident
       tags:
@@ -1248,13 +1187,14 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X POST http://localhost:8080/v1/incident/123456789/resolve
+            curl -X POST http://localhost:8080/v1/incidents/123456789/resolve
       parameters:
         - name: incidentKey
           in: path
           required: true
           schema:
             type: string
+            pattern: '^\d{15,20}$'
           example: "4503599627370530"
       responses:
         201:
@@ -1265,24 +1205,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: Incident not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        409:
-          description: Conflict - incident already resolved
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         502:
           description: Failed to redirect request to responsible node
           content:
@@ -1290,12 +1212,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /test/{nodeId}/start-cpu-profile:
+  /tests/{nodeId}/start-cpu-profile:
     post:
       operationId: testStartCpuProfile
       summary: start a cpu profiler
       tags:
-        - start-cpu-profile
         - test
       parameters:
         - name: nodeId
@@ -1303,6 +1224,8 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^[a-zA-Z0-9-_]+$'
+          description: ID of the node to profile
       responses:
         200:
           description: Cpu profiler starter
@@ -1312,18 +1235,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        502:
-          description: Failed to redirect request to responsible node
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /test/{nodeId}/stop-cpu-profile:
+  /tests/{nodeId}/stop-cpu-profile:
     post:
       operationId: testStopCpuProfile
       summary: stop a cpu profiler
       tags:
-        - stop-cpu-profile
         - test
       parameters:
         - name: nodeId
@@ -1331,6 +1247,8 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^[a-zA-Z0-9-_]+$'
+          description: ID of the node to stop profiling
       responses:
         200:
           description: Cpu profiler stopped
@@ -1348,12 +1266,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        502:
-          description: Failed to redirect request to responsible node
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -1363,27 +1275,40 @@ components:
         - page
         - size
         - count
+        - totalCount
       properties:
         page:
           type: integer
+          description: Current page number (1-based indexing)
         size:
           type: integer
+          description: Number of items per page
         count:
-          description: number of items returned
           type: integer
+          description: Number of items returned in the current page
+        totalCount:
+          type: integer
+          description: Total number of items available
     PageMetadata:
       type: object
       required:
-        - offset
+        - page
         - size
         - count
+        - totalCount
       properties:
-        offset:
+        page:
           type: integer
+          description: Current page number (1-based indexing)
         size:
           type: integer
+          description: Number of items per page
         count:
           type: integer
+          description: Number of items returned in the current page
+        totalCount:
+          type: integer
+          description: Total number of items available
     PartitionProcessInstances:
       type: object
       required:
@@ -1681,6 +1606,14 @@ components:
         - $ref: "#/components/schemas/PageMetadata"
     Activity:
       type: object
+      required:
+        - key
+        - processInstanceKey
+        - processDefinitionKey
+        - createdAt
+        - state
+        - elementId
+        - bpmnElementType
       properties:
         key:
           type: string
@@ -1712,6 +1645,11 @@ components:
         - $ref: "#/components/schemas/PageMetadata"
     FlowElementHistory:
       type: object
+      required:
+        - key
+        - processInstanceKey
+        - createdAt
+        - elementId
       properties:
         key:
           type: string
