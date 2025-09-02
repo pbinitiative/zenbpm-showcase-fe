@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * BPMN Engine OpenAPI
- * REST API for lib-bpmn-engine
+ * ZenBPM OpenAPI
+ * REST API for ZenBPM
  *
  * The version of the OpenAPI document: 0.1.0
  * 

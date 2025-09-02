@@ -147,7 +147,7 @@
               <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
                   <q-btn
-                    v-if="props.row.state === 'ActivityStateActive'"
+                    v-if="props.row.state === 'active'"
                     label="Complete"
                     color="primary"
                     @click="complete(props.row)"
@@ -237,7 +237,7 @@
                   name: 'message',
                   align: 'left',
                   label: 'Message',
-                  field: 'message'
+                  field: 'message',
                 },
                 {
                   name: 'createdAt',
@@ -250,7 +250,9 @@
                   align: 'left',
                   label: 'Resolved At',
                   field: (row) =>
-                    row.resolvedAt ? new Date(row.resolvedAt).toLocaleString() : '',
+                    row.resolvedAt
+                      ? new Date(row.resolvedAt).toLocaleString()
+                      : '',
                 },
                 {
                   name: 'actions',
@@ -262,7 +264,7 @@
               <template v-slot:body-cell-message="props">
                 <q-td :props="props">
                   <div>
-                    {{ props.row.message.substring(0, 50) + '...' }}
+                    {{ props.row.message.substring(0, 50) + "..." }}
                     <q-tooltip anchor="top middle" self="bottom middle">
                       {{ props.row.message }}
                     </q-tooltip>
@@ -403,7 +405,7 @@ function reload() {
 
             for (let i = 0; i < incidents.value.length; i++) {
               overlays.value[incidents.value[i].elementId] = {
-                state: 'incident',
+                state: "incident",
                 bpmnElementType: incidents.value[i].bpmnElementType,
               };
             }
@@ -414,7 +416,7 @@ function reload() {
 
         // Load jobs
         processInstancesApi.value
-          .getJobs(route.params.processInstanceKey)
+          .getProcessInstanceJobs(route.params.processInstanceKey)
           .then((res) => {
             jobs.value = res.data.items;
           })
@@ -454,7 +456,6 @@ function complete(job) {
 }
 
 function resolve(incident) {
-
   incidentApi.value
     .resolveIncident(incident.key)
     .then(() => {

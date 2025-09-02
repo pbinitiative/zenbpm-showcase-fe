@@ -79,7 +79,15 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, watch, ref, onMounted, shallowRef } from "vue";
+import {
+  defineAsyncComponent,
+  watch,
+  ref,
+  onMounted,
+  shallowRef,
+  compile,
+  getCurrentInstance,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import TaskItem from "src/components/tasklist/TaskItem.vue";
 import ProcessItem from "src/components/tasklist/ProcessItem.vue";
@@ -90,6 +98,7 @@ import {
   ProcessDefinitionsApi,
   ProcessInstancesApi,
   JobsApi,
+  JobState,
 } from "src/api-client";
 
 import config from "../config/config";
@@ -106,6 +115,34 @@ const formData = ref({});
 
 const tasks = ref([]);
 
+import { loadModule } from "vue3-sfc-loader";
+import * as Vue from "vue"; // the app’s Vue runtime
+
+import * as QuasarAll from "quasar";
+
+const options = {
+  moduleCache: {
+    vue: Vue,
+    quasar: QuasarAll, // ← lets external SFC `import { QForm } from 'quasar'`
+  },
+  async getFile(url) {
+    const res = await fetch(url, { credentials: "include" }); // if you need cookies
+    if (!res.ok) throw new Error(`${res.status} ${url}`);
+    return { getContentData: () => res.text() };
+  },
+  addStyle(textContent) {
+    const style = document.createElement("style");
+    style.textContent = textContent;
+    document.head.appendChild(style);
+  },
+};
+
+function loadExternalSFC(url) {
+  return defineAsyncComponent(() =>
+    loadModule("/forms/components/" + url, options)
+  );
+}
+
 const getTaskByKey = (key) => {
   return tasks.value.find((task) => task.key == key);
 };
@@ -117,16 +154,15 @@ const getProcessById = (id) => {
 const activeTask = ref(null);
 const activeProcess = ref(null);
 const processes = ref([]);
-const processesMetadata = ref([])
+const processesMetadata = ref([]);
 
-const tasksMetadata = ref([])
+const tasksMetadata = ref([]);
 
 const currentFormComponent = shallowRef(null);
 onMounted(async () => {
-
-  const data = await fetch('http://localhost:8086/metadata').then(r => r.json())
-  processesMetadata.value = data.processes
-  tasksMetadata.value = data.tasks
+  const data = await fetch("/forms/metadata").then((r) => r.json());
+  processesMetadata.value = data.processes;
+  tasksMetadata.value = data.tasks;
 
   // setCurrentComponent();
   processes.value.length = 0;
@@ -152,8 +188,8 @@ const selectTask = (task) => {
 
 const loadUserTasks = async () => {
   tasks.value.length = 0;
-  await jobsApi.activateJobs("user-task-type").then((res) => {
-    tasks.value.push(...res.data);
+  await jobsApi.getJobs("user-task-type", JobState.Active).then((res) => {
+    tasks.value.push(...res.data.partitions[0].items);
   });
 };
 
@@ -214,7 +250,9 @@ const setCurrentComponent = () => {
       } else {
         activeProcess.value = process;
         try {
-          return await import(`../forms/${process.bpmnProcessId}-start-form.vue`);
+          return await loadExternalSFC(
+            `${process.bpmnProcessId}-start-form.vue`
+          );
         } catch (error) {
           console.log(error);
           currentFormComponent.value = null;
@@ -235,7 +273,7 @@ const setCurrentComponent = () => {
           task.elementId.lastIndexOf("-")
         );
 
-        return await import(`../forms/${formId}-form.vue`);
+        return await loadExternalSFC(`${formId}-form.vue`);
       } catch (error) {
         console.log(error);
         currentFormComponent.value = null;
