@@ -22,6 +22,7 @@ tags:
   - name: job
   - name: message
   - name: incident
+  - name: test
 
 paths:
   /decision-definition:
@@ -110,7 +111,27 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/decision-definition
+            curl -X GET "http://localhost:8080/v1/decision-definition?page=1&size=10"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of decision definitions
@@ -129,9 +150,10 @@ paths:
                   - key: "4503599627370497"
                     version: 1
                     decisionDefinitionId: "credit-score-check"
-                offset: 0
+                page: 1
                 size: 10
                 count: 3
+                totalCount: 3
         500:
           description: Internal server error
           content:
@@ -390,7 +412,27 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-definition
+            curl -X GET "http://localhost:8080/v1/process-definition?page=1&size=10"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of process definitions
@@ -409,9 +451,10 @@ paths:
                   - key: "4503599627370500"
                     version: 1
                     bpmnProcessId: "credit-check"
-                offset: 0
+                page: 1
                 size: 10
                 count: 3
+                totalCount: 3
         400:
           description: Bad request - invalid query parameters
           content:
@@ -579,20 +622,26 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^\d{15,20}$'
+          description: Key of the process definition
           example: "4503599627370498"
         - name: page
           in: query
           schema:
             type: integer
             format: int32
+            minimum: 1
             default: 1
+          description: Page number (1-based indexing)
           example: 1
         - name: size
           in: query
           schema:
             type: integer
             format: int32
+            minimum: 1
             default: 10
+          description: Number of items per page
           example: 10
       responses:
         200:
@@ -634,6 +683,7 @@ paths:
                 page: 1
                 size: 10
                 count: 3
+                totalCount: 3
         400:
           description: Bad request
           content:
@@ -729,7 +779,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/jobs
+            curl -X GET "http://localhost:8080/v1/process-instance/123456789/jobs?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -738,6 +788,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of jobs
@@ -765,9 +834,10 @@ paths:
                     variables:
                       result: "approved"
                       score: 85
-                offset: 0
+                page: 1
                 size: 10
                 count: 2
+                totalCount: 2
         400:
           description: Bad request
           content:
@@ -802,7 +872,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/activities
+            curl -X GET "http://localhost:8080/v1/process-instance/123456789/activities?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -811,6 +881,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of activities
@@ -834,9 +923,10 @@ paths:
                     state: "active"
                     elementId: "Task_CheckApplication"
                     bpmnElementType: "userTask"
-                offset: 0
+                page: 1
                 size: 10
                 count: 2
+                totalCount: 2
         400:
           description: Bad request
           content:
@@ -871,7 +961,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/history
+            curl -X GET "http://localhost:8080/v1/process-instance/123456789/history?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -880,6 +970,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of activities
@@ -901,9 +1010,10 @@ paths:
                     elementId: "Task_CheckApplication"
                     processInstanceKey: "4503599627370501"
                     createdAt: "2025-08-22T14:30:27Z"
-                offset: 0
+                page: 1
                 size: 10
                 count: 3
+                totalCount: 3
         400:
           description: Bad request
           content:
@@ -938,7 +1048,7 @@ paths:
       x-code-samples:
         - lang: curl
           source: |
-            curl -X GET http://localhost:8080/v1/process-instance/123456789/incidents
+            curl -X GET "http://localhost:8080/v1/process-instance/123456789/incidents?page=1&size=10"
       parameters:
         - name: processInstanceKey
           in: path
@@ -947,6 +1057,25 @@ paths:
             type: string
             pattern: '^\d{15,20}$'
           example: "4503599627370501"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 1
+          description: Page number (1-based indexing)
+          example: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page (max 100)
+          example: 10
       responses:
         200:
           description: List of incidents
@@ -971,9 +1100,10 @@ paths:
                     createdAt: "2025-08-22T14:36:22Z"
                     resolvedAt: "2025-08-22T14:45:18Z"
                     executionToken: "123457"
-                offset: 0
+                page: 1
                 size: 10
                 count: 2
+                totalCount: 2
         400:
           description: Bad request
           content:
@@ -1072,6 +1202,7 @@ paths:
                 page: 1
                 size: 10
                 count: 2
+                totalCount: 2
         400:
           description: Bad request
           content:
@@ -1255,6 +1386,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^\d{15,20}$'
           example: "4503599627370530"
       responses:
         201:
@@ -1295,7 +1427,6 @@ paths:
       operationId: testStartCpuProfile
       summary: start a cpu profiler
       tags:
-        - start-cpu-profile
         - test
       parameters:
         - name: nodeId
@@ -1303,6 +1434,8 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^[a-zA-Z0-9-_]+$'
+          description: ID of the node to profile
       responses:
         200:
           description: Cpu profiler starter
@@ -1323,7 +1456,6 @@ paths:
       operationId: testStopCpuProfile
       summary: stop a cpu profiler
       tags:
-        - stop-cpu-profile
         - test
       parameters:
         - name: nodeId
@@ -1331,6 +1463,8 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^[a-zA-Z0-9-_]+$'
+          description: ID of the node to stop profiling
       responses:
         200:
           description: Cpu profiler stopped
@@ -1363,27 +1497,40 @@ components:
         - page
         - size
         - count
+        - totalCount
       properties:
         page:
           type: integer
+          description: Current page number (1-based indexing)
         size:
           type: integer
+          description: Number of items per page
         count:
-          description: number of items returned
           type: integer
+          description: Number of items returned in the current page
+        totalCount:
+          type: integer
+          description: Total number of items available
     PageMetadata:
       type: object
       required:
-        - offset
+        - page
         - size
         - count
+        - totalCount
       properties:
-        offset:
+        page:
           type: integer
+          description: Current page number (1-based indexing)
         size:
           type: integer
+          description: Number of items per page
         count:
           type: integer
+          description: Number of items returned in the current page
+        totalCount:
+          type: integer
+          description: Total number of items available
     PartitionProcessInstances:
       type: object
       required:
@@ -1681,6 +1828,14 @@ components:
         - $ref: "#/components/schemas/PageMetadata"
     Activity:
       type: object
+      required:
+        - key
+        - processInstanceKey
+        - processDefinitionKey
+        - createdAt
+        - state
+        - elementId
+        - bpmnElementType
       properties:
         key:
           type: string
@@ -1712,6 +1867,11 @@ components:
         - $ref: "#/components/schemas/PageMetadata"
     FlowElementHistory:
       type: object
+      required:
+        - key
+        - processInstanceKey
+        - createdAt
+        - elementId
       properties:
         key:
           type: string
@@ -1781,3 +1941,4 @@ components:
       example:
         code: "NOT_FOUND"
         message: "Process instance with key 4503599627370501 not found"
+

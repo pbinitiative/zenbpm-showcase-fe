@@ -221,6 +221,10 @@ function getProcessDefinition() {
       setTimeout(getProcessDefinition, reloadInterval.value);
       if (reloadInterval.value < 10000) reloadInterval.value *= 2;
     });
+  getProcessInstances();
+}
+
+function getProcessInstances() {
   processInstanceApi.value
     .getProcessInstances(route.params.processDefinitionKey)
     .then((res) => {
@@ -260,6 +264,12 @@ function startProcessInstance() {
       })
       .catch((err) => {
         console.log(err);
+        $q.notify({
+          color: "negative",
+          message: "Failed during executing process instance",
+          icon: "report_problem",
+        });
+        getProcessInstances();
       });
   });
 
