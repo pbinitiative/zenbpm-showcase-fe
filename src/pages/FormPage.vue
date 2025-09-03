@@ -117,34 +117,17 @@ const getProcessById = (id) => {
 const activeTask = ref(null);
 const activeProcess = ref(null);
 const processes = ref([]);
-const processesMetadata = ref([
-  {
-    id: "example-claim-handling",
-    name: "Zpracování pojistné události",
-    agenda: "Likvidace",
-  },
-  {
-    id: "policy-change-process",
-    name: "Změna smlovy",
-    agenda: "Likvidace",
-  },
-]);
+const processesMetadata = ref([])
 
-const tasksMetadata = ref([
-  {
-    id: "example-claim-check-task-1",
-    name: "Provedení manuální likvidace",
-    process: "Zpracování pojistné události",
-  },
-  {
-    id: "example-claim-check-task-2",
-    name: "Provedení revize",
-    process: "Zpracování pojistné události",
-  },
-]);
+const tasksMetadata = ref([])
 
 const currentFormComponent = shallowRef(null);
 onMounted(async () => {
+
+  const data = await fetch('http://localhost:8086/metadata').then(r => r.json())
+  processesMetadata.value = data.processes
+  tasksMetadata.value = data.tasks
+
   // setCurrentComponent();
   processes.value.length = 0;
 
@@ -231,9 +214,7 @@ const setCurrentComponent = () => {
       } else {
         activeProcess.value = process;
         try {
-          return await import(
-            `../forms/${process.bpmnProcessId}-start-form.vue`
-          );
+          return await import(`../forms/${process.bpmnProcessId}-start-form.vue`);
         } catch (error) {
           console.log(error);
           currentFormComponent.value = null;
