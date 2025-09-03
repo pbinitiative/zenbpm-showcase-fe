@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <div class="col-10" ref="diagramRef" style="height: 500px"></div>
+  <div class="col row full-height">
+    <div class="col-10 full-height" ref="diagramRef"></div>
     <div class="col-2" id="properties"></div>
   </div>
 </template>

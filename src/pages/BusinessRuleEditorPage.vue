@@ -4,13 +4,13 @@
       <div class="col-12 col-md-12">
         <q-card class="column full-height">
           <q-card-section>
-            <div class="text-h6">Process Definition Editor</div>
+            <div class="text-h6">Business Rule Editor</div>
           </q-card-section>
           <q-card-section class="col q-pa-none">
-            <BpmnEditor
-              ref="bpmnEditorRef"
-              :diagram-data="route.params.processDefinitionKey ? processDefinition.bpmnData : emptyProcess()"
-              v-if="route.params.processDefinitionKey ? processDefinition.bpmnData : true"
+            <DmnEditor
+              ref="dmnEditorRef"
+              :diagram-data="route.params.decisionDefinitionKey ? decisionDefinition.dmnData : emptyProcess()"
+              v-if="route.params.decisionDefinitionKey ? decisionDefinition.dmnData : true"
               @diagram-changed="onDiagramChanged"
             />
           </q-card-section>
@@ -35,9 +35,9 @@
         <q-tab-panels class="col-12" v-model="tab">
           <q-tab-panel name="log" class="q-pa-none">
             <q-table
-              style="max-height: 250px;"
-              :rows="log"
-              :columns="[
+                style="max-height: 250px;"
+                :rows="log"
+                :columns="[
                 {
                   name: 'time',
                   label: 'Time',
@@ -87,8 +87,8 @@
 
   </q-page>
   <q-page-sticky position="bottom-right" :offset="[18, 18]">
-    <q-btn fab icon="rocket" color="primary" @click="deployProcessDefinition">
-      <q-tooltip>Deploy process definition</q-tooltip>
+    <q-btn fab icon="rocket" color="primary" @click="deployDecisionDefinition">
+      <q-tooltip>Deploy business rule</q-tooltip>
     </q-btn>
   </q-page-sticky>
 </template>
@@ -97,18 +97,18 @@
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { ProcessDefinitionsApi } from "src/api-client";
-import BpmnEditor from "components/diagrams/BpmnEditor.vue";
+import { DecisionDefinitionsApi } from "src/api-client";
 
 import config from "../config/config";
-import {useQuasar} from "quasar";
+import { useQuasar } from "quasar";
+import DmnEditor from "components/diagrams/DmnEditor.vue";
 
-const processDefinitionsApi = ref(null);
-const processDefinition = ref({});
+const decisionDefinitionsApi = ref(null);
+const decisionDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
 const route = useRoute();
-const bpmnEditorRef = ref(null);
+const dmnEditorRef = ref(null);
 const log = ref([]);
 const tab = ref("log");
 
@@ -123,21 +123,25 @@ const partitionOptions = computed(() =>
   }))
 );
 
-onMounted(async () => {
-  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
-  processDefinitionsApi.value
-    .getProcessDefinition(route.params.processDefinitionKey)
+onMounted(() => {
+  decisionDefinitionsApi.value = new DecisionDefinitionsApi(config);
+  if (!route.params.decisionDefinitionKey) {
+    decisionDefinition.value = emptyProcess();
+    return;
+  }
+  decisionDefinitionsApi.value
+    .getDecisionDefinition(route.params.decisionDefinitionKey)
     .then((res) => {
-      processDefinition.value = res.data;
+      decisionDefinition.value = res.data;
     })
     .catch((err) => {
       console.log(err);
     });
 });
 
-async function deployProcessDefinition() {
+async function deployDecisionDefinition() {
   try {
-    const xmlToSend = await bpmnEditorRef.value.getXml();
+    const xmlToSend = await dmnEditorRef.value.getXml();
 
     if (!xmlToSend) {
       log.value.unshift({
@@ -149,8 +153,9 @@ async function deployProcessDefinition() {
       return;
     }
 
-    const response = await processDefinitionsApi.value.createProcessDefinition(xmlToSend);
-    if (response.data.processDefinitionKey === route.params.processDefinitionKey) {
+    const response = await decisionDefinitionsApi.value.createDecisionDefinition(xmlToSend);
+    console.log(response.data.decisionDefinitionKey ,"===", route.params.decisionDefinitionKey)
+    if (response.data.decisionDefinitionKey === route.params.decisionDefinitionKey) {
       log.value.unshift({
         time: new Date(),
         icon: 'close',
@@ -187,8 +192,9 @@ async function deployProcessDefinition() {
       color: 'green',
       message: 'Process definition deployed successfully.'
     });
-    await router.push(`/process-definitions/${response.data.processDefinitionKey}`);
+    await router.push(`/business-rules/${response.data.decisionDefinitionKey}`);
   } catch (error) {
+    console.log("ERROR", error)
     $q.notify({
       type: 'negative',
       message: error.response.data.message,
@@ -211,20 +217,27 @@ async function deployProcessDefinition() {
 }
 
 function emptyProcess() {
-  const processId = `Process_${randomId()}`;
+  const id = randomId();
   return `<?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" id="Definitions_${randomId()}" targetNamespace="http://bpmn.io/schema/bpmn">
-  <bpmn:process id="${processId}" isExecutable="true">
-    <bpmn:startEvent id="StartEvent_1" />
-  </bpmn:process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="${processId}">
-      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
-        <dc:Bounds x="182" y="162" width="36" height="36" />
-      </bpmndi:BPMNShape>
-    </bpmndi:BPMNPlane>
-  </bpmndi:BPMNDiagram>
-</bpmn:definitions>`
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="Definitions_${id}" name="DRD">
+  <decision id="Decision_${id}" name="Decision 1">
+    <decisionTable id="DecisionTable_${id}">
+      <input id="Input_1">
+        <inputExpression id="InputExpression_1" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" typeRef="string" />
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_${id}">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>`
 }
 
 function randomId() {

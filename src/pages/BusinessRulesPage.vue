@@ -1,15 +1,15 @@
 <template>
   <q-page class="q-pa-md pb-100">
-  <q-table
-      v-if="processDefinitions"
-      title="Process Definitions"
-      :rows="processDefinitions"
+    <q-table
+      v-if="businessRules"
+      title="Business Rules"
+      :rows="businessRules"
       :columns="columns"
       row-key="key"
       :filter="filter"
       :pagination="pagination"
       :rows-per-page-options="[15]"
-      @row-click="(evt, row) => $router.push(`/process-definitions/${row.key}`)"
+      @row-click="(evt, row) => $router.push(`/business-rules/${row.key}`)"
     >
       <template v-slot:top-right>
         <q-input
@@ -31,7 +31,7 @@
       <q-btn fab icon="upload" color="primary" @click="fileInput.click()">
         <q-tooltip>Deploy new process definition from file</q-tooltip>
       </q-btn>
-      <q-btn fab icon="edit" color="primary" @click="editNewProcessDefinition">
+      <q-btn fab icon="edit" color="primary" @click="editNewDecisionDefinition">
         <q-tooltip>Edit&nbsp;new&nbsp;process&nbsp;definition</q-tooltip>
       </q-btn>
     </div>
@@ -40,29 +40,29 @@
     type="file"
     ref="fileInput"
     @change="deployProcess"
-    accept=".bpmn"
+    accept=".dmn"
     style="display: none"
   />
 </template>
 
 <script setup>
-import { ProcessDefinitionsApi } from "src/api-client";
+import { DecisionDefinitionsApi } from "src/api-client";
 import { ref, onMounted } from "vue";
 
 import config from "../config/config";
 import {useRouter} from "vue-router";
 
-const processDefinitions = ref([]);
-const processDefinitionsApi = ref(null);
+const businessRules = ref([]);
+const decisionDefinitionsApi = ref(null);
 const router = useRouter();
 
 onMounted(() => {
-  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
+  decisionDefinitionsApi.value = new DecisionDefinitionsApi(config);
 
-  processDefinitionsApi.value
-    .getProcessDefinitions()
+  decisionDefinitionsApi.value
+    .getDecisionDefinitions()
     .then((res) => {
-      processDefinitions.value.push(...res.data.items);
+      businessRules.value.push(...res.data.items);
     })
     .catch((err) => {
       console.log(err);
@@ -75,7 +75,7 @@ const deployProcess = () => {
   const selectedFile = fileInput.value.files[0];
   const reader = new FileReader();
   reader.onload = (e) => {
-    processDefinitionsApi.value.createProcessDefinition(e.target.result).then;
+    decisionDefinitionsApi.value.createDecisionDefinition(e.target.result);
   };
   reader.readAsText(selectedFile);
 };
@@ -94,20 +94,20 @@ const columns = [
     sortable: true,
   },
   {
-    name: "bpmnProcessId",
-    label: "BPMN Process ID",
-    field: "bpmnProcessId",
+    name: "dmnDecisionId",
+    label: "DMN Decision ID",
+    field: "dmnDecisionId",
     sortable: true,
   },
   {
     name: "resourceName",
     label: "Resource Name",
-    field: "bpmnResourceName",
+    field: "dmnResourceName",
     sortable: true,
   },
 ];
 
-function editNewProcessDefinition() {
-  router.push(`/process-definitions/new`);
+function editNewDecisionDefinition() {
+  router.push(`/business-rules/new`);
 }
 </script>

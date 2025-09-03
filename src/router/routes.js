@@ -32,6 +32,22 @@ const routes = [
         path: "tasklist/:id?/:action?/",
         component: () => import("pages/FormPage.vue"),
       },
+      {
+        path: "business-rules",
+        component: () => import("pages/BusinessRulesPage.vue"),
+      },
+      {
+        path: "business-rules/:decisionDefinitionKey",
+        component: () => import("pages/BusinessRuleDetailPage.vue"),
+      },
+      {
+        path: "business-rules/edit/:decisionDefinitionKey",
+        component: () => import("pages/BusinessRuleEditorPage.vue"),
+      },
+      {
+        path: "business-rules/new",
+        component: () => import("pages/BusinessRuleEditorPage.vue"),
+      },
     ],
   },
 

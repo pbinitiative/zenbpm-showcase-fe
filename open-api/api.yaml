@@ -2,6 +2,8 @@ openapi: 3.0.0
 info:
   title: ZenBPM OpenAPI
   description: REST API for ZenBPM
+  title: ZenBPM OpenAPI
+  description: REST API for ZenBPM
   version: 0.1.0
 servers:
   - url: http://localhost:8080/v1
@@ -339,6 +341,7 @@ paths:
                 $ref: "#/components/schemas/Error"
   /process-instances/{processInstanceKey}/jobs:
     get:
+      operationId: getProcessInstanceJobs
       operationId: getProcessInstanceJobs
       tags:
         - process-instances
@@ -855,6 +858,130 @@ components:
           type: string
         outputValue:
           type: object
+    DecisionDefinitionsPage:
+      type: object
+      allOf:
+        - type: object
+          required:
+            - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/DecisionDefinitionSimple"
+        - $ref: "#/components/schemas/PageMetadata"
+    DecisionDefinitionSimple:
+      type: object
+      required:
+        - key
+        - version
+        - decisionDefinitionId
+      properties:
+        key:
+          type: string
+        version:
+          type: integer
+        decisionDefinitionId:
+          type: string
+    DecisionDefinitionDetail:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DecisionDefinitionSimple"
+        - type: object
+          properties:
+            dmnData:
+              type: string
+    EvaluatedDRDResult:
+      type: object
+      required:
+        - evaluatedDecisions
+        - decisionOutput
+      properties:
+        evaluatedDecisions:
+          type: array
+          items:
+            $ref: "#/components/schemas/EvaluatedDecisionResult"
+        decisionOutput:
+          type: object
+    EvaluatedDecisionResult:
+      type: object
+      required:
+        - decisionId
+        - decisionName
+        - decisionType
+        - decisionDefinitionVersion
+        - decisionDefinitionKey
+        - decisionDefinitionId
+        - matchedRules
+        - decisionOutput
+        - evaluatedInputs
+      properties:
+        decisionId:
+          type: string
+        decisionName:
+          type: string
+        decisionType:
+          type: string
+        decisionDefinitionVersion:
+          type: integer
+        decisionDefinitionKey:
+          type: string
+        decisionDefinitionId:
+          type: string
+        matchedRules:
+          type: array
+          items:
+            $ref: "#/components/schemas/EvaluatedDecisionRule"
+        decisionOutput:
+          type: object
+        evaluatedInputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/EvaluatedDecisionInput"
+    EvaluatedDecisionRule:
+      type: object
+      required:
+        - ruleId
+        - ruleIndex
+        - evaluatedOutputs
+      properties:
+        ruleId:
+          type: string
+        ruleIndex:
+          type: integer
+        evaluatedOutputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/EvaluatedDecisionOutput"
+    EvaluatedDecisionInput:
+      type: object
+      required:
+        - inputId
+        - inputName
+        - inputExpression
+        - inputValue
+      properties:
+        inputId:
+          type: string
+        inputName:
+          type: string
+        inputExpression:
+          type: string
+        inputValue:
+          type: object
+    EvaluatedDecisionOutput:
+      type: object
+      required:
+        - outputId
+        - outputName
+        - outputValue
+      properties:
+        outputId:
+          type: string
+        outputName:
+          type: string
+        outputValue:
+          type: object
     ProcessDefinitionsPage:
       type: object
       allOf:
@@ -936,6 +1063,30 @@ components:
               items:
                 $ref: "#/components/schemas/Job"
         - $ref: "#/components/schemas/PageMetadata"
+    JobPartitionPage:
+      type: object
+      allOf:
+        - type: object
+          required:
+            - partitions
+          properties:
+            partitions:
+              type: array
+              items:
+                $ref: "#/components/schemas/PartitionJobs"
+        - $ref: "#/components/schemas/PartitionedPageMetadata"
+    PartitionJobs:
+      type: object
+      required:
+        - partition
+        - items
+      properties:
+        partition:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Job"
     JobPartitionPage:
       type: object
       allOf:

@@ -327,7 +327,7 @@ import {
   ProcessDefinitionsApi,
   ProcessInstancesApi,
 } from "src/api-client";
-import BpmnIoDiagram from "src/components/BpmnIoDiagram.vue";
+import BpmnIoDiagram from "components/diagrams/BpmnIoDiagram.vue";
 
 const processInstancesApi = ref(null);
 const processDefinitionsApi = ref(null);
