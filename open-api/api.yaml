@@ -98,8 +98,6 @@ paths:
               required:
                 - decisionId
                 - bindingType
-                - versionTag
-                - variables
               properties:
                 decisionId:
                   type: string
@@ -109,7 +107,7 @@ paths:
                     - latest
                     - deployment #TODO: unsupported
                     - versionTag
-                decisionDefinitionKey:
+                decisionDefinitionId:
                   description: Can be used in combination with bindingType latest
                   type: string
                 versionTag:
@@ -498,7 +496,7 @@ paths:
           in: query
           required: false
           schema:
-            $ref: '#/components/schemas/JobState'
+            $ref: "#/components/schemas/JobState"
         - name: page
           in: query
           schema:
@@ -618,6 +616,70 @@ paths:
           description: Incident resolved
         400:
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        502:
+          description: Failed to redirect request to responsible node
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /test/{nodeId}/start-cpu-profile:
+    post:
+      operationId: testStartCpuProfile
+      summary: start a cpu profiler
+      tags:
+        - start-cpu-profile
+        - test
+      parameters:
+        - name: nodeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Cpu profiler starter
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        502:
+          description: Failed to redirect request to responsible node
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /test/{nodeId}/stop-cpu-profile:
+    post:
+      operationId: testStopCpuProfile
+      summary: stop a cpu profiler
+      tags:
+        - stop-cpu-profile
+        - test
+      parameters:
+        - name: nodeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Cpu profiler stopped
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pprof:
+                    type: string
+                    format: byte
+        500:
+          description: Internal server error
           content:
             application/json:
               schema:
@@ -918,7 +980,7 @@ components:
         processInstanceKey:
           type: string
         state:
-          $ref: '#/components/schemas/JobState'
+          $ref: "#/components/schemas/JobState"
         createdAt:
           type: string
           format: date-time
@@ -930,6 +992,7 @@ components:
         - active
         - completed
         - terminated
+        - failed
     ActivityPage:
       type: object
       allOf:
