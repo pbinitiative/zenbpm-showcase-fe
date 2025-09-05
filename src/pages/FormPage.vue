@@ -93,6 +93,7 @@ import TaskItem from "src/components/tasklist/TaskItem.vue";
 import ProcessItem from "src/components/tasklist/ProcessItem.vue";
 import TaskHeader from "src/components/tasklist/TaskHeader.vue";
 import ProcessHeader from "src/components/tasklist/ProcessHeader.vue";
+import { loadExtSFC } from "src/sfc-loader";
 
 import {
   ProcessDefinitionsApi,
@@ -114,34 +115,6 @@ const tab = ref("tasks");
 const formData = ref({});
 
 const tasks = ref([]);
-
-import { loadModule } from "vue3-sfc-loader";
-import * as Vue from "vue"; // the app’s Vue runtime
-
-import * as QuasarAll from "quasar";
-
-const options = {
-  moduleCache: {
-    vue: Vue,
-    quasar: QuasarAll, // ← lets external SFC `import { QForm } from 'quasar'`
-  },
-  async getFile(url) {
-    const res = await fetch(url, { credentials: "include" }); // if you need cookies
-    if (!res.ok) throw new Error(`${res.status} ${url}`);
-    return { getContentData: () => res.text() };
-  },
-  addStyle(textContent) {
-    const style = document.createElement("style");
-    style.textContent = textContent;
-    document.head.appendChild(style);
-  },
-};
-
-function loadExternalSFC(url) {
-  return defineAsyncComponent(() =>
-    loadModule("/forms/components/" + url, options)
-  );
-}
 
 const getTaskByKey = (key) => {
   return tasks.value.find((task) => task.key == key);
@@ -250,9 +223,10 @@ const setCurrentComponent = () => {
       } else {
         activeProcess.value = process;
         try {
-          return await loadExternalSFC(
-            `${process.bpmnProcessId}-start-form.vue`
-          );
+          // return await debugLoadSFC(
+          //   "/forms/components/" + `${process.bpmnProcessId}-start-form.vue`
+          // );
+          return await loadExtSFC(`${process.bpmnProcessId}-start-form.vue`);
         } catch (error) {
           console.log(error);
           currentFormComponent.value = null;
@@ -273,7 +247,7 @@ const setCurrentComponent = () => {
           task.elementId.lastIndexOf("-")
         );
 
-        return await loadExternalSFC(`${formId}-form.vue`);
+        return await loadExtSFC(`${formId}-form.vue`);
       } catch (error) {
         console.log(error);
         currentFormComponent.value = null;
