@@ -277,19 +277,19 @@ export interface EvaluateDecisionRequest {
      * @type {string}
      * @memberof EvaluateDecisionRequest
      */
-    'decisionDefinitionKey'?: string;
+    'decisionDefinitionId'?: string;
     /**
      * Is used in combination with bindingType versionTag
      * @type {string}
      * @memberof EvaluateDecisionRequest
      */
-    'versionTag': string;
+    'versionTag'?: string;
     /**
      * 
      * @type {object}
      * @memberof EvaluateDecisionRequest
      */
-    'variables': object;
+    'variables'?: object;
 }
 
 export const EvaluateDecisionRequestBindingTypeEnum = {
@@ -731,7 +731,8 @@ export interface JobPartitionPage {
 export const JobState = {
     Active: 'active',
     Completed: 'completed',
-    Terminated: 'terminated'
+    Terminated: 'terminated',
+    Failed: 'failed'
 } as const;
 
 export type JobState = typeof JobState[keyof typeof JobState];
@@ -1032,6 +1033,19 @@ export interface PublishMessageRequest {
      * @memberof PublishMessageRequest
      */
     'variables'?: object;
+}
+/**
+ * 
+ * @export
+ * @interface TestStopCpuProfile200Response
+ */
+export interface TestStopCpuProfile200Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof TestStopCpuProfile200Response
+     */
+    'pprof'?: string;
 }
 
 /**
@@ -2586,6 +2600,399 @@ export class ProcessInstancesApi extends BaseAPI {
      */
     public getProcessInstances(processDefinitionKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
         return ProcessInstancesApiFp(this.configuration).getProcessInstances(processDefinitionKey, page, size, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * StartCpuProfileApi - axios parameter creator
+ * @export
+ */
+export const StartCpuProfileApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary start a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStartCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'nodeId' is not null or undefined
+            assertParamExists('testStartCpuProfile', 'nodeId', nodeId)
+            const localVarPath = `/test/{nodeId}/start-cpu-profile`
+                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * StartCpuProfileApi - functional programming interface
+ * @export
+ */
+export const StartCpuProfileApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = StartCpuProfileApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary start a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.testStartCpuProfile(nodeId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StartCpuProfileApi.testStartCpuProfile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * StartCpuProfileApi - factory interface
+ * @export
+ */
+export const StartCpuProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = StartCpuProfileApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary start a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.testStartCpuProfile(nodeId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * StartCpuProfileApi - object-oriented interface
+ * @export
+ * @class StartCpuProfileApi
+ * @extends {BaseAPI}
+ */
+export class StartCpuProfileApi extends BaseAPI {
+    /**
+     * 
+     * @summary start a cpu profiler
+     * @param {string} nodeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StartCpuProfileApi
+     */
+    public testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
+        return StartCpuProfileApiFp(this.configuration).testStartCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * StopCpuProfileApi - axios parameter creator
+ * @export
+ */
+export const StopCpuProfileApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary stop a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStopCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'nodeId' is not null or undefined
+            assertParamExists('testStopCpuProfile', 'nodeId', nodeId)
+            const localVarPath = `/test/{nodeId}/stop-cpu-profile`
+                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * StopCpuProfileApi - functional programming interface
+ * @export
+ */
+export const StopCpuProfileApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = StopCpuProfileApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary stop a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TestStopCpuProfile200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.testStopCpuProfile(nodeId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StopCpuProfileApi.testStopCpuProfile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * StopCpuProfileApi - factory interface
+ * @export
+ */
+export const StopCpuProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = StopCpuProfileApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary stop a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<TestStopCpuProfile200Response> {
+            return localVarFp.testStopCpuProfile(nodeId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * StopCpuProfileApi - object-oriented interface
+ * @export
+ * @class StopCpuProfileApi
+ * @extends {BaseAPI}
+ */
+export class StopCpuProfileApi extends BaseAPI {
+    /**
+     * 
+     * @summary stop a cpu profiler
+     * @param {string} nodeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StopCpuProfileApi
+     */
+    public testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
+        return StopCpuProfileApiFp(this.configuration).testStopCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TestApi - axios parameter creator
+ * @export
+ */
+export const TestApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary start a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStartCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'nodeId' is not null or undefined
+            assertParamExists('testStartCpuProfile', 'nodeId', nodeId)
+            const localVarPath = `/test/{nodeId}/start-cpu-profile`
+                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary stop a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStopCpuProfile: async (nodeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'nodeId' is not null or undefined
+            assertParamExists('testStopCpuProfile', 'nodeId', nodeId)
+            const localVarPath = `/test/{nodeId}/stop-cpu-profile`
+                .replace(`{${"nodeId"}}`, encodeURIComponent(String(nodeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TestApi - functional programming interface
+ * @export
+ */
+export const TestApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TestApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary start a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.testStartCpuProfile(nodeId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TestApi.testStartCpuProfile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary stop a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TestStopCpuProfile200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.testStopCpuProfile(nodeId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TestApi.testStopCpuProfile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TestApi - factory interface
+ * @export
+ */
+export const TestApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TestApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary start a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.testStartCpuProfile(nodeId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary stop a cpu profiler
+         * @param {string} nodeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig): AxiosPromise<TestStopCpuProfile200Response> {
+            return localVarFp.testStopCpuProfile(nodeId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TestApi - object-oriented interface
+ * @export
+ * @class TestApi
+ * @extends {BaseAPI}
+ */
+export class TestApi extends BaseAPI {
+    /**
+     * 
+     * @summary start a cpu profiler
+     * @param {string} nodeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TestApi
+     */
+    public testStartCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
+        return TestApiFp(this.configuration).testStartCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary stop a cpu profiler
+     * @param {string} nodeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TestApi
+     */
+    public testStopCpuProfile(nodeId: string, options?: RawAxiosRequestConfig) {
+        return TestApiFp(this.configuration).testStopCpuProfile(nodeId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

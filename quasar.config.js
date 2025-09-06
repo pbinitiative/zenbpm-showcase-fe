@@ -87,6 +87,11 @@ module.exports = configure(function (/* ctx */) {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, "/v1"),
         },
+        "/forms": {
+          target: "http://localhost:8086",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/forms/, ""),
+        },
         "/minio": {
           target: "http://localhost:8085",
           changeOrigin: true,
@@ -114,10 +119,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [
-        "Dialog",
-        "Notify",
-      ],
+      plugins: ["Dialog", "Notify"],
     },
 
     // animations: 'all', // --- includes all animations

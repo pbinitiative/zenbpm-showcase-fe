@@ -79,17 +79,27 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, watch, ref, onMounted, shallowRef } from "vue";
+import {
+  defineAsyncComponent,
+  watch,
+  ref,
+  onMounted,
+  shallowRef,
+  compile,
+  getCurrentInstance,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import TaskItem from "src/components/tasklist/TaskItem.vue";
 import ProcessItem from "src/components/tasklist/ProcessItem.vue";
 import TaskHeader from "src/components/tasklist/TaskHeader.vue";
 import ProcessHeader from "src/components/tasklist/ProcessHeader.vue";
+import { loadExtSFC } from "src/sfc-loader";
 
 import {
   ProcessDefinitionsApi,
   ProcessInstancesApi,
   JobsApi,
+  JobState,
 } from "src/api-client";
 
 import config from "../config/config";
@@ -117,34 +127,16 @@ const getProcessById = (id) => {
 const activeTask = ref(null);
 const activeProcess = ref(null);
 const processes = ref([]);
-const processesMetadata = ref([
-  {
-    id: "example-claim-handling",
-    name: "Claim Handling",
-    agenda: "Insurance Claim Handling",
-  },
-  {
-    id: "policy-change-process",
-    name: "Policy Change",
-    agenda: "Insurance Policy Change",
-  },
-]);
+const processesMetadata = ref([]);
 
-const tasksMetadata = ref([
-  {
-    id: "example-claim-check-task-1",
-    name: "Manual Damage Assessment",
-    process: "Claim Handling",
-  },
-  {
-    id: "example-claim-check-task-2",
-    name: "Revision",
-    process: "Claim Handling",
-  },
-]);
+const tasksMetadata = ref([]);
 
 const currentFormComponent = shallowRef(null);
 onMounted(async () => {
+  const data = await fetch("/forms/metadata").then((r) => r.json());
+  processesMetadata.value = data.processes;
+  tasksMetadata.value = data.tasks;
+
   // setCurrentComponent();
   processes.value.length = 0;
 
@@ -169,8 +161,8 @@ const selectTask = (task) => {
 
 const loadUserTasks = async () => {
   tasks.value.length = 0;
-  await jobsApi.activateJobs("user-task-type").then((res) => {
-    tasks.value.push(...res.data);
+  await jobsApi.getJobs("user-task-type", JobState.Active).then((res) => {
+    tasks.value.push(...res.data.partitions[0].items);
   });
 };
 
@@ -231,9 +223,10 @@ const setCurrentComponent = () => {
       } else {
         activeProcess.value = process;
         try {
-          return await import(
-            `../forms/${process.bpmnProcessId}-start-form.vue`
-          );
+          // return await debugLoadSFC(
+          //   "/forms/components/" + `${process.bpmnProcessId}-start-form.vue`
+          // );
+          return await loadExtSFC(`${process.bpmnProcessId}-start-form.vue`);
         } catch (error) {
           console.log(error);
           currentFormComponent.value = null;
@@ -254,7 +247,7 @@ const setCurrentComponent = () => {
           task.elementId.lastIndexOf("-")
         );
 
-        return await import(`../forms/${formId}-form.vue`);
+        return await loadExtSFC(`${formId}-form.vue`);
       } catch (error) {
         console.log(error);
         currentFormComponent.value = null;
