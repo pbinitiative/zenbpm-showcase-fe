@@ -46,28 +46,34 @@
 </template>
 
 <script setup>
-import { DecisionDefinitionsApi } from "src/api-client";
+import { DecisionDefinitionApi } from "src/api-client";
 import { ref, onMounted } from "vue";
 
 import config from "../config/config";
 import {useRouter} from "vue-router";
+import {useQuasar} from "quasar";
 
 const businessRules = ref([]);
-const decisionDefinitionsApi = ref(null);
+const decisionDefinitionApi = ref(null);
 const router = useRouter();
+const $q = useQuasar()
 
 onMounted(() => {
-  decisionDefinitionsApi.value = new DecisionDefinitionsApi(config);
+  loadDecisionDefinitions();
+});
 
-  decisionDefinitionsApi.value
+const loadDecisionDefinitions = () => {
+  decisionDefinitionApi.value = new DecisionDefinitionApi(config);
+
+  decisionDefinitionApi.value
     .getDecisionDefinitions()
     .then((res) => {
-      businessRules.value.push(...res.data.items);
+      businessRules.value = res.data.items;
     })
     .catch((err) => {
       console.log(err);
     });
-});
+}
 
 const fileInput = ref(null);
 
@@ -75,7 +81,26 @@ const deployProcess = () => {
   const selectedFile = fileInput.value.files[0];
   const reader = new FileReader();
   reader.onload = (e) => {
-    decisionDefinitionsApi.value.createDecisionDefinition(e.target.result);
+    decisionDefinitionApi.value.createDecisionDefinition(e.target.result)
+      .then(() => {
+        loadDecisionDefinitions();
+      })
+      .catch((error) => {
+        console.log(error)
+        $q.notify({
+          message: error.response.data.message,
+          position: 'bottom',
+          timeout: 5000,
+          actions: [
+            {
+              icon: 'close',
+              color: 'white',
+            }
+          ]
+        })
+      })
+
+
   };
   reader.readAsText(selectedFile);
 };

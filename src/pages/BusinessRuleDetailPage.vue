@@ -98,7 +98,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useQuasar } from "quasar";
 
-import { DecisionDefinitionsApi } from "src/api-client";
+import { DecisionDefinitionApi } from "src/api-client";
 import "dmn-js/dist/assets/diagram-js.css";
 import "dmn-js/dist/assets/dmn-js-shared.css";
 import "dmn-js/dist/assets/dmn-js-drd.css";
@@ -112,7 +112,7 @@ import config from "../config/config";
 import DmnDiagram from "components/diagrams/DmnDiagram.vue";
 import DmnEvaluateDialog from "components/diagrams/DmnEvaluateDialog.vue";
 
-const decisionDefinitionsApi = ref(null);
+const decisionDefinitionApi = ref(null);
 const decisionDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
@@ -148,8 +148,8 @@ onMounted(async () => {
 });
 
 function getDecisionDefinition() {
-  decisionDefinitionsApi.value = new DecisionDefinitionsApi(config);
-  decisionDefinitionsApi.value
+  decisionDefinitionApi.value = new DecisionDefinitionApi(config);
+  decisionDefinitionApi.value
     .getDecisionDefinition(route.params.decisionDefinitionKey)
     .then((res) => {
       decisionDefinition.value = res.data;
