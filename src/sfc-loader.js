@@ -319,5 +319,5 @@ async function debugLoadSFC(url) {
 export async function loadExtSFC(url) {
   //TODO: Need to be fixed and the workaround `debugLoadSFC` removed
   // return await loadExternalSFC("/forms/components/" + url);
-  return debugLoadSFC("/forms/components/" + url);
+  return debugLoadSFC("forms/components/" + url);
 }
