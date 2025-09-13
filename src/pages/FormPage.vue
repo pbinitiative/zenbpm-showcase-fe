@@ -133,7 +133,7 @@ const tasksMetadata = ref([]);
 
 const currentFormComponent = shallowRef(null);
 onMounted(async () => {
-  const data = await fetch("/forms/metadata").then((r) => r.json());
+  const data = await fetch("forms/metadata").then((r) => r.json());
   processesMetadata.value = data.processes;
   tasksMetadata.value = data.tasks;
 
