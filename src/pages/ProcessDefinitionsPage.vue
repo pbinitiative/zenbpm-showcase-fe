@@ -1,14 +1,15 @@
 <template>
   <q-page class="q-pa-md pb-100">
   <q-table
+      ref="tableRef"
       v-if="processDefinitions"
       title="Process Definitions"
       :rows="processDefinitions"
       :columns="columns"
       row-key="key"
       :filter="filter"
-      :pagination="pagination"
-      :rows-per-page-options="[15]"
+      v-model:pagination="pagination"
+      @request="loadProcessDefinitions"
       @row-click="(evt, row) => $router.push(`/process-definitions/${row.key}`)"
     >
       <template v-slot:top-right>
@@ -46,28 +47,50 @@
 </template>
 
 <script setup>
-import { ProcessDefinitionsApi } from "src/api-client";
+import { ProcessDefinitionApi } from "src/api-client";
 import { ref, onMounted } from "vue";
 
 import config from "../config/config";
 import {useRouter} from "vue-router";
+import {useQuasar} from "quasar";
 
 const processDefinitions = ref([]);
-const processDefinitionsApi = ref(null);
+const processDefinitionApi = ref(null);
+const tableRef = ref(null)
+const pagination = ref({
+      sortBy: 'desc',
+      descending: false,
+      page: 1,
+      rowsPerPage: 10,
+      rowsNumber: 0
+    })
+
 const router = useRouter();
+const $q = useQuasar()
 
 onMounted(() => {
-  processDefinitionsApi.value = new ProcessDefinitionsApi(config);
+  tableRef.value.requestServerInteraction()
+});
 
-  processDefinitionsApi.value
-    .getProcessDefinitions()
+const loadProcessDefinitions = (props) => {
+  const { page, rowsPerPage, sortBy, descending } = props.pagination
+  processDefinitionApi.value = new ProcessDefinitionApi(config);
+
+  processDefinitionApi.value
+    .getProcessDefinitions(page, rowsPerPage)
     .then((res) => {
-      processDefinitions.value.push(...res.data.items);
+      processDefinitions.value = res.data.items;
+      pagination.value.page = page;
+      pagination.value.rowsPerPage = rowsPerPage;
+      pagination.value.sortBy = sortBy;
+      pagination.value.descending = descending;
+      pagination.value.rowsNumber = res.data.count;
+      console.log("RES", res)
     })
     .catch((err) => {
       console.log(err);
     });
-});
+}
 
 const fileInput = ref(null);
 
@@ -75,7 +98,24 @@ const deployProcess = () => {
   const selectedFile = fileInput.value.files[0];
   const reader = new FileReader();
   reader.onload = (e) => {
-    processDefinitionsApi.value.createProcessDefinition(e.target.result).then;
+    processDefinitionApi.value.createProcessDefinition(e.target.result)
+      .then(() => {
+        loadProcessDefinitions({pagination: pagination.value});
+      })
+      .catch((error) => {
+        console.log(error)
+        $q.notify({
+          message: error.response.data.message,
+          position: 'bottom',
+          timeout: 5000,
+          actions: [
+            {
+              icon: 'close',
+              color: 'white',
+            }
+          ]
+        })
+      });
   };
   reader.readAsText(selectedFile);
 };
