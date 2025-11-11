@@ -37,11 +37,11 @@ const routes = [
         component: () => import("pages/BusinessRulesPage.vue"),
       },
       {
-        path: "business-rules/:decisionDefinitionKey",
+        path: "business-rules/:dmnResourceDefinitionKey",
         component: () => import("pages/BusinessRuleDetailPage.vue"),
       },
       {
-        path: "business-rules/edit/:decisionDefinitionKey",
+        path: "business-rules/edit/:dmnResourceDefinitionKey",
         component: () => import("pages/BusinessRuleEditorPage.vue"),
       },
       {

@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { DecisionDefinitionApi } from "src/api-client";
+import { DmnResourceDefinitionApi } from "src/api-client";
 import { ref, onMounted } from "vue";
 
 import config from "../config/config";
@@ -54,7 +54,7 @@ import {useRouter} from "vue-router";
 import {useQuasar} from "quasar";
 
 const businessRules = ref([]);
-const decisionDefinitionApi = ref(null);
+const drdApi = ref(null);
 const router = useRouter();
 const $q = useQuasar()
 
@@ -63,10 +63,10 @@ onMounted(() => {
 });
 
 const loadDecisionDefinitions = () => {
-  decisionDefinitionApi.value = new DecisionDefinitionApi(config);
+  drdApi.value = new DmnResourceDefinitionApi(config);
 
-  decisionDefinitionApi.value
-    .getDecisionDefinitions()
+  drdApi.value
+    .getDmnResourceDefinitions()
     .then((res) => {
       businessRules.value = res.data.items;
     })
@@ -81,7 +81,7 @@ const deployProcess = () => {
   const selectedFile = fileInput.value.files[0];
   const reader = new FileReader();
   reader.onload = (e) => {
-    decisionDefinitionApi.value.createDecisionDefinition(e.target.result)
+    drdApi.value.createDmnResourceDefinition(e.target.result)
       .then(() => {
         loadDecisionDefinitions();
       })
@@ -120,14 +120,14 @@ const columns = [
   },
   {
     name: "dmnDecisionId",
-    label: "DMN Decision ID",
-    field: "dmnDecisionId",
+    label: "Decision Definition ID",
+    field: "decisionDefinitionId",
     sortable: true,
   },
   {
     name: "resourceName",
     label: "Resource Name",
-    field: "dmnResourceName",
+    field: "resourceName",
     sortable: true,
   },
 ];
