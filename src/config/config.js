@@ -1,7 +1,7 @@
 import { Configuration } from "src/api-client";
 
 const configuration = new Configuration({
-  basePath: "api",
+  basePath: process.env.API || "api",
 });
 
 export default configuration;
