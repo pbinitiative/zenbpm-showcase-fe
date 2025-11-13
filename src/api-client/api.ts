@@ -131,15 +131,15 @@ export interface CompleteJobRequest {
 /**
  * 
  * @export
- * @interface CreateDecisionDefinition201Response
+ * @interface CreateDmnResourceDefinition201Response
  */
-export interface CreateDecisionDefinition201Response {
+export interface CreateDmnResourceDefinition201Response {
     /**
      * 
      * @type {string}
-     * @memberof CreateDecisionDefinition201Response
+     * @memberof CreateDmnResourceDefinition201Response
      */
-    'decisionDefinitionKey': string;
+    'dmnResourceDefinitionKey': string;
 }
 /**
  * 
@@ -172,99 +172,105 @@ export interface CreateProcessInstanceRequest {
      * @memberof CreateProcessInstanceRequest
      */
     'variables'?: object;
+    /**
+     * Duration for which process instance data are kept in storage after the process instance ends. If omitted the default will be picked up from engine configuration. (1d8h, 1M5d8h)
+     * @type {string}
+     * @memberof CreateProcessInstanceRequest
+     */
+    'historyTimeToLive'?: string;
 }
 /**
  * 
  * @export
- * @interface DecisionDefinitionDetail
+ * @interface DmnResourceDefinitionDetail
  */
-export interface DecisionDefinitionDetail {
+export interface DmnResourceDefinitionDetail {
     /**
      * 
      * @type {string}
-     * @memberof DecisionDefinitionDetail
+     * @memberof DmnResourceDefinitionDetail
      */
     'key': string;
     /**
      * 
      * @type {number}
-     * @memberof DecisionDefinitionDetail
+     * @memberof DmnResourceDefinitionDetail
      */
     'version': number;
     /**
      * 
      * @type {string}
-     * @memberof DecisionDefinitionDetail
+     * @memberof DmnResourceDefinitionDetail
      */
     'decisionDefinitionId': string;
     /**
      * 
      * @type {string}
-     * @memberof DecisionDefinitionDetail
+     * @memberof DmnResourceDefinitionDetail
      */
     'dmnData': string;
 }
 /**
  * 
  * @export
- * @interface DecisionDefinitionSimple
+ * @interface DmnResourceDefinitionSimple
  */
-export interface DecisionDefinitionSimple {
+export interface DmnResourceDefinitionSimple {
     /**
      * 
      * @type {string}
-     * @memberof DecisionDefinitionSimple
+     * @memberof DmnResourceDefinitionSimple
      */
     'key': string;
     /**
      * 
      * @type {number}
-     * @memberof DecisionDefinitionSimple
+     * @memberof DmnResourceDefinitionSimple
      */
     'version': number;
     /**
      * 
      * @type {string}
-     * @memberof DecisionDefinitionSimple
+     * @memberof DmnResourceDefinitionSimple
      */
     'decisionDefinitionId': string;
 }
 /**
  * 
  * @export
- * @interface DecisionDefinitionsPage
+ * @interface DmnResourceDefinitionsPage
  */
-export interface DecisionDefinitionsPage {
+export interface DmnResourceDefinitionsPage {
     /**
      * Current page number (1-based indexing)
      * @type {number}
-     * @memberof DecisionDefinitionsPage
+     * @memberof DmnResourceDefinitionsPage
      */
     'page': number;
     /**
      * Number of items per page
      * @type {number}
-     * @memberof DecisionDefinitionsPage
+     * @memberof DmnResourceDefinitionsPage
      */
     'size': number;
     /**
      * Number of items returned in the current page
      * @type {number}
-     * @memberof DecisionDefinitionsPage
+     * @memberof DmnResourceDefinitionsPage
      */
     'count': number;
     /**
      * Total number of items available
      * @type {number}
-     * @memberof DecisionDefinitionsPage
+     * @memberof DmnResourceDefinitionsPage
      */
     'totalCount': number;
     /**
      * 
-     * @type {Array<DecisionDefinitionSimple>}
-     * @memberof DecisionDefinitionsPage
+     * @type {Array<DmnResourceDefinitionSimple>}
+     * @memberof DmnResourceDefinitionsPage
      */
-    'items': Array<DecisionDefinitionSimple>;
+    'items': Array<DmnResourceDefinitionSimple>;
 }
 /**
  * 
@@ -416,7 +422,7 @@ export interface EvaluatedDecisionResult {
      * @type {string}
      * @memberof EvaluatedDecisionResult
      */
-    'decisionDefinitionKey': string;
+    'dmnResourceDefinitionKey': string;
     /**
      * 
      * @type {string}
@@ -1091,6 +1097,31 @@ export interface PublishMessageRequest {
 /**
  * 
  * @export
+ * @interface StartProcessInstanceOnElementsRequest
+ */
+export interface StartProcessInstanceOnElementsRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof StartProcessInstanceOnElementsRequest
+     */
+    'processDefinitionKey': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof StartProcessInstanceOnElementsRequest
+     */
+    'variables'?: object;
+    /**
+     * Allows for a start at chosen element id
+     * @type {Array<string>}
+     * @memberof StartProcessInstanceOnElementsRequest
+     */
+    'startingElementIds': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface TestStopCpuProfile200Response
  */
 export interface TestStopCpuProfile200Response {
@@ -1103,14 +1134,14 @@ export interface TestStopCpuProfile200Response {
 }
 
 /**
- * DecisionApi - axios parameter creator
+ * DecisionDefinitionApi - axios parameter creator
  * @export
  */
-export const DecisionApiAxiosParamCreator = function (configuration?: Configuration) {
+export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Evaluate latest version of decision directly in engine
+         * @summary Evaluate latest version of decision definition directly in engine
          * @param {string} decisionId 
          * @param {EvaluateDecisionRequest} evaluateDecisionRequest 
          * @param {*} [options] Override http request option.
@@ -1121,7 +1152,7 @@ export const DecisionApiAxiosParamCreator = function (configuration?: Configurat
             assertParamExists('evaluateDecision', 'decisionId', decisionId)
             // verify required parameter 'evaluateDecisionRequest' is not null or undefined
             assertParamExists('evaluateDecision', 'evaluateDecisionRequest', evaluateDecisionRequest)
-            const localVarPath = `/decisions/{decisionId}/evaluate`
+            const localVarPath = `/decision-definitions/{decisionId}/evaluate`
                 .replace(`{${"decisionId"}}`, encodeURIComponent(String(decisionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1152,15 +1183,15 @@ export const DecisionApiAxiosParamCreator = function (configuration?: Configurat
 };
 
 /**
- * DecisionApi - functional programming interface
+ * DecisionDefinitionApi - functional programming interface
  * @export
  */
-export const DecisionApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = DecisionApiAxiosParamCreator(configuration)
+export const DecisionDefinitionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DecisionDefinitionApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @summary Evaluate latest version of decision directly in engine
+         * @summary Evaluate latest version of decision definition directly in engine
          * @param {string} decisionId 
          * @param {EvaluateDecisionRequest} evaluateDecisionRequest 
          * @param {*} [options] Override http request option.
@@ -1169,22 +1200,22 @@ export const DecisionApiFp = function(configuration?: Configuration) {
         async evaluateDecision(decisionId: string, evaluateDecisionRequest: EvaluateDecisionRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EvaluatedDRDResult>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.evaluateDecision(decisionId, evaluateDecisionRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DecisionApi.evaluateDecision']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DecisionDefinitionApi.evaluateDecision']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * DecisionApi - factory interface
+ * DecisionDefinitionApi - factory interface
  * @export
  */
-export const DecisionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = DecisionApiFp(configuration)
+export const DecisionDefinitionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DecisionDefinitionApiFp(configuration)
     return {
         /**
          * 
-         * @summary Evaluate latest version of decision directly in engine
+         * @summary Evaluate latest version of decision definition directly in engine
          * @param {string} decisionId 
          * @param {EvaluateDecisionRequest} evaluateDecisionRequest 
          * @param {*} [options] Override http request option.
@@ -1197,45 +1228,45 @@ export const DecisionApiFactory = function (configuration?: Configuration, baseP
 };
 
 /**
- * DecisionApi - object-oriented interface
+ * DecisionDefinitionApi - object-oriented interface
  * @export
- * @class DecisionApi
+ * @class DecisionDefinitionApi
  * @extends {BaseAPI}
  */
-export class DecisionApi extends BaseAPI {
+export class DecisionDefinitionApi extends BaseAPI {
     /**
      * 
-     * @summary Evaluate latest version of decision directly in engine
+     * @summary Evaluate latest version of decision definition directly in engine
      * @param {string} decisionId 
      * @param {EvaluateDecisionRequest} evaluateDecisionRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DecisionApi
+     * @memberof DecisionDefinitionApi
      */
     public evaluateDecision(decisionId: string, evaluateDecisionRequest: EvaluateDecisionRequest, options?: RawAxiosRequestConfig) {
-        return DecisionApiFp(this.configuration).evaluateDecision(decisionId, evaluateDecisionRequest, options).then((request) => request(this.axios, this.basePath));
+        return DecisionDefinitionApiFp(this.configuration).evaluateDecision(decisionId, evaluateDecisionRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 
 /**
- * DecisionDefinitionApi - axios parameter creator
+ * DmnResourceDefinitionApi - axios parameter creator
  * @export
  */
-export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: Configuration) {
+export const DmnResourceDefinitionApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Deploy a new decision definition
+         * @summary Deploy a new dmn resource definition
          * @param {string} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createDecisionDefinition: async (body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createDmnResourceDefinition: async (body: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
-            assertParamExists('createDecisionDefinition', 'body', body)
-            const localVarPath = `/decision-definitions`;
+            assertParamExists('createDmnResourceDefinition', 'body', body)
+            const localVarPath = `/dmn-resource-definitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1263,16 +1294,16 @@ export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Get decision definition
-         * @param {string} decisionDefinitionKey 
+         * @summary Get dmn resource definition
+         * @param {string} dmnResourceDefinitionKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDecisionDefinition: async (decisionDefinitionKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'decisionDefinitionKey' is not null or undefined
-            assertParamExists('getDecisionDefinition', 'decisionDefinitionKey', decisionDefinitionKey)
-            const localVarPath = `/decision-definitions/{decisionDefinitionKey}`
-                .replace(`{${"decisionDefinitionKey"}}`, encodeURIComponent(String(decisionDefinitionKey)));
+        getDmnResourceDefinition: async (dmnResourceDefinitionKey: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'dmnResourceDefinitionKey' is not null or undefined
+            assertParamExists('getDmnResourceDefinition', 'dmnResourceDefinitionKey', dmnResourceDefinitionKey)
+            const localVarPath = `/dmn-resource-definitions/{dmnResourceDefinitionKey}`
+                .replace(`{${"dmnResourceDefinitionKey"}}`, encodeURIComponent(String(dmnResourceDefinitionKey)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1297,14 +1328,14 @@ export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Get list of decision definitions
+         * @summary Get list of dmn resource definitions
          * @param {number} [page] Page number (1-based indexing)
          * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDecisionDefinitions: async (page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/decision-definitions`;
+        getDmnResourceDefinitions: async (page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/dmn-resource-definitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1339,138 +1370,138 @@ export const DecisionDefinitionApiAxiosParamCreator = function (configuration?: 
 };
 
 /**
- * DecisionDefinitionApi - functional programming interface
+ * DmnResourceDefinitionApi - functional programming interface
  * @export
  */
-export const DecisionDefinitionApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = DecisionDefinitionApiAxiosParamCreator(configuration)
+export const DmnResourceDefinitionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DmnResourceDefinitionApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @summary Deploy a new decision definition
+         * @summary Deploy a new dmn resource definition
          * @param {string} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createDecisionDefinition(body: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateDecisionDefinition201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createDecisionDefinition(body, options);
+        async createDmnResourceDefinition(body: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateDmnResourceDefinition201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDmnResourceDefinition(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DecisionDefinitionApi.createDecisionDefinition']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DmnResourceDefinitionApi.createDmnResourceDefinition']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @summary Get decision definition
-         * @param {string} decisionDefinitionKey 
+         * @summary Get dmn resource definition
+         * @param {string} dmnResourceDefinitionKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDecisionDefinition(decisionDefinitionKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DecisionDefinitionDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDecisionDefinition(decisionDefinitionKey, options);
+        async getDmnResourceDefinition(dmnResourceDefinitionKey: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DmnResourceDefinitionDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDmnResourceDefinition(dmnResourceDefinitionKey, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DecisionDefinitionApi.getDecisionDefinition']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DmnResourceDefinitionApi.getDmnResourceDefinition']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @summary Get list of decision definitions
+         * @summary Get list of dmn resource definitions
          * @param {number} [page] Page number (1-based indexing)
          * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDecisionDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DecisionDefinitionsPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDecisionDefinitions(page, size, options);
+        async getDmnResourceDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DmnResourceDefinitionsPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDmnResourceDefinitions(page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DecisionDefinitionApi.getDecisionDefinitions']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DmnResourceDefinitionApi.getDmnResourceDefinitions']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * DecisionDefinitionApi - factory interface
+ * DmnResourceDefinitionApi - factory interface
  * @export
  */
-export const DecisionDefinitionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = DecisionDefinitionApiFp(configuration)
+export const DmnResourceDefinitionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DmnResourceDefinitionApiFp(configuration)
     return {
         /**
          * 
-         * @summary Deploy a new decision definition
+         * @summary Deploy a new dmn resource definition
          * @param {string} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createDecisionDefinition(body: string, options?: RawAxiosRequestConfig): AxiosPromise<CreateDecisionDefinition201Response> {
-            return localVarFp.createDecisionDefinition(body, options).then((request) => request(axios, basePath));
+        createDmnResourceDefinition(body: string, options?: RawAxiosRequestConfig): AxiosPromise<CreateDmnResourceDefinition201Response> {
+            return localVarFp.createDmnResourceDefinition(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Get decision definition
-         * @param {string} decisionDefinitionKey 
+         * @summary Get dmn resource definition
+         * @param {string} dmnResourceDefinitionKey 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDecisionDefinition(decisionDefinitionKey: string, options?: RawAxiosRequestConfig): AxiosPromise<DecisionDefinitionDetail> {
-            return localVarFp.getDecisionDefinition(decisionDefinitionKey, options).then((request) => request(axios, basePath));
+        getDmnResourceDefinition(dmnResourceDefinitionKey: string, options?: RawAxiosRequestConfig): AxiosPromise<DmnResourceDefinitionDetail> {
+            return localVarFp.getDmnResourceDefinition(dmnResourceDefinitionKey, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Get list of decision definitions
+         * @summary Get list of dmn resource definitions
          * @param {number} [page] Page number (1-based indexing)
          * @param {number} [size] Number of items per page (max 100)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDecisionDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<DecisionDefinitionsPage> {
-            return localVarFp.getDecisionDefinitions(page, size, options).then((request) => request(axios, basePath));
+        getDmnResourceDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<DmnResourceDefinitionsPage> {
+            return localVarFp.getDmnResourceDefinitions(page, size, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * DecisionDefinitionApi - object-oriented interface
+ * DmnResourceDefinitionApi - object-oriented interface
  * @export
- * @class DecisionDefinitionApi
+ * @class DmnResourceDefinitionApi
  * @extends {BaseAPI}
  */
-export class DecisionDefinitionApi extends BaseAPI {
+export class DmnResourceDefinitionApi extends BaseAPI {
     /**
      * 
-     * @summary Deploy a new decision definition
+     * @summary Deploy a new dmn resource definition
      * @param {string} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DecisionDefinitionApi
+     * @memberof DmnResourceDefinitionApi
      */
-    public createDecisionDefinition(body: string, options?: RawAxiosRequestConfig) {
-        return DecisionDefinitionApiFp(this.configuration).createDecisionDefinition(body, options).then((request) => request(this.axios, this.basePath));
+    public createDmnResourceDefinition(body: string, options?: RawAxiosRequestConfig) {
+        return DmnResourceDefinitionApiFp(this.configuration).createDmnResourceDefinition(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Get decision definition
-     * @param {string} decisionDefinitionKey 
+     * @summary Get dmn resource definition
+     * @param {string} dmnResourceDefinitionKey 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DecisionDefinitionApi
+     * @memberof DmnResourceDefinitionApi
      */
-    public getDecisionDefinition(decisionDefinitionKey: string, options?: RawAxiosRequestConfig) {
-        return DecisionDefinitionApiFp(this.configuration).getDecisionDefinition(decisionDefinitionKey, options).then((request) => request(this.axios, this.basePath));
+    public getDmnResourceDefinition(dmnResourceDefinitionKey: string, options?: RawAxiosRequestConfig) {
+        return DmnResourceDefinitionApiFp(this.configuration).getDmnResourceDefinition(dmnResourceDefinitionKey, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Get list of decision definitions
+     * @summary Get list of dmn resource definitions
      * @param {number} [page] Page number (1-based indexing)
      * @param {number} [size] Number of items per page (max 100)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DecisionDefinitionApi
+     * @memberof DmnResourceDefinitionApi
      */
-    public getDecisionDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig) {
-        return DecisionDefinitionApiFp(this.configuration).getDecisionDefinitions(page, size, options).then((request) => request(this.axios, this.basePath));
+    public getDmnResourceDefinitions(page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return DmnResourceDefinitionApiFp(this.configuration).getDmnResourceDefinitions(page, size, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1893,6 +1924,116 @@ export class MessageApi extends BaseAPI {
      */
     public publishMessage(publishMessageRequest: PublishMessageRequest, options?: RawAxiosRequestConfig) {
         return MessageApiFp(this.configuration).publishMessage(publishMessageRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * MigrationApi - axios parameter creator
+ * @export
+ */
+export const MigrationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Start a new process instance starting at chosen elements
+         * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startProcessInstanceOnElements: async (startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'startProcessInstanceOnElementsRequest' is not null or undefined
+            assertParamExists('startProcessInstanceOnElements', 'startProcessInstanceOnElementsRequest', startProcessInstanceOnElementsRequest)
+            const localVarPath = `/migration/start-process-instance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(startProcessInstanceOnElementsRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MigrationApi - functional programming interface
+ * @export
+ */
+export const MigrationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MigrationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Start a new process instance starting at chosen elements
+         * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startProcessInstanceOnElements(startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessInstance>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startProcessInstanceOnElements(startProcessInstanceOnElementsRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MigrationApi.startProcessInstanceOnElements']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * MigrationApi - factory interface
+ * @export
+ */
+export const MigrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MigrationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Start a new process instance starting at chosen elements
+         * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startProcessInstanceOnElements(startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ProcessInstance> {
+            return localVarFp.startProcessInstanceOnElements(startProcessInstanceOnElementsRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MigrationApi - object-oriented interface
+ * @export
+ * @class MigrationApi
+ * @extends {BaseAPI}
+ */
+export class MigrationApi extends BaseAPI {
+    /**
+     * 
+     * @summary Start a new process instance starting at chosen elements
+     * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MigrationApi
+     */
+    public startProcessInstanceOnElements(startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options?: RawAxiosRequestConfig) {
+        return MigrationApiFp(this.configuration).startProcessInstanceOnElements(startProcessInstanceOnElementsRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2454,6 +2595,42 @@ export const ProcessInstanceApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Start a new process instance starting at chosen elements
+         * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startProcessInstanceOnElements: async (startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'startProcessInstanceOnElementsRequest' is not null or undefined
+            assertParamExists('startProcessInstanceOnElements', 'startProcessInstanceOnElementsRequest', startProcessInstanceOnElementsRequest)
+            const localVarPath = `/migration/start-process-instance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(startProcessInstanceOnElementsRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2565,6 +2742,19 @@ export const ProcessInstanceApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['ProcessInstanceApi.getProcessInstances']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Start a new process instance starting at chosen elements
+         * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startProcessInstanceOnElements(startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProcessInstance>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startProcessInstanceOnElements(startProcessInstanceOnElementsRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProcessInstanceApi.startProcessInstanceOnElements']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -2654,6 +2844,16 @@ export const ProcessInstanceApiFactory = function (configuration?: Configuration
          */
         getProcessInstances(processDefinitionKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<ProcessInstancePage> {
             return localVarFp.getProcessInstances(processDefinitionKey, page, size, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start a new process instance starting at chosen elements
+         * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startProcessInstanceOnElements(startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ProcessInstance> {
+            return localVarFp.startProcessInstanceOnElements(startProcessInstanceOnElementsRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2757,6 +2957,18 @@ export class ProcessInstanceApi extends BaseAPI {
      */
     public getProcessInstances(processDefinitionKey: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
         return ProcessInstanceApiFp(this.configuration).getProcessInstances(processDefinitionKey, page, size, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start a new process instance starting at chosen elements
+     * @param {StartProcessInstanceOnElementsRequest} startProcessInstanceOnElementsRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProcessInstanceApi
+     */
+    public startProcessInstanceOnElements(startProcessInstanceOnElementsRequest: StartProcessInstanceOnElementsRequest, options?: RawAxiosRequestConfig) {
+        return ProcessInstanceApiFp(this.configuration).startProcessInstanceOnElements(startProcessInstanceOnElementsRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

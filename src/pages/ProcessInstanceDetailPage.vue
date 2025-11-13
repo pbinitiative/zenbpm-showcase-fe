@@ -264,7 +264,9 @@
               <template v-slot:body-cell-message="props">
                 <q-td :props="props">
                   <div>
-                    {{ props.row.message.substring(0, 50) + "..." }}
+                    <p @click="props.row.expand = !props.row.expand">
+                      {{ props.row.expand ? props.row.message.substring(0, 50) + "..." : props.row.message }}
+                    </p>
                     <q-tooltip anchor="top middle" self="bottom middle">
                       {{ props.row.message }}
                     </q-tooltip>

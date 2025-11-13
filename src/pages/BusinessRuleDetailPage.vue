@@ -18,7 +18,7 @@
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>{{
-                    decisionDefinition.key
+                    dmnResourceDefinition.key
                   }}</q-item-label>
                 </q-item-section>
               </q-item>
@@ -28,17 +28,27 @@
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>{{
-                    decisionDefinition.version
+                    dmnResourceDefinition.version
                   }}</q-item-label>
                 </q-item-section>
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-item-label>DMN Definition ID</q-item-label>
+                  <q-item-label>Resource Name</q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>{{
-                    decisionDefinition.dmnDecisionId
+                      dmnResourceDefinition.resourceName
+                    }}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Decision Definition ID</q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-item-label caption>{{
+                    dmnResourceDefinition.decisionDefinitionId
                   }}</q-item-label>
                 </q-item-section>
               </q-item>
@@ -54,8 +64,8 @@
           </q-card-section>
           <q-card-section>
             <DmnDiagram
-              v-if="decisionDefinition.dmnData"
-              :diagram-data="decisionDefinition.dmnData"
+              v-if="dmnResourceDefinition.dmnData"
+              :diagram-data="dmnResourceDefinition.dmnData"
               :onViewChanged="onViewChanged"
             />
           </q-card-section>
@@ -98,7 +108,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useQuasar } from "quasar";
 
-import { DecisionDefinitionApi } from "src/api-client";
+import { DmnResourceDefinitionApi } from "src/api-client";
 import "dmn-js/dist/assets/diagram-js.css";
 import "dmn-js/dist/assets/dmn-js-shared.css";
 import "dmn-js/dist/assets/dmn-js-drd.css";
@@ -112,8 +122,8 @@ import config from "../config/config";
 import DmnDiagram from "components/diagrams/DmnDiagram.vue";
 import DmnEvaluateDialog from "components/diagrams/DmnEvaluateDialog.vue";
 
-const decisionDefinitionApi = ref(null);
-const decisionDefinition = ref({});
+const drdApi = ref(null);
+const dmnResourceDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
 const route = useRoute();
@@ -148,11 +158,11 @@ onMounted(async () => {
 });
 
 function getDecisionDefinition() {
-  decisionDefinitionApi.value = new DecisionDefinitionApi(config);
-  decisionDefinitionApi.value
-    .getDecisionDefinition(route.params.decisionDefinitionKey)
+  drdApi.value = new DmnResourceDefinitionApi(config);
+  drdApi.value
+    .getDmnResourceDefinition(route.params.dmnResourceDefinitionKey)
     .then((res) => {
-      decisionDefinition.value = res.data;
+      dmnResourceDefinition.value = res.data;
       loading.value = false;
     })
     .catch((err) => {
@@ -163,11 +173,11 @@ function getDecisionDefinition() {
 }
 
 function editDecisionDefinition() {
-  router.push(`/business-rules/edit/${decisionDefinition.value.key}`);
+  router.push(`/business-rules/edit/${dmnResourceDefinition.value.key}`);
 }
 
 function evaluateDecision() {
-  dmnEvaluateDialogRef.value.open(activeDecisionId.value, decisionDefinition.value.key);
+  dmnEvaluateDialogRef.value.open(activeDecisionId.value, dmnResourceDefinition.value.key);
 }
 
 function onViewChanged (decisionId) {

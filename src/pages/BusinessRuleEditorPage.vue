@@ -9,9 +9,8 @@
           <q-card-section class="col q-pa-none">
             <DmnEditor
               ref="dmnEditorRef"
-              :diagram-data="route.params.decisionDefinitionKey ? decisionDefinition.dmnData : emptyProcess()"
-              v-if="route.params.decisionDefinitionKey ? decisionDefinition.dmnData : true"
-              @diagram-changed="onDiagramChanged"
+              :diagram-data="route.params.dmnResourceDefinitionKey ? decisionDefinition.dmnData : emptyProcess()"
+              v-if="route.params.dmnResourceDefinitionKey ? decisionDefinition.dmnData : true"
             />
           </q-card-section>
         </q-card>
@@ -102,13 +101,13 @@
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { DecisionDefinitionApi } from "src/api-client";
+import { DmnResourceDefinitionApi } from "src/api-client";
 
 import config from "../config/config";
 import { useQuasar } from "quasar";
 import DmnEditor from "components/diagrams/DmnEditor.vue";
 
-const decisionDefinitionApi = ref(null);
+const drdApi = ref(null);
 const decisionDefinition = ref({});
 const partitionsData = ref([]);
 const selectedPartition = ref(null);
@@ -130,14 +129,17 @@ const partitionOptions = computed(() =>
 );
 
 onMounted(() => {
-  decisionDefinitionApi.value = new DecisionDefinitionApi(config);
-  if (!route.params.decisionDefinitionKey) {
+  console.log("Key", route.params)
+  drdApi.value = new DmnResourceDefinitionApi(config);
+  if (!route.params.dmnResourceDefinitionKey) {
+    console.log("Empty")
     decisionDefinition.value = emptyProcess();
     return;
   }
-  decisionDefinitionApi.value
-    .getDecisionDefinition(route.params.decisionDefinitionKey)
+  drdApi.value
+    .getDmnResourceDefinition(route.params.dmnResourceDefinitionKey)
     .then((res) => {
+      console.log("RES", res)
       decisionDefinition.value = res.data;
     })
     .catch((err) => {
@@ -159,8 +161,8 @@ async function deployDecisionDefinition() {
       return;
     }
 
-    const response = await decisionDefinitionApi.value.createDecisionDefinition(xmlToSend);
-    console.log(response.data.decisionDefinitionKey ,"===", route.params.decisionDefinitionKey)
+    const response = await drdApi.value.createDmnResourceDefinition(xmlToSend);
+    console.log(response.data.dmnResourceDefinitionKey ,"===", route.params.dmnResourceDefinition)
     if (response.status === 409) {
       log.value.unshift({
         time: new Date(),
@@ -198,7 +200,7 @@ async function deployDecisionDefinition() {
       color: 'green',
       message: 'Process definition deployed successfully.'
     });
-    await router.push(`/business-rules/${response.data.decisionDefinitionKey}`);
+    await router.push(`/business-rules/${response.data.dmnResourceDefinitionKey}`);
   } catch (error) {
     console.log("ERROR", error)
     $q.notify({

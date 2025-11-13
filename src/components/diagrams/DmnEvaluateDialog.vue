@@ -43,7 +43,7 @@
 import { onMounted, ref } from "vue";
 
 import config from "../../config/config";
-import { DecisionApi } from "src/api-client";
+import { DecisionDefinitionApi } from "src/api-client";
 
 const decisionApi = ref(null);
 const variables = ref("");
@@ -57,7 +57,7 @@ const decisionDefinitionKey = ref("");
 const matchedRules = ref([]);
 
 onMounted(() => {
-  decisionApi.value = new DecisionApi(config);
+  decisionApi.value = new DecisionDefinitionApi(config);
 })
 
 const updateVariables = (value) => {
